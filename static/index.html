@@ -1,0 +1,1013 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Interpret</title>
+<style>
+  :root {
+    --canvas: #F7F6F3;
+    --panel: #FFFFFF;
+    --border: #EAEAEA;
+    --hairline: #E4E2DE;
+    --ink: #111111;
+    --muted: #787774;
+    --faint: #A8A5A0;
+    --listen-bg: #EDF3EC;
+    --listen-fg: #346538;
+    --speak-bg: #E1F3FE;
+    --speak-fg: #1F6C9F;
+    --num-bg: #FBF3DB;
+    --num-fg: #956400;
+    --err-bg: #FDEBEC;
+    --err-fg: #9F2F2D;
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro", system-ui, "Segoe UI", sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .app { display: flex; height: 100vh; width: 100vw; overflow: hidden; }
+
+  /* Two full-bleed halves split by a single hairline. No floating cards. */
+  .panel {
+    flex: 1;
+    min-width: 0;
+    background: var(--panel);
+    display: flex;
+    flex-direction: column;
+    padding: 26px 32px 22px;
+    overflow: hidden;
+  }
+  .panel + .panel { border-left: 1px solid var(--hairline); }
+  .panel--patient { transform: rotate(180deg); }
+
+  .label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* Content hugs the talk button; a short turn sits beside its control. */
+  .conversation {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0 18px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .conversation > :first-child { margin-top: auto; }
+
+  .line { margin: 0 0 24px; }
+  .line:last-child { margin-bottom: 0; }
+  .own {
+    font-size: 23px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .other {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--muted);
+    margin-top: 5px;
+  }
+  .pending-own { color: var(--faint); }
+  .num {
+    background: var(--num-bg);
+    color: var(--num-fg);
+    border-radius: 5px;
+    padding: 0 4px;
+  }
+  .flag {
+    display: inline-block;
+    margin-top: 6px;
+    background: var(--num-bg);
+    color: var(--num-fg);
+    border-radius: 5px;
+    padding: 1px 8px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .numbers-note { font-size: 11px; color: var(--faint); margin: 0 0 10px; }
+
+  /* The turn state is the primary affordance: dot + label, above the button. */
+  .status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--muted);
+    min-height: 22px;
+    margin: 0 0 12px;
+    transition: color 180ms var(--ease);
+  }
+  .status::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.85;
+    flex: none;
+    transition: background 180ms var(--ease);
+  }
+  .status--listening { color: var(--listen-fg); }
+  .status--translating { color: var(--speak-fg); }
+  .status--error { color: var(--err-fg); }
+  .status .retry {
+    display: none;
+    margin-left: 6px;
+    border: 1px solid currentColor;
+    background: transparent;
+    color: inherit;
+    border-radius: 999px;
+    padding: 3px 13px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 160ms var(--ease-out);
+  }
+  .status--error .retry { display: inline-block; }
+  .status .retry:active { transform: scale(0.96); }
+
+  .talk {
+    width: 100%;
+    font-family: inherit;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--panel);
+    color: var(--ink);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    padding: 30px 0;
+    cursor: pointer;
+    transition: background 180ms var(--ease), color 180ms var(--ease),
+                border-color 180ms var(--ease), opacity 180ms var(--ease),
+                transform 160ms var(--ease-out);
+  }
+  .talk:active:not(:disabled) { transform: scale(0.985); }
+  .talk:disabled { opacity: 0.34; cursor: default; }
+  .talk--listening {
+    background: var(--listen-bg);
+    color: var(--listen-fg);
+    /* The pale fill alone is ~1.06:1 against white — invisible. The border and
+       text carry the state; the wash is only reinforcement. */
+    border-color: var(--listen-fg);
+  }
+
+  .footer {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 14px;
+    font-size: 11px;
+    color: var(--faint);
+  }
+  .footer-actions { display: flex; gap: 14px; align-items: baseline; }
+  .save, .call, .langs {
+    border: none;
+    background: none;
+    padding: 0 0 1px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    border-bottom: 1px solid var(--hairline);
+    transition: color 160ms var(--ease), border-color 160ms var(--ease);
+  }
+
+  /* Hover only where there is a real pointer. */
+  @media (hover: hover) and (pointer: fine) {
+    .talk:hover:not(:disabled) { border-color: #D8D6D1; }
+    .call:hover { color: var(--ink); border-color: var(--muted); }
+  }
+
+  .setup {
+    position: fixed;
+    inset: 0;
+    background: var(--canvas);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  .setup.hidden { display: none; }
+  .setup-card .note { font-size: 14px; line-height: 1.55; color: var(--ink); margin: 0 0 12px; }
+  .setup-card .note.zh { color: var(--muted); margin-bottom: 24px; }
+  .setup-card #interp-continue { margin-bottom: 14px; }
+  .setup-card #interp-end { display: block; margin: 0 auto; }
+  .setup-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 44px;
+    width: min(430px, 90vw);
+  }
+  .setup-card h1 {
+    font-size: 19px;
+    letter-spacing: -0.01em;
+    margin: 0 0 26px;
+  }
+  .field { margin: 0 0 18px; }
+  .field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  .field select {
+    width: 100%;
+    font-size: 16px;
+    padding: 11px 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel);
+    color: var(--ink);
+    font-family: inherit;
+  }
+  .consent {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 12px; line-height: 1.5; color: var(--muted);
+    margin: 0 0 18px; cursor: pointer;
+  }
+  .consent input { margin-top: 2px; flex: none; }
+  .consent strong { color: var(--ink); }
+  .consent .zh { display: block; margin-top: 4px; }
+  .start:disabled { opacity: 0.4; cursor: not-allowed; }
+  .start {
+    width: 100%;
+    margin-top: 8px;
+    font-family: inherit;
+    border: 1px solid var(--ink);
+    border-radius: 12px;
+    background: var(--ink);
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 14px 0;
+    cursor: pointer;
+    transition: opacity 160ms var(--ease), transform 160ms var(--ease-out);
+  }
+  .start:active { transform: scale(0.985); }
+
+  /* One-time entrance. Rare, so it earns a little motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    .setup-card, .app { animation: rise 320ms var(--ease-out) both; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: none; }
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="setup hidden" id="interpreter">
+    <div class="setup-card">
+      <h1>Call a human interpreter</h1>
+      <p class="note">This tablet cannot connect you to an interpreter. It only relays automatic translation. Use your clinic's normal interpreter line, and do not rely on this tool for this conversation.</p>
+      <p class="note zh">这台平板无法为您接通人工翻译。它只做自动翻译。请使用诊所平常的翻译电话，这次对话不要依赖本工具。</p>
+      <button class="start" id="interp-continue" type="button">Continue session</button>
+      <button class="langs" id="interp-end" type="button">End session</button>
+    </div>
+  </div>
+
+  <div class="setup" id="setup">
+    <div class="setup-card">
+      <h1>Interpretation setup</h1>
+      <div class="field">
+        <label for="doctor-lang">Doctor language</label>
+        <select id="doctor-lang">
+          <option value="en" selected>English</option>
+          <option value="zh">中文 (Mandarin)</option>
+          <option value="es">Español (Spanish)</option>
+          <option value="fil">Filipino</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="patient-lang">Patient language</label>
+        <select id="patient-lang">
+          <option value="zh" selected>中文 (Mandarin)</option>
+          <option value="en">English</option>
+          <option value="es">Español (Spanish)</option>
+          <option value="fil">Filipino</option>
+        </select>
+      </div>
+      <label class="consent" for="consent">
+        <input type="checkbox" id="consent">
+        <span>
+          <strong>Before you start:</strong> speech is sent to a cloud service to be translated
+          automatically. This is <strong>not</strong> a medical interpreter.<br>
+          <span class="zh">开始之前：语音会发送到云端服务进行自动翻译。这<strong>不是</strong>医疗翻译员。</span>
+        </span>
+      </label>
+      <button class="start" id="start" disabled>Start</button>
+    </div>
+  </div>
+
+  <div class="app">
+    <div class="panel" data-role="doctor">
+      <div class="label"></div>
+      <div class="conversation"></div>
+      <div class="numbers-note">Numbers need a human to confirm</div>
+      <button class="talk">TALK</button>
+      <div class="status"></div>
+      <div class="footer">
+        <div>Automatic translation · not a medical interpreter</div>
+        <div class="footer-actions">
+          <button class="save">Save transcript</button>
+          <button class="langs">Change languages</button>
+          <button class="call">Call interpreter</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel--patient" data-role="patient">
+      <div class="label"></div>
+      <div class="conversation"></div>
+      <div class="numbers-note">Numbers need a human to confirm</div>
+      <button class="talk">TALK</button>
+      <div class="status"></div>
+      <div class="footer">
+        <div>Automatic translation · not a medical interpreter</div>
+        <div class="footer-actions">
+          <button class="save">Save transcript</button>
+          <button class="langs">Change languages</button>
+          <button class="call">Call interpreter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  var LANGS = { en: "English", zh: "中文", es: "Español", fil: "Filipino" };
+  var ROLES = { doctor: "Doctor", patient: "Patient" };
+  var SILENCE_THRESHOLD = 0.01;
+  var SILENCE_MS = 3000;
+  var CHUNK = 1600; // 100 ms of 16 kHz mono PCM16
+
+  var cfg = { doctor: "en", patient: "zh" };
+  var phase = "idle"; // idle | listening | translating | error
+  var active = null;  // doctor | patient | null
+  var lines = [];
+  // Every transcript line is keyed by the turn it belongs to. The model keeps
+  // emitting after a turn closes; without this, that late output lands in whatever
+  // line comes next, which is how the tool "said" things nobody spoke.
+  var lineByTurn = {};
+  var audioBuf = [];
+  var QUIESCE_MS = 3000;      // this long with no *speech* from the model -> turn done
+  var TURN_HARD_CAP_MS = 15000;
+  // The model streams silence-padded audio continuously, so peak amplitude cannot
+  // separate speech from padding (the padding still has a noise floor that clears a
+  // small peak threshold). Energy can: measured padding is RMS ~0-11, speech is in
+  // the hundreds and up.
+  var AUDIO_RMS_MIN = 220;
+  var quietTimer = null, capTimer = null;
+  var playCtx = null, nextTime = 0, draining = false, drainTimer = null, lastOutputAt = 0;
+  var turnSeq = 0, currentTurn = null, sawOutput = false, heardSound = false, turnCapTimer = null;
+  var MAX_TURN_MS = 30000;   // hard ceiling so a turn can never stay open forever
+  // Seconds of digital silence must not be streamed at the model: it finalises the
+  // utterance early and drops the tail. Forward speech plus a short tail, and let
+  // it resume the moment sound returns.
+  var TRAIL_SILENCE_MS = 1200;
+  var COLD_GRACE_MS = 9000;   // longest we wait for a first token before closing anyway
+
+  var ws = null;
+  var audioCtx = null, sourceNode = null, processor = null;
+  var pcmAccum = new Int16Array(0);
+  var lastSound = 0;
+  var hasTurned = false;
+
+  var panels = {
+    doctor: document.querySelector('.panel[data-role="doctor"]'),
+    patient: document.querySelector('.panel[data-role="patient"]')
+  };
+
+  function el(panel, sel) { return panels[panel].querySelector(sel); }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  function renderText(s) {
+    var esc = escapeHtml(toSimplified(s));
+    return esc.replace(/(\d+(?:[.,]\d+)*)/g, '<span class="num">$1</span>');
+  }
+
+  // Plain-text record of the consult, for the clinician's notes. Both languages
+  // per turn, with flagged turns marked.
+  function transcriptText() {
+    var out = [];
+    for (var i = 0; i < lines.length; i++) {
+      var ln = lines[i];
+      var who = ln.side === "doctor" ? "DOCTOR" : "PATIENT";
+      var miss = missingNumbers(ln.source, ln.translation);
+      out.push(who + ": " + toSimplified(ln.source));
+      if (ln.translation) out.push("  -> " + toSimplified(ln.translation));
+      // Carry the same caveats the screen shows. A record that silently drops the
+      // warnings is worse than no record, because it reads as verified.
+      if (!ln.source && !ln.translation) out.push("  [NOTHING CAPTURED]");
+      else if (ln.source && !ln.translation && cfg.doctor !== cfg.patient) out.push("  [NO TRANSLATION]");
+      else if (looksUnreliable(ln.source, ln.translation)) out.push("  [CHECK THE TRANSLATION]");
+      else if (miss.length) out.push("  [CHECK THE NUMBER: " + miss.join(", ") + "]");
+    }
+    return out.join("\n") + "\n";
+  }
+
+  function downloadTranscript() {
+    var blob = new Blob([transcriptText()], { type: "text/plain;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "consult-transcript.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+  }
+
+  // Number integrity. If the speaker said a number and the translation does not
+  // carry it, the tool is hiding its own failure — the exact thing both users said
+  // is worse than no tool. Spelled-out numbers are normalised first (EN + ZH) so
+  // "five days" and 五天 are comparable.
+  var NUMBER_WORDS = {
+    one: 1, once: 1, two: 2, twice: 2, three: 3, thrice: 3, four: 4, five: 5,
+    six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
+    "一": 1, "二": 2, "两": 2, "三": 3, "四": 4, "五": 5,
+    "六": 6, "七": 7, "八": 8, "九": 9, "十": 10
+  };
+
+  var ZH_DIGIT = { "一": "1", "二": "2", "两": "2", "三": "3", "四": "4",
+                   "五": "5", "六": "6", "七": "7", "八": "8", "九": "9", "十": "10" };
+
+  function numbersIn(s) {
+    // Chinese writes decimals with 度, and the model may follow it with either a
+    // digit ("38度5") or the numeral character ("38度五"). Fold both, plus the
+    // Western decimal point, into one digit run so the forms compare equal.
+    s = s.replace(/(\d)[.,](\d)/g, "$1$2")
+         .replace(/(\d)度(\d)/g, "$1$2")
+         .replace(/(\d)度([一二两三四五六七八九十])/g, function (_, a, b) {
+           return a + (ZH_DIGIT[b] || b);
+         });
+    var out = [], re = /\d+(?:[.,]\d+)?|[A-Za-z]+|[一二两三四五六七八九十]/g, m;
+    while ((m = re.exec(s))) {
+      var t = m[0], v = null;
+      if (/^\d/.test(t)) {
+        // Digits only, so "38度5" (Chinese for 38.5) and "38.5" compare equal.
+        v = t.replace(/\D/g, "");
+      } else {
+        var w = NUMBER_WORDS[t.toLowerCase()];
+        if (w === undefined) w = NUMBER_WORDS[t];
+        if (w !== undefined) v = String(w);
+      }
+      if (v === null) continue;
+      // "one" / "一" is almost always an article or measure word ("one tablet",
+      // "一天") rather than a quantity. Counting it made the flag cry wolf.
+      if (v === "1") continue;
+      out.push(v);
+    }
+    return out;
+  }
+
+  // The model sometimes renders a whole clause as one bare word instead of
+  // translating it ("Me duele la cabeza." -> "Midway"). No numbers involved, so the
+  // number check misses it — but it is exactly the "confidently wrong" failure both
+  // users said they cannot live with, so it gets the same treatment.
+  function looksUnreliable(source, translation) {
+    if (!source || !translation) return false;
+    var t = translation.trim();
+    if (t.length < 2) return true;
+    if (/[\u4e00-\u9fff]/.test(t)) return false;   // CJK target: word counting is meaningless
+    var srcUnits = source.trim().split(/\s+/).length;
+    var tgtWords = t.split(/\s+/).length;
+    return srcUnits >= 3 && tgtWords === 1;         // a 3+ word clause reduced to one bare word
+  }
+
+  // Which spoken numbers did not survive into the translation. Naming them makes
+  // the warning actionable instead of a generic "check something".
+  function missingNumbers(source, translation) {
+    var said = numbersIn(source), got = numbersIn(translation), out = [];
+    for (var i = 0; i < said.length; i++) {
+      var k = got.indexOf(said[i]);
+      if (k === -1) out.push(said[i]); else got.splice(k, 1);
+    }
+    return out;
+  }
+
+  function numberMismatch(source, translation) {
+    return missingNumbers(source, translation).length > 0;
+  }
+
+  // The model intermittently ignores the zh-Hans target and emits Traditional
+  // characters (兩 體 溫 這 個 藥 ...). Normalise the common ones so a mainland
+  // patient is not handed a mixed-script medical record.
+  var TO_SIMPLIFIED = {
+    "兩":"两","體":"体","溫":"温","這":"这","個":"个","藥":"药","幾":"几","醫":"医",
+    "診":"诊","護":"护","說":"说","過":"过","還":"还","們":"们","來":"来","時":"时",
+    "會":"会","對":"对","開":"开","關":"关","問":"问","題":"题","發":"发","燒":"烧",
+    "應":"应","該":"该","讓":"让","請":"请","謝":"谢","麼":"么","樣":"样","東":"东",
+    "頭":"头","覺":"觉","產":"产","檢":"检","驗":"验","單":"单","雙":"双","張":"张",
+    "號":"号","錢":"钱","買":"买","賣":"卖","車":"车","門":"门","樂":"乐","學":"学",
+    "習":"习","讀":"读","寫":"写","語":"语","詞":"词","話":"话","談":"谈","飛":"飞",
+    "機":"机","場":"场","電":"电","視":"视","腦":"脑","網":"网","線":"线","統":"统",
+    "編":"编","織":"织","級":"级","給":"给","結":"结","經":"经","續":"续","練":"练",
+    "總":"总","緊":"紧","紅":"红","綠":"绿","藍":"蓝","黃":"黄","點":"点","熱":"热",
+    "濕":"湿","陽":"阳","陰":"阴","風":"风","雲":"云","氣":"气","現":"现","實":"实",
+    "際":"际","標":"标","準":"准","確":"确","認":"认","誤":"误","錯":"错","證":"证",
+    "據":"据","簽":"签","約":"约","費":"费","價":"价","貴":"贵","銀":"银","鐵":"铁",
+    "鋼":"钢","針":"针","縫":"缝","補":"补","復":"复","興":"兴","舉":"举","舊":"旧",
+    "營":"营","業":"业","農":"农","鄉":"乡","鎮":"镇","縣":"县","區":"区","國":"国",
+    "團":"团","圖":"图","園":"园","圓":"圆","圍":"围","塊":"块","壞":"坏","堅":"坚",
+    "強":"强","態":"态","懷":"怀","憂":"忧","慮":"虑","憶":"忆","慣":"惯","願":"愿",
+    "擁":"拥","擇":"择","擔":"担","擠":"挤","擊":"击","斷":"断","曆":"历","書":"书",
+    "條":"条","樹":"树","樓":"楼","橋":"桥","權":"权","歡":"欢","歲":"岁","歷":"历",
+    "歸":"归","殘":"残","殺":"杀","決":"决","況":"况","沒":"没","淨":"净","減":"减",
+    "滿":"满","潔":"洁","濃":"浓","濟":"济","燈":"灯","爭":"争","牆":"墙","獨":"独",
+    "獲":"获","環":"环","療":"疗","當":"当","盡":"尽","監":"监","盤":"盘","眾":"众",
+    "礙":"碍","禮":"礼","萬":"万","積":"积","稱":"称","穩":"稳","窮":"穷","競":"竞",
+    "筆":"笔","節":"节","範":"范","築":"筑","簡":"简","類":"类","糧":"粮","紀":"纪",
+    "細":"细","組":"组","終":"终","絕":"绝","絲":"丝","維":"维","綱":"纲","緒":"绪",
+    "緩":"缓","縮":"缩","績":"绩","繼":"继","纏":"缠","罰":"罚","羅":"罗","聖":"圣",
+    "聞":"闻","聯":"联","聰":"聪","聲":"声","職":"职","聽":"听","脈":"脉","腳":"脚",
+    "臉":"脸","膚":"肤","膽":"胆","臟":"脏","臨":"临","艱":"艰","藝":"艺","蘇":"苏",
+    "處":"处","蟲":"虫","術":"术","衛":"卫","衝":"冲","襪":"袜","見":"见","觀":"观",
+    "規":"规","親":"亲","覽":"览","計":"计","訂":"订","討":"讨","訊":"讯","記":"记",
+    "講":"讲","許":"许","論":"论","設":"设","訪":"访","評":"评","試":"试","詳":"详",
+    "誠":"诚","誰":"谁","調":"调","諾":"诺","謀":"谋","譯":"译","議":"议","譽":"誉",
+    "變":"变","讚":"赞","負":"负","財":"财","責":"责","貨":"货","販":"贩","貪":"贪",
+    "貧":"贫","貸":"贷","貼":"贴","賀":"贺","資":"资","賓":"宾","質":"质","購":"购",
+    "賽":"赛","贈":"赠","贊":"赞","贏":"赢","軌":"轨","軍":"军","軟":"软","較":"较",
+    "載":"载","輔":"辅","輕":"轻","輛":"辆","輪":"轮","輸":"输","轉":"转","辦":"办",
+    "邊":"边","連":"连","進":"进","遠":"远","違":"违","適":"适","選":"选","遲":"迟",
+    "遺":"遗","遷":"迁","醬":"酱","釀":"酿","釋":"释","銷":"销","錄":"录","鍋":"锅",
+    "鍵":"键","鎖":"锁","鏈":"链","鏡":"镜","鐘":"钟","鑄":"铸","長":"长","閃":"闪",
+    "閉":"闭","閒":"闲","間":"间","閣":"阁","閱":"阅","陣":"阵","階":"阶","隊":"队",
+    "隨":"随","險":"险","隱":"隐","隻":"只","難":"难","靜":"静","頂":"顶","項":"项",
+    "順":"顺","須":"须","預":"预","領":"领","頻":"频","顆":"颗","顏":"颜","顧":"顾",
+    "顫":"颤","顯":"显","飯":"饭","飲":"饮","飼":"饲","飽":"饱","飾":"饰","餅":"饼",
+    "養":"养","餘":"余","館":"馆","馬":"马","駐":"驻","駕":"驾","騎":"骑","驚":"惊",
+    "髮":"发","鬥":"斗","魚":"鱼","鮮":"鲜","鳥":"鸟","鳴":"鸣","鴨":"鸭","鵝":"鹅",
+    "鷹":"鹰","鹽":"盐","麗":"丽","麥":"麦","麵":"面","黨":"党","齊":"齐","齒":"齿",
+    "龍":"龙","龜":"龟","戲":"戏","擾":"扰","擬":"拟","齣":"出"
+  };
+
+  function toSimplified(s) {
+    return s.replace(/[\u4e00-\u9fff]/g, function (ch) {
+      return TO_SIMPLIFIED[ch] || ch;
+    });
+  }
+
+  var lastPanelHtml = { doctor: null, patient: null };
+
+  function renderPanel(role) {
+    var ownLang = role === "doctor" ? cfg.doctor : cfg.patient;
+    var html = "";
+    var items = lines;
+    for (var i = 0; i < items.length; i++) {
+      var ln = items[i];
+      var isOwn = ln.side === role;
+      var own = isOwn ? ln.source : ln.translation;
+      var other = isOwn ? ln.translation : ln.source;
+      var finalized = !!ln.closed;
+      html += '<div class="line">';
+      if (own) {
+        html += '<div class="own">' + renderText(own) + "</div>";
+      } else if (!finalized) {
+        html += '<div class="own pending-own">…</div>';
+      }
+      if (other) {
+        html += '<div class="other">' + renderText(other) + "</div>";
+      } else if (!finalized && !own) {
+        html += '<div class="other">…</div>';
+      }
+      // Computed live, never stored: content can still arrive after a turn closes,
+      // and a stale flag would keep crying wolf on a line that has since filled in.
+      if (finalized && !ln.source && !ln.translation) {
+        html += '<div class="flag">Nothing captured — please say that again · 没有听到，请再说一次</div>';
+      } else if (finalized && ln.source && !ln.translation && cfg.doctor !== cfg.patient) {
+        html += '<div class="flag">No translation — please check · 没有翻译，请检查</div>';
+      } else if (finalized && looksUnreliable(ln.source, ln.translation)) {
+        html += '<div class="flag">Check the translation · 请核对翻译</div>';
+      } else if (finalized && numberMismatch(ln.source, ln.translation)) {
+        var miss = missingNumbers(ln.source, ln.translation);
+        html += '<div class="flag">Check the number · 请核对数字' +
+                (miss.length ? " (" + miss.join(", ") + ")" : "") + "</div>";
+      }
+      html += "</div>";
+    }
+    el(role, ".label").textContent = (LANGS[ownLang] || ownLang) + " · " + ROLES[role];
+    var conv = el(role, ".conversation");
+    if (html !== lastPanelHtml[role]) {
+      conv.innerHTML = html;
+      lastPanelHtml[role] = html;
+    }
+    conv.scrollTop = conv.scrollHeight;
+  }
+
+  function statusText() {
+    if (phase === "idle") return hasTurned ? "Your turn" : "Ready";
+    if (phase === "listening") return "Listening…";
+    if (phase === "translating") {
+      var listener = active === "doctor" ? "patient" : "doctor";
+      return "Speaking to " + ROLES[listener];
+    }
+    if (phase === "error") return "Nothing was translated.";
+    return "";
+  }
+
+  function renderStatus() {
+    ["doctor", "patient"].forEach(function (role) {
+      var st = el(role, ".status");
+      st.className = "status";
+      if (phase === "listening") st.classList.add("status--listening");
+      if (phase === "translating") st.classList.add("status--translating");
+      if (phase === "error") st.classList.add("status--error");
+      st.innerHTML = statusText() +
+        '<button class="retry">Retry</button>';
+      var retry = st.querySelector(".retry");
+      retry.onclick = retryAll;
+    });
+  }
+
+  function renderButtons() {
+    ["doctor", "patient"].forEach(function (role) {
+      var btn = el(role, ".talk");
+      btn.className = "talk";
+      var isActive = phase === "listening" && active === role;
+      var isDisabled = phase === "error" || phase === "translating" ||
+        (phase === "listening" && active !== role);
+      btn.disabled = isDisabled;
+      if (isActive) btn.classList.add("talk--listening");
+    });
+  }
+
+  function render() {
+    renderPanel("doctor");
+    renderPanel("patient");
+    renderStatus();
+    renderButtons();
+  }
+
+  function wsUrl() {
+    var proto = location.protocol === "https:" ? "wss" : "ws";
+    return proto + "://" + location.host + "/ws";
+  }
+
+  function connect() {
+    ws = new WebSocket(wsUrl());
+    ws.onopen = function () {
+      ws.send(JSON.stringify({ type: "config", doctor: cfg.doctor, patient: cfg.patient }));
+    };
+    ws.onmessage = function (ev) { onMessage(JSON.parse(ev.data)); };
+    ws.onclose = function () { if (phase !== "error") onError("Connection closed"); };
+    ws.onerror = function () { onError("Connection error"); };
+  }
+
+  function onMessage(m) {
+    if (m.type === "ready") {
+      phase = "idle"; render();
+    } else if (m.type === "source") {
+      var ls = lineByTurn[m.turn];
+      if (!ls || ls.side !== m.side) return;   // attribute strictly by turn
+      ls.source += m.text;
+      sawOutput = true;
+      render();
+    } else if (m.type === "translation") {
+      var lt = lineByTurn[m.turn];
+      if (!lt || lt.side !== m.side) return;
+      lt.translation += m.text;
+      sawOutput = true;
+      markOutput();
+    } else if (m.type === "audio") {
+      if (m.turn !== currentTurn) return;
+      // Only the active person's session contributes audio, and only while a
+      // turn is open: an idle session keeps streaming silence-padded frames.
+      if (m.side === active && (phase === "listening" || phase === "translating")) {
+        if (b64Rms(m.b64) > AUDIO_RMS_MIN) {
+          audioBuf.push(m.b64);
+          if (draining) scheduleAudio();   // keep playback fed as it streams in
+          sawOutput = true;
+          markOutput();
+        }
+      }
+    } else if (m.type === "turn_end") {
+      closeTurn();
+    } else if (m.type === "error") {
+      onError(m.raw || "API error");
+    }
+  }
+
+  function startTalk(side) {
+    if (phase !== "idle") return;
+    phase = "listening";
+    active = side;
+    turnSeq++;
+    currentTurn = turnSeq;
+    sawOutput = false;
+    heardSound = false;
+    var ln = { side: side, source: "", translation: "", turn: currentTurn, closed: false };
+    lines.push(ln);
+    lineByTurn[currentTurn] = ln;
+    audioBuf = [];
+    pcmAccum = new Int16Array(0);
+    lastSound = performance.now();
+    send({ type: "talk_start", side: side, turn: currentTurn });
+    // Safety ceiling. A turn where no audio is ever captured does not auto-end
+    // (that is deliberate, so a pause-before-speaking is not discarded), so it
+    // must not be able to hang the session indefinitely either.
+    if (turnCapTimer) clearTimeout(turnCapTimer);
+    turnCapTimer = setTimeout(function () { if (phase === "listening") stopTalk(); }, MAX_TURN_MS);
+    resumeStreaming();   // inside the tap gesture, so a suspended context is legal here
+    ensureMic();
+    render();
+  }
+
+  function stopTalk() {
+    if (phase !== "listening") return;
+    phase = "translating";
+    send({ type: "talk_end" });
+    stopStreaming();
+    // The Live API never sends a "turn finished" signal, so the turn ends on a
+    // drained playback queue plus model silence. See startDrain().
+    startDrain();
+    render();
+  }
+
+  function b64Rms(b64) {
+    var bin = atob(b64), n = bin.length, sum = 0, count = 0;
+    for (var i = 0; i + 1 < n; i += 2) {
+      var v = bin.charCodeAt(i) | (bin.charCodeAt(i + 1) << 8);
+      if (v >= 0x8000) v -= 0x10000;
+      sum += v * v; count++;
+    }
+    return count ? Math.sqrt(sum / count) : 0;
+  }
+
+  function clearTurnTimers() {
+    if (quietTimer) clearTimeout(quietTimer);
+    if (capTimer) clearTimeout(capTimer);
+    if (drainTimer) clearInterval(drainTimer);
+    if (turnCapTimer && draining) { clearTimeout(turnCapTimer); turnCapTimer = null; }
+    quietTimer = capTimer = drainTimer = null;
+  }
+
+  function markOutput() { lastOutputAt = performance.now(); }
+
+  function ensurePlayCtx() {
+    if (!playCtx) {
+      playCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+    }
+    if (playCtx.state === "suspended") playCtx.resume();
+  }
+
+  // Plays whatever translation audio has arrived so far and keeps appending as
+  // more streams in, gaplessly. Called repeatedly while a turn drains.
+  function scheduleAudio() {
+    if (!audioBuf.length) return;
+    ensurePlayCtx();
+    nextTime = Math.max(nextTime, playCtx.currentTime);
+    for (var i = 0; i < audioBuf.length; i++) {
+      var bin = atob(audioBuf[i]);
+      var bytes = new Uint8Array(bin.length);
+      for (var j = 0; j < bin.length; j++) bytes[j] = bin.charCodeAt(j);
+      var i16 = new Int16Array(bytes.buffer);
+      if (!i16.length) continue;
+      var buf = playCtx.createBuffer(1, i16.length, 24000);
+      var ch = buf.getChannelData(0);
+      for (var k = 0; k < i16.length; k++) ch[k] = i16[k] / 0x8000;
+      var node = playCtx.createBufferSource();
+      node.buffer = buf;
+      node.connect(playCtx.destination);
+      var t = Math.max(playCtx.currentTime, nextTime);
+      node.start(t);
+      nextTime = t + buf.duration;
+    }
+    audioBuf = [];
+  }
+
+  // A turn is over when BOTH hold: the model has produced no new speech for
+  // QUIESCE_MS, and everything queued has finished playing. The model streams in
+  // bursts, so a quiet-window-only rule closes turns mid-translation and splits
+  // one utterance across two transcript lines.
+  function startDrain() {
+    draining = true;
+    markOutput();
+    var endedAt = performance.now();
+    ensurePlayCtx();
+    scheduleAudio();
+    clearTurnTimers();
+    drainTimer = setInterval(function () {
+      var quiet = performance.now() - lastOutputAt > QUIESCE_MS;
+      var drained = playCtx.currentTime >= nextTime - 0.05;
+      // A cold session can take seconds to produce its first token, so never close
+      // on a timer alone — but do not hang forever on a turn that says nothing.
+      var graceExpired = performance.now() - endedAt > COLD_GRACE_MS;
+      if (quiet && drained && (sawOutput || graceExpired)) closeTurn();
+    }, 200);
+    capTimer = setTimeout(function () { closeTurn(); }, TURN_HARD_CAP_MS);
+  }
+
+  function closeTurn() {
+    clearTurnTimers();
+    draining = false;
+    var ln = lineByTurn[currentTurn];
+    if (ln) ln.closed = true;
+    hasTurned = true;
+    active = null;
+    phase = "idle";
+    render();
+  }
+
+  function onError(msg) {
+    // Stop the turn machinery first: a drain timer left running would call
+    // closeTurn(), reset phase to idle, and silently erase "Nothing was translated".
+    clearTurnTimers();
+    draining = false;
+    phase = "error";
+    active = null;
+    audioBuf = [];
+    stopStreaming();
+    render();
+  }
+
+  function retryAll() {
+    // Detach first. The old socket's onclose would otherwise fire after the phase
+    // was reset to idle and drop us straight back into the error state, making
+    // Retry a no-op.
+    if (ws) {
+      try { ws.onclose = ws.onerror = ws.onmessage = ws.onopen = null; ws.close(); } catch (e) {}
+    }
+    clearTurnTimers();
+    draining = false;
+    lines = []; lineByTurn = {}; audioBuf = []; phase = "idle"; active = null;
+    hasTurned = false;
+    connect();
+    render();
+  }
+
+  function send(obj) { if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj)); }
+
+  function ensureMic() {
+    if (audioCtx) { resumeStreaming(); return; }
+    navigator.mediaDevices.getUserMedia({
+      audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true }
+    }).then(function (stream) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+      // Created inside a promise callback, i.e. outside the user gesture that
+      // started the turn, so browsers hand it back SUSPENDED and it captures
+      // nothing. Resuming only on the next ensureMic() is why the first turn of
+      // every session produced no audio at all.
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      sourceNode = audioCtx.createMediaStreamSource(stream);
+      processor = audioCtx.createScriptProcessor(2048, 1, 1);
+      processor.onaudioprocess = onAudio;
+      var mute = audioCtx.createGain(); mute.gain.value = 0;
+      sourceNode.connect(processor);
+      processor.connect(mute);
+      mute.connect(audioCtx.destination);
+      lastSound = performance.now();
+    }).catch(function () { onError("Microphone unavailable"); });
+  }
+
+  function resumeStreaming() {
+    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+  }
+
+  function stopStreaming() {
+    // keep the stream warm; just stop treating chunks as a live turn
+    pcmAccum = new Int16Array(0);
+  }
+
+  function onAudio(e) {
+    if (phase !== "listening") return;
+    var input = e.inputBuffer.getChannelData(0);
+    var i16 = new Int16Array(input.length);
+    var sum = 0;
+    for (var i = 0; i < input.length; i++) {
+      var s = Math.max(-1, Math.min(1, input[i]));
+      i16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
+      sum += s * s;
+    }
+    var rms = Math.sqrt(sum / input.length);
+    var now = performance.now();
+    if (rms > SILENCE_THRESHOLD) { lastSound = now; heardSound = true; }
+
+    var merged = new Int16Array(pcmAccum.length + i16.length);
+    merged.set(pcmAccum);
+    merged.set(i16, pcmAccum.length);
+    pcmAccum = merged;
+    var withinTail = (now - lastSound) < TRAIL_SILENCE_MS;
+    while (pcmAccum.length >= CHUNK) {
+      // Forward speech and its short tail. Streaming the full silence gap makes the
+      // model finalise the utterance early and drop the last clause.
+      if (withinTail) sendAudio(pcmAccum.subarray(0, CHUNK));
+      pcmAccum = pcmAccum.subarray(CHUNK);
+    }
+    // Only auto-end a turn that has actually carried speech. Ending on elapsed
+    // silence alone silently discarded the whole turn for anyone who taps and then
+    // pauses to think before speaking.
+    if (heardSound && now - lastSound > SILENCE_MS) stopTalk();
+  }
+
+  function int16ToB64(i16) {
+    var bytes = new Uint8Array(i16.buffer, i16.byteOffset, i16.byteLength);
+    var bin = "";
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin);
+  }
+
+  function sendAudio(i16) {
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+      // Dropping captured speech silently is the failure mode this tool must never
+      // have; surface it instead of losing the words.
+      onError("Connection lost");
+      return;
+    }
+    send({ type: "audio", b64: int16ToB64(i16) });
+  }
+
+  // TALK button wiring.
+  ["doctor", "patient"].forEach(function (role) {
+    el(role, ".talk").addEventListener("click", function () {
+      if (phase === "idle") startTalk(role);
+      else if (phase === "listening" && active === role) stopTalk();
+    });
+  });
+
+  // Setup. The last pair is only a DEFAULT: persisting it *and* skipping the setup
+  // screen made the languages permanent, so a shared tablet handed patient 2 the
+  // previous patient's languages with no way to change them.
+  var saved = null;
+  try { saved = localStorage.getItem("interpret.cfg"); } catch (e) {}
+  if (saved) {
+    try {
+      var prev = JSON.parse(saved);
+      if (prev.doctor) document.getElementById("doctor-lang").value = prev.doctor;
+      if (prev.patient) document.getElementById("patient-lang").value = prev.patient;
+    } catch (e) {}
+  }
+  var consent = document.getElementById("consent");
+  var startBtn = document.getElementById("start");
+  consent.addEventListener("change", function () { startBtn.disabled = !consent.checked; });
+  startBtn.addEventListener("click", function () {
+    if (!consent.checked) return;
+    cfg.doctor = document.getElementById("doctor-lang").value;
+    cfg.patient = document.getElementById("patient-lang").value;
+    try { localStorage.setItem("interpret.cfg", JSON.stringify(cfg)); } catch (e) {}
+    document.getElementById("setup").classList.add("hidden");
+    // Open the microphone now rather than on the first tap. Creating the audio
+    // context on demand races the speaker's first words and intermittently loses
+    // the whole opening turn; priming it here means capture is live before anyone
+    // speaks. Nothing is transmitted until a TALK button is pressed.
+    ensureMic();
+    connect();
+  });
+  [].forEach.call(document.querySelectorAll(".langs"), function (b) {
+    b.addEventListener("click", function () { location.reload(); });
+  });
+  [].forEach.call(document.querySelectorAll(".save"), function (b) {
+    b.addEventListener("click", downloadTranscript);
+  });
+  // "Call interpreter" used to be inert, which implies a capability the tool does
+  // not have. Make it say so plainly, in both languages, and let the clinician
+  // either carry on or end the session.
+  var overlay = document.getElementById("interpreter");
+  [].forEach.call(document.querySelectorAll(".call"), function (b) {
+    b.addEventListener("click", function () { overlay.classList.remove("hidden"); });
+  });
+  document.getElementById("interp-continue").addEventListener("click", function () {
+    overlay.classList.add("hidden");
+  });
+  document.getElementById("interp-end").addEventListener("click", function () { location.reload(); });
+
+  render();
+})();
+</script>
+</body>
+</html>
