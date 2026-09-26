@@ -5,6 +5,7 @@
 **Run:** `psf run --git --harness opencode --model deepseek/deepseek-v4-pro --mode yolo --no-ask`
 **Factory:** psf `0.1.0`, digest `sha256:f21bac89b0ddbd4317a07321618f3adca116fa6955f29a604803a67bcd4ea44b`
 **Envelope:** `FB-07f94279` → filed upstream as issue #2
+**Follow-up issues:** #7 (`verify_command` needs `--git`), #8 (feedback export fails silently)
 
 ---
 
@@ -157,9 +158,35 @@ Suggested fix:
 - make the export **verify the created issue URL** and exit non-zero with a clear message when
   filing fails.
 
+Filed upstream as **issue #8**.
+
 ---
 
-## 6. Suggested eval cases
+## 6. A second factory defect: `verify_command` vs the temp-dir workspace
+
+Found while smoke-testing a clean clone: `psf run "<goal>"` **cannot reach `DONE`** in this
+repo unless `--git` is passed, and it reports an error that looks like a code defect.
+
+```
+psf run "<goal>"          ->  BLOCKED   attempts 3/3
+psf run "<goal>" --git    ->  DONE      attempts 1/3
+
+verify_command failed: error: Failed to spawn: `server.py`
+  Caused by: No such file or directory (os error 2)
+```
+
+`Workspace.create()` with `use_git=False` returns `tempfile.mkdtemp(...)` — an empty
+directory. A `verify_command` that references a project file can therefore only fail, so the
+item blocks deterministically no matter how good the agents are, and `max_attempts` cannot
+help. The README quickstart is the invocation that fails.
+
+This matters beyond one consumer: `verify_command` referencing a project file is the natural
+way to write one, and the failure mode is silent about its cause. Filed upstream as **issue #7**.
+
+Together with §5, both defects are in the factory's own delivery and verification paths, not in
+any particular consumer's usage.
+
+## 7. Suggested eval cases
 
 Concrete additions, in the factory's own idiom:
 
@@ -179,7 +206,7 @@ Concrete additions, in the factory's own idiom:
 
 ---
 
-## 7. What the factory got right
+## 8. What the factory got right
 
 Worth keeping, because the failure above is narrow rather than general:
 
@@ -198,7 +225,7 @@ stops at the boundary of the sandbox**, exactly where real integrations begin.
 
 ---
 
-## 8. Privacy
+## 9. Privacy
 
 This document describes failure *classes*, gate behaviour, and process. It contains no
 consumer source code, no prompts, no file paths, no credentials, and no customer data. The
