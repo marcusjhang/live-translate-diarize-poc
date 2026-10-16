@@ -214,8 +214,10 @@
   .setup.hidden { display: none; }
   .setup-card .note { font-size: 14px; line-height: 1.55; color: var(--ink); margin: 0 0 12px; }
   .setup-card .note.zh { color: var(--muted); margin-bottom: 24px; }
-  .setup-card #interp-continue { margin-bottom: 14px; }
-  .setup-card #interp-end { display: block; margin: 0 auto; }
+  .setup-card #end-save { margin-bottom: 10px; }
+  .setup-card #end-nosave { margin-bottom: 16px; }
+  .setup-card #end-cancel { display: block; margin: 0 auto; }
+  .start--quiet { background: var(--panel); color: var(--ink); border-color: var(--border); }
   .setup-card {
     background: var(--panel);
     border: 1px solid var(--border);
@@ -285,13 +287,14 @@
 </style>
 </head>
 <body>
-  <div class="setup hidden" id="interpreter">
+  <div class="setup hidden" id="endbox">
     <div class="setup-card">
-      <h1>Call a human interpreter</h1>
-      <p class="note">This tablet cannot connect you to an interpreter. It only relays automatic translation. Use your clinic's normal interpreter line, and do not rely on this tool for this conversation.</p>
-      <p class="note zh">这台平板无法为您接通人工翻译。它只做自动翻译。请使用诊所平常的翻译电话，这次对话不要依赖本工具。</p>
-      <button class="start" id="interp-continue" type="button">Continue session</button>
-      <button class="langs" id="interp-end" type="button">End session</button>
+      <h1>End this consultation?</h1>
+      <p class="note">The translation session stops and the microphone is released. You stay on this
+      page so you can still read or save what was said.</p>
+      <button class="start" id="end-save" type="button">Save transcript &amp; end</button>
+      <button class="start start--quiet" id="end-nosave" type="button">End without saving</button>
+      <button class="langs" id="end-cancel" type="button">Cancel</button>
     </div>
   </div>
 
@@ -336,11 +339,10 @@
       <button class="talk">TALK</button>
       <div class="status"></div>
       <div class="footer">
-        <div>Automatic translation · not a medical interpreter</div>
         <div class="footer-actions">
           <button class="save">Save transcript</button>
           <button class="langs">Change languages</button>
-          <button class="call">Call interpreter</button>
+          <button class="end">End consultation</button>
         </div>
       </div>
     </div>
@@ -351,11 +353,10 @@
       <button class="talk">TALK</button>
       <div class="status"></div>
       <div class="footer">
-        <div>Automatic translation · not a medical interpreter</div>
         <div class="footer-actions">
           <button class="save">Save transcript</button>
           <button class="langs">Change languages</button>
-          <button class="call">Call interpreter</button>
+          <button class="end">End consultation</button>
         </div>
       </div>
     </div>
@@ -372,7 +373,7 @@
   var CHUNK = 1600; // 100 ms of 16 kHz mono PCM16
 
   var cfg = { doctor: "en", patient: "zh" };
-  var phase = "idle"; // idle | listening | translating | error
+  var phase = "idle"; // idle | listening | translating | error | ended
   var active = null;  // doctor | patient | null
   var lines = [];
   // Every transcript line is keyed by the turn it belongs to. The model keeps
@@ -398,7 +399,7 @@
   var COLD_GRACE_MS = 9000;   // longest we wait for a first token before closing anyway
 
   var ws = null;
-  var audioCtx = null, sourceNode = null, processor = null;
+  var audioCtx = null, sourceNode = null, processor = null, micStream = null;
   var pcmAccum = new Int16Array(0);
   var lastSound = 0;
   var hasTurned = false;
@@ -638,6 +639,7 @@
       return "Speaking to " + ROLES[listener];
     }
     if (phase === "error") return "Nothing was translated.";
+    if (phase === "ended") return "Session ended";
     return "";
   }
 
@@ -660,7 +662,7 @@
       var btn = el(role, ".talk");
       btn.className = "talk";
       var isActive = phase === "listening" && active === role;
-      var isDisabled = phase === "error" || phase === "translating" ||
+      var isDisabled = phase === "error" || phase === "ended" || phase === "translating" ||
         (phase === "listening" && active !== role);
       btn.disabled = isDisabled;
       if (isActive) btn.classList.add("talk--listening");
@@ -856,6 +858,25 @@
     render();
   }
 
+  // Real end: close the socket so the server tears down both upstream sessions,
+  // release the microphone, and stop the playout. Leaves the transcript on screen.
+  function endSession() {
+    clearTurnTimers();
+    draining = false;
+    if (ws) {
+      try { ws.onclose = ws.onerror = ws.onmessage = ws.onopen = null; ws.close(); } catch (e) {}
+      ws = null;
+    }
+    if (micStream) { try { micStream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {} }
+    if (audioCtx) { try { audioCtx.close(); } catch (e) {} }
+    if (playCtx) { try { playCtx.close(); } catch (e) {} }
+    audioCtx = sourceNode = processor = micStream = null;
+    playCtx = null; nextTime = 0;
+    phase = "ended";
+    active = null;
+    render();
+  }
+
   function retryAll() {
     // Detach first. The old socket's onclose would otherwise fire after the phase
     // was reset to idle and drop us straight back into the error state, making
@@ -878,6 +899,7 @@
     navigator.mediaDevices.getUserMedia({
       audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true }
     }).then(function (stream) {
+      micStream = stream;
       audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
       // Created inside a promise callback, i.e. outside the user gesture that
       // started the turn, so browsers hand it back SUSPENDED and it captures
@@ -994,17 +1016,23 @@
   [].forEach.call(document.querySelectorAll(".save"), function (b) {
     b.addEventListener("click", downloadTranscript);
   });
-  // "Call interpreter" used to be inert, which implies a capability the tool does
-  // not have. Make it say so plainly, in both languages, and let the clinician
-  // either carry on or end the session.
-  var overlay = document.getElementById("interpreter");
-  [].forEach.call(document.querySelectorAll(".call"), function (b) {
-    b.addEventListener("click", function () { overlay.classList.remove("hidden"); });
+  // End consultation: ask once, and offer to keep the record.
+  var endbox = document.getElementById("endbox");
+  [].forEach.call(document.querySelectorAll(".end"), function (b) {
+    b.addEventListener("click", function () { endbox.classList.remove("hidden"); });
   });
-  document.getElementById("interp-continue").addEventListener("click", function () {
-    overlay.classList.add("hidden");
+  document.getElementById("end-cancel").addEventListener("click", function () {
+    endbox.classList.add("hidden");
   });
-  document.getElementById("interp-end").addEventListener("click", function () { location.reload(); });
+  document.getElementById("end-save").addEventListener("click", function () {
+    downloadTranscript();
+    endbox.classList.add("hidden");
+    endSession();
+  });
+  document.getElementById("end-nosave").addEventListener("click", function () {
+    endbox.classList.add("hidden");
+    endSession();
+  });
 
   render();
 })();
