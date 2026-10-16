@@ -48,7 +48,7 @@ node tests/e2e/disconnect.mjs e3      # press during playback, probed mid-turn
 node tests/e2e/conversation.mjs       # one 10-turn consultation
 node tests/e2e/longevity.mjs          # 60 turns (~12 min); crosses the 10-minute cap
 node tests/e2e/check-consent.mjs      # consent gate + language defaults
-node tests/e2e/check-interpreter.mjs  # "Call interpreter" overlay
+node tests/e2e/check-end.mjs          # End consultation + footer shape
 ```
 
 `disconnect.mjs e5` needs the server killed while it runs — start it, then
@@ -84,6 +84,7 @@ Every fixture is a fixed string in that script, so the corpus is reproducible an
 - **Misuse** — interrupting mid-turn, both buttons in the same tick, pressing during
   playback, a silent double-tap, and a mid-turn disconnect.
 - **Lifecycle** — the error state survives; Retry recovers; the consent gate holds;
+  a consultation can be ended (with or without saving) and the transcript survives it;
   languages can be changed between patients; playback is silenced so the room stays quiet.
 
 Verified with these: **30/30 scenarios**, 20/20 unit cases, 5/5 misuse cases, 0 server
