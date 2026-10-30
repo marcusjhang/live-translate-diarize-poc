@@ -1,6 +1,6 @@
 # Interpret
 
-A simple, turn-based, two-person live interpretation app for a doctor–patient
+A simple two-person live interpretation app for a doctor–patient
 consultation on one shared tablet, powered by Gemini 3.5 Live Translate.
 
 Two people, two buttons, one conversation. No accounts, no settings screens, no
@@ -13,6 +13,11 @@ other, so each person reads their own panel from their side of the desk.
 cp .env.example .env          # fill in GEMINI_API_KEY
 uv run server.py              # http://localhost:8000
 ```
+
+Translation is delivered after each turn by default. Start in progressive live
+mode with either `STREAMING_MODE=realtime uv run server.py` or
+`uv run server.py --streaming-mode realtime`. The in-session `Mode` control
+switches between `After turn` and `Live` without opening a settings screen.
 
 The key is held server-side and never reaches the browser.
 
@@ -66,13 +71,14 @@ is fed the doctor's mic; session B targets the doctor's language and is fed the
 patient's mic. Both are opened at start and kept warm so the first turn is fast.
 Only one direction may stream at a time.
 
-## App-side buffering
+## Delivery modes
 
-The model streams the translated audio while the speaker is still talking. The
-app buffers that audio (and holds the translated text) and releases it only when
-the turn closes, so the listener never hears a partial, overlapping translation.
-While LISTENING the speaker's own words stream live in both panels — the "did it
-hear me" reassurance — while the translated line appears after the turn closes.
+The model streams translated text and audio while the speaker is still talking.
+In the default `turn` mode, the app buffers translated audio and holds translated
+text on screen until the turn closes, so the listener never hears a partial,
+overlapping translation. In `realtime` mode, the app renders text deltas and
+plays audio chunks as they arrive. Source speech remains visible live in both
+modes as the "did it hear me" reassurance.
 
 ## Disclaimer
 
