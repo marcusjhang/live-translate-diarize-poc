@@ -13,6 +13,7 @@ thin relay plus the pure logic that the self-check asserts: language mapping,
 the transcript normaliser, and the turn state machine.
 """
 import asyncio
+import argparse
 import base64
 from contextlib import asynccontextmanager
 import json
@@ -24,6 +25,7 @@ import uvicorn
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from streaming_mode import STREAMING_MODES, default_streaming_mode, parse_streaming_mode
 
 STATIC_DIR = Path(__file__).parent / "static"
 
@@ -44,6 +46,7 @@ def _load_dotenv():
 _load_dotenv()
 
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-live-translate-preview")
+DEFAULT_STREAMING_MODE = default_streaming_mode()
 
 # ---------------------------------------------------------------------------
 # Pure logic — no SDK, no network, no key. The self-check asserts this.
@@ -354,6 +357,12 @@ async def ws_bridge(browser: WebSocket):
         return
     doctor = cfg.get("doctor", "en")
     patient = cfg.get("patient", "zh")
+    try:
+        streaming_mode = parse_streaming_mode(cfg.get("streaming_mode", DEFAULT_STREAMING_MODE))
+    except ValueError:
+        await browser.send_json({"type": "error", "raw": "Invalid streaming mode"})
+        await browser.close()
+        return
 
     if not os.environ.get("GEMINI_API_KEY"):
         await browser.send_json({"type": "error", "raw": "GEMINI_API_KEY not set on server"})
@@ -369,7 +378,7 @@ async def ws_bridge(browser: WebSocket):
         "patient": asyncio.create_task(_direction("patient", lang_bcp47(doctor), in_q["patient"], out_q)),
     }
 
-    await browser.send_json({"type": "ready"})
+    await browser.send_json({"type": "ready", "streaming_mode": streaming_mode})
 
     async def out_pump():
         while True:
@@ -401,6 +410,16 @@ async def ws_bridge(browser: WebSocket):
                     await in_q[active].put({"type": "silence", "ms": 800})
                     await in_q[active].put({"type": "activity_end"})
                     active = None
+            elif t == "set_streaming_mode":
+                try:
+                    streaming_mode = parse_streaming_mode(m.get("streaming_mode"))
+                except ValueError:
+                    await browser.send_json({"type": "error", "raw": "Invalid streaming mode"})
+                else:
+                    await browser.send_json({
+                        "type": "streaming_mode",
+                        "streaming_mode": streaming_mode,
+                    })
     except (WebSocketDisconnect, ValueError, json.JSONDecodeError):
         pass
     finally:
@@ -420,6 +439,17 @@ def _check(cond, msg):
 
 
 def _self_check():
+    # Delivery-mode configuration.
+    _check(parse_streaming_mode(None) == "turn", "turn is the default mode")
+    _check(parse_streaming_mode(" TURN ") == "turn", "mode is normalized")
+    _check(parse_streaming_mode("realtime") == "realtime", "realtime is valid")
+    try:
+        parse_streaming_mode("fast")
+    except ValueError:
+        pass
+    else:
+        _check(False, "unknown streaming mode must fail")
+
     # Language mapping.
     _check(lang_bcp47("zh") == "zh-Hans", "zh must map to zh-Hans")
     _check(lang_bcp47("en") == "en", "en passes through")
@@ -461,12 +491,23 @@ def _self_check():
 
 
 if __name__ == "__main__":
-    if "--self-check" in sys.argv:
+    parser = argparse.ArgumentParser(description="Interpret live translation server")
+    parser.add_argument("--self-check", action="store_true")
+    parser.add_argument(
+        "--streaming-mode",
+        choices=STREAMING_MODES,
+        default=None,
+        help="default delivery mode for new sessions (overrides STREAMING_MODE)",
+    )
+    args = parser.parse_args()
+    if args.self_check:
         _self_check()
     else:
+        if args.streaming_mode is not None:
+            DEFAULT_STREAMING_MODE = args.streaming_mode
         host = os.environ.get("HOST", "127.0.0.1")
         port = int(os.environ.get("PORT", "8000"))
-        print(f"[interpret] listening on http://{host}:{port}")
+        print(f"[interpret] listening on http://{host}:{port} ({DEFAULT_STREAMING_MODE} mode)")
         # Loopback by default: /ws is unauthenticated and every turn spends the
         # server-side API key, so exposing it on the LAN hands the key to anyone
         # who can reach the port. Set HOST=0.0.0.0 deliberately.

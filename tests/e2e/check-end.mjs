@@ -69,9 +69,9 @@ await ev(`(async function(){
     return o.apply(this,arguments);}; return 'ok';})()`, true);
 
 // --- footer shape ------------------------------------------------------------
-check('footer offers exactly the three actions',
+check('footer offers the four session actions',
   await ev(`[...document.querySelectorAll('.panel[data-role="doctor"] .footer-actions button')].map(b=>b.textContent).join('|')`),
-  'Save transcript|Change languages|End consultation');
+  'Save transcript|Mode: After turn|Change languages|End consultation');
 check('"Call interpreter" is gone', await ev(`document.body.innerText.includes('Call interpreter')`), false);
 check('no duplicate footer disclaimer', await ev(`/not a medical interpreter/i.test(document.querySelector('.panel[data-role="doctor"] .footer').innerText)`), false);
 check('consent gate still carries the disclaimer', await ev(`/not a medical interpreter/i.test(document.getElementById('setup').innerText)`), true);
@@ -80,6 +80,10 @@ check('consent gate still carries the disclaimer', await ev(`/not a medical inte
 await ev(`(function(){var c=document.getElementById('consent'); if(c&&!c.checked) c.click(); document.getElementById('start').click();})()`);
 await sleep(1600);
 check('connected', await status(), 'Ready');
+check('server default is after-turn delivery', await ev(`document.querySelector('.mode').textContent`), 'Mode: After turn');
+await ev(`document.querySelector('.mode').click()`); await sleep(300);
+check('mode toggles to live', await ev(`document.querySelector('.mode').textContent`), 'Mode: Live');
+check('both panels show live mode', await ev(`[...document.querySelectorAll('.mode')].every(b=>b.getAttribute('aria-pressed')==='true')`), true);
 await ev(`window.__clip=${JSON.stringify(b64)}`);
 await ev(`document.querySelector('.panel[data-role="doctor"] button.talk').click()`);
 await sleep(700);
