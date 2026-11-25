@@ -290,8 +290,8 @@
   <div class="setup hidden" id="endbox">
     <div class="setup-card">
       <h1>End this consultation?</h1>
-      <p class="note">The translation session stops and the microphone is released. You stay on this
-      page so you can still read or save what was said.</p>
+      <p class="note">The translation session stops, the microphone is released, and you return to
+      the setup page. The transcript is cleared unless you save it first.</p>
       <button class="start" id="end-save" type="button">Save transcript &amp; end</button>
       <button class="start start--quiet" id="end-nosave" type="button">End without saving</button>
       <button class="cancel" id="end-cancel" type="button">Cancel</button>
@@ -303,21 +303,11 @@
       <h1>Interpretation setup</h1>
       <div class="field">
         <label for="doctor-lang">Doctor language</label>
-        <select id="doctor-lang">
-          <option value="en" selected>English</option>
-          <option value="zh">中文 (Mandarin)</option>
-          <option value="es">Español (Spanish)</option>
-          <option value="fil">Filipino</option>
-        </select>
+        <select id="doctor-lang"></select>
       </div>
       <div class="field">
         <label for="patient-lang">Patient language</label>
-        <select id="patient-lang">
-          <option value="zh" selected>中文 (Mandarin)</option>
-          <option value="en">English</option>
-          <option value="es">Español (Spanish)</option>
-          <option value="fil">Filipino</option>
-        </select>
+        <select id="patient-lang"></select>
       </div>
       <label class="consent" for="consent">
         <input type="checkbox" id="consent">
@@ -368,10 +358,79 @@
 (function () {
   "use strict";
 
-  var LANGS = { en: "English", zh: "中文", es: "Español", fil: "Filipino" };
+  // [code, English name, native name]. Codes are BCP-47 tags the translation model
+  // accepts as-is, except "zh", which the server maps to zh-Hans (kept as "zh" so
+  // saved setups and the e2e suites still work). Priority languages first, then
+  // everything else alphabetically by English name.
+  var PRIORITY_LANGS = [
+    ["ta", "Tamil", "தமிழ்"],
+    ["id", "Indonesian", "Bahasa Indonesia"],
+    ["vi", "Vietnamese", "Tiếng Việt"],
+    ["hi", "Hindi", "हिन्दी"],
+    ["zh", "Chinese, Simplified", "简体中文"],
+    ["zh-Hant", "Chinese, Traditional", "繁體中文"],
+    ["my", "Burmese", "မြန်မာ"],
+    ["fil", "Filipino", "Filipino"],
+    ["bn", "Bengali", "বাংলা"],
+    ["ko", "Korean", "한국어"],
+    ["ms", "Malay", "Bahasa Melayu"]
+  ];
+  var OTHER_LANGS = [
+    ["af", "Afrikaans", "Afrikaans"], ["ak", "Akan", "Akan"], ["sq", "Albanian", "Shqip"],
+    ["am", "Amharic", "አማርኛ"], ["ar", "Arabic", "العربية"], ["hy", "Armenian", "Հայերեն"],
+    ["az", "Azerbaijani", "Azərbaycanca"], ["eu", "Basque", "Euskara"],
+    ["be", "Belarusian", "Беларуская"], ["bg", "Bulgarian", "Български"],
+    ["ca", "Catalan", "Català"], ["hr", "Croatian", "Hrvatski"], ["cs", "Czech", "Čeština"],
+    ["da", "Danish", "Dansk"], ["nl", "Dutch", "Nederlands"], ["en", "English", "English"],
+    ["et", "Estonian", "Eesti"], ["fi", "Finnish", "Suomi"], ["fr", "French", "Français"],
+    ["gl", "Galician", "Galego"], ["ka", "Georgian", "ქართული"], ["de", "German", "Deutsch"],
+    ["el", "Greek", "Ελληνικά"], ["gu", "Gujarati", "ગુજરાતી"], ["ha", "Hausa", "Hausa"],
+    ["he", "Hebrew", "עברית"], ["hu", "Hungarian", "Magyar"], ["is", "Icelandic", "Íslenska"],
+    ["it", "Italian", "Italiano"], ["ja", "Japanese", "日本語"], ["jv", "Javanese", "Basa Jawa"],
+    ["kn", "Kannada", "ಕನ್ನಡ"], ["kk", "Kazakh", "Қазақ"], ["km", "Khmer", "ខ្មែរ"],
+    ["rw", "Kinyarwanda", "Ikinyarwanda"], ["lo", "Lao", "ລາວ"], ["lv", "Latvian", "Latviešu"],
+    ["lt", "Lithuanian", "Lietuvių"], ["mk", "Macedonian", "Македонски"],
+    ["ml", "Malayalam", "മലയാളം"], ["mr", "Marathi", "मराठी"], ["mn", "Mongolian", "Монгол"],
+    ["ne", "Nepali", "नेपाली"], ["no", "Norwegian", "Norsk"], ["fa", "Persian", "فارسی"],
+    ["pl", "Polish", "Polski"], ["pt-BR", "Portuguese, Brazil", "Português (Brasil)"],
+    ["pt-PT", "Portuguese, Portugal", "Português (Portugal)"], ["pa", "Punjabi", "ਪੰਜਾਬੀ"],
+    ["ro", "Romanian", "Română"], ["ru", "Russian", "Русский"], ["sr", "Serbian", "Српски"],
+    ["sd", "Sindhi", "سنڌي"], ["si", "Sinhala", "සිංහල"], ["sk", "Slovak", "Slovenčina"],
+    ["sl", "Slovenian", "Slovenščina"], ["es", "Spanish", "Español"],
+    ["su", "Sundanese", "Basa Sunda"], ["sw", "Swahili", "Kiswahili"],
+    ["sv", "Swedish", "Svenska"], ["te", "Telugu", "తెలుగు"], ["th", "Thai", "ไทย"],
+    ["tr", "Turkish", "Türkçe"], ["uk", "Ukrainian", "Українська"], ["ur", "Urdu", "اردو"],
+    ["uz", "Uzbek", "Oʻzbek"], ["zu", "Zulu", "isiZulu"]
+  ];
+  var LANGS = {};  // code -> native name, for the panel labels
+  PRIORITY_LANGS.concat(OTHER_LANGS).forEach(function (l) { LANGS[l[0]] = l[2]; });
+  function fillLangSelect(id, selected) {
+    var sel = document.getElementById(id);
+    [["Priority languages", PRIORITY_LANGS], ["All other languages", OTHER_LANGS]].forEach(function (g) {
+      var group = document.createElement("optgroup");
+      group.label = g[0];
+      g[1].forEach(function (l) {
+        var o = document.createElement("option");
+        o.value = l[0];
+        o.textContent = l[1] === l[2] ? l[1] : l[2] + " (" + l[1] + ")";
+        if (l[0] === selected) o.selected = true;
+        group.appendChild(o);
+      });
+      sel.appendChild(group);
+    });
+  }
+  fillLangSelect("doctor-lang", "en");
+  fillLangSelect("patient-lang", "zh");
   var ROLES = { doctor: "Doctor", patient: "Patient" };
-  var SILENCE_THRESHOLD = 0.01;
-  var SILENCE_MS = 3000;
+  // Input model (docs/starter-alignment-plan.md): like Google's starter, the mic is
+  // ONE continuous 16 kHz stream of 100 ms PCM16 chunks for the whole session, and
+  // the model's own activity detection decides where speech starts and ends. TALK
+  // only ROUTES that stream to one person's translation session; releasing the
+  // route makes the model flush the clause it is holding. Nothing here edits the
+  // audio the model hears (no silence trimming, no fake padding, no turn markers).
+  var SILENCE_THRESHOLD = 0.01;  // UI only: drives auto-release, never filters audio
+                                 // (the model's input transcript also counts as speech)
+  var SILENCE_MS = 3000;         // auto-release after this much quiet following speech
   var CHUNK = 1600; // 100 ms of 16 kHz mono PCM16
 
   var cfg = { doctor: "en", patient: "zh" };
@@ -379,10 +438,10 @@
   var phase = "idle"; // idle | listening | translating | error | ended
   var active = null;  // doctor | patient | null
   var lines = [];
-  // Every transcript line is keyed by the turn it belongs to. The model keeps
-  // emitting after a turn closes; without this, that late output lands in whatever
-  // line comes next, which is how the tool "said" things nobody spoke.
-  var lineByTurn = {};
+  // Output is attributed by SESSION: each person has their own translation session,
+  // so whatever it emits belongs to that person's latest line, even if it arrives
+  // after someone else has started talking.
+  var lineBySide = { doctor: null, patient: null };
   var audioBuf = [];
   var QUIESCE_MS = 3000;      // this long with no *speech* from the model -> turn done
   var TURN_HARD_CAP_MS = 15000;
@@ -391,19 +450,21 @@
   // small peak threshold). Energy can: measured padding is RMS ~0-11, speech is in
   // the hundreds and up.
   var AUDIO_RMS_MIN = 220;
+  var PLAYOUT_LEAD_S = 0.25;  // jitter-buffer depth when playback (re)starts; see scheduleAudio()
   var quietTimer = null, capTimer = null;
-  var playCtx = null, nextTime = 0, draining = false, drainTimer = null, lastOutputAt = 0;
+  var playCtx = null, nextTime = 0, speechEnd = 0, turnHasSpeech = false, draining = false, drainTimer = null, lastOutputAt = 0;
   var turnSeq = 0, currentTurn = null, sawOutput = false, heardSound = false, turnCapTimer = null;
   var MAX_TURN_MS = 30000;   // hard ceiling so a turn can never stay open forever
-  // Seconds of digital silence must not be streamed at the model: it finalises the
-  // utterance early and drops the tail. Forward speech plus a short tail, and let
-  // it resume the moment sound returns.
-  var TRAIL_SILENCE_MS = 1200;
-  var COLD_GRACE_MS = 9000;   // longest we wait for a first token before closing anyway
+  var COLD_GRACE_MS = 9000;   // longest we wait for a first token before handing over anyway
+  var route = null;           // side the mic is routed to, mirrored to the server
+  var connected = false;      // server said "ready": a route message will not be lost
+  var micPending = false;     // getUserMedia / worklet setup in flight
+  var sessionToken = 0;       // bumped by endSession so late async setup is discarded
 
   var ws = null;
   var audioCtx = null, sourceNode = null, processor = null, micStream = null;
   var pcmAccum = new Int16Array(0);
+  var micMute = null;
   var lastSound = 0;
   var hasTurned = false;
 
@@ -636,7 +697,7 @@
   }
 
   function statusText() {
-    if (phase === "idle") return hasTurned ? "Your turn" : "Ready";
+    if (phase === "idle") return !connected ? "Connecting…" : hasTurned ? "Your turn" : "Ready";
     if (phase === "listening") return "Listening…";
     if (phase === "translating") {
       var listener = active === "doctor" ? "patient" : "doctor";
@@ -666,7 +727,7 @@
       var btn = el(role, ".talk");
       btn.className = "talk";
       var isActive = phase === "listening" && active === role;
-      var isDisabled = phase === "error" || phase === "ended" || phase === "translating" ||
+      var isDisabled = !connected || phase === "error" || phase === "ended" || phase === "translating" ||
         (phase === "listening" && active !== role);
       btn.disabled = isDisabled;
       if (isActive) btn.classList.add("talk--listening");
@@ -710,45 +771,52 @@
   function onMessage(m) {
     if (m.type === "ready") {
       streamingMode = m.streaming_mode === "realtime" ? "realtime" : "turn";
-      phase = "idle"; render();
+      connected = true;
+      if (phase !== "listening" && phase !== "translating") phase = "idle";
+      render();
     } else if (m.type === "streaming_mode") {
       streamingMode = m.streaming_mode === "realtime" ? "realtime" : "turn";
       if (streamingMode === "realtime" && audioBuf.length) scheduleAudio();
       render();
     } else if (m.type === "source") {
-      var ls = lineByTurn[m.turn];
-      if (!ls || ls.side !== m.side) return;   // attribute strictly by turn
+      var ls = lineBySide[m.side];
+      if (!ls) return;                         // nobody on that side has spoken yet
       ls.source += m.text;
-      sawOutput = true;
+      // The model hearing words is the best speech detector we have: a quiet or
+      // distant speaker may never cross SILENCE_THRESHOLD, but is still transcribed.
+      if (phase === "listening" && m.side === active) { lastSound = performance.now(); heardSound = true; }
+      // Only the active person's output counts toward THEIR turn: late text from
+      // the previous speaker must neither end this turn early nor hold it open.
+      if (m.side === active) sawOutput = true;
       render();
     } else if (m.type === "translation") {
-      var lt = lineByTurn[m.turn];
-      if (!lt || lt.side !== m.side) return;
+      var lt = lineBySide[m.side];
+      if (!lt) return;
       lt.translation += m.text;
-      sawOutput = true;
-      markOutput();
-      if (streamingMode === "realtime") render();
+      if (m.side === active) { sawOutput = true; markOutput(); }
+      if (streamingMode === "realtime" || lt.closed) render();
     } else if (m.type === "audio") {
-      if (m.turn !== currentTurn) return;
-      // Only the active person's session contributes audio, and only while a
+      // Only the active person's session contributes audio, and only while their
       // turn is open: an idle session keeps streaming silence-padded frames.
       if (m.side === active && (phase === "listening" || phase === "translating")) {
-        if (b64Rms(m.b64) > AUDIO_RMS_MIN) {
-          audioBuf.push(m.b64);
-          if (draining || streamingMode === "realtime") scheduleAudio();
+        var loud = b64Rms(m.b64) > AUDIO_RMS_MIN;
+        audioBuf.push({ b64: m.b64, loud: loud });
+        if (DEBUG_AUDIO && dbg.turn !== null) dbg.recv.push(b64Bytes(m.b64));
+        if (draining || streamingMode === "realtime") scheduleAudio();
+        if (loud) {
           sawOutput = true;
           markOutput();
         }
       }
     } else if (m.type === "turn_end") {
-      closeTurn();
+      if (m.side === active && phase === "translating") closeTurn();
     } else if (m.type === "error") {
       onError(m.raw || "API error");
     }
   }
 
   function startTalk(side) {
-    if (phase !== "idle") return;
+    if (phase !== "idle" || !connected) return;
     phase = "listening";
     active = side;
     turnSeq++;
@@ -757,11 +825,12 @@
     heardSound = false;
     var ln = { side: side, source: "", translation: "", turn: currentTurn, closed: false };
     lines.push(ln);
-    lineByTurn[currentTurn] = ln;
+    lineBySide[side] = ln;
     audioBuf = [];
-    pcmAccum = new Int16Array(0);
+    turnHasSpeech = false;
     lastSound = performance.now();
-    send({ type: "talk_start", side: side, turn: currentTurn });
+    setRoute(side);
+    dbgStartTurn(currentTurn);
     // Safety ceiling. A turn where no audio is ever captured does not auto-end
     // (that is deliberate, so a pause-before-speaking is not discarded), so it
     // must not be able to hang the session indefinitely either.
@@ -775,12 +844,16 @@
   function stopTalk() {
     if (phase !== "listening") return;
     phase = "translating";
-    send({ type: "talk_end" });
-    stopStreaming();
+    setRoute(null);   // the server sends audio_stream_end: the model flushes its tail
     // The Live API never sends a "turn finished" signal, so the turn ends on a
     // drained playback queue plus model silence. See startDrain().
     startDrain();
     render();
+  }
+
+  function setRoute(side) {
+    route = side;
+    send({ type: "route", side: side });
   }
 
   function b64Rms(b64) {
@@ -806,31 +879,117 @@
   function ensurePlayCtx() {
     if (!playCtx) {
       playCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+      playOut = playCtx.createGain();
+      playOut.connect(playCtx.destination);
+      if (DEBUG_AUDIO) {
+        dbg.tap = playCtx.createMediaStreamDestination();
+        playOut.connect(dbg.tap);
+      }
     }
     if (playCtx.state === "suspended") playCtx.resume();
   }
 
+  // ---- Audio debug recorder (open the page with ?debugaudio) ----------------
+  // Per turn, downloads three files when the turn closes:
+  //   turnN-sent-16k.wav      the mic audio actually sent to the server
+  //   turnN-received-24k.wav  every chunk the model sent, back to back, untouched
+  //   turnN-played.webm       what the page actually sent to the speakers
+  // Compare them: if "received" is choppy, the model is; if only "played" is,
+  // playback is; if "sent" is choppy, capture is.
+  var DEBUG_AUDIO = /[?&]debugaudio\b/.test(location.search);
+  var playOut = null;
+  var dbg = { tap: null, rec: null, webm: [], sent: [], recv: [], turn: null };
+
+  function dbgStartTurn(turn) {
+    if (!DEBUG_AUDIO) return;
+    ensurePlayCtx();
+    dbg.turn = turn; dbg.sent = []; dbg.recv = []; dbg.webm = [];
+    try {
+      dbg.rec = new MediaRecorder(dbg.tap.stream);
+      dbg.rec.ondataavailable = function (e) { if (e.data.size) dbg.webm.push(e.data); };
+      dbg.rec.start(1000);
+    } catch (e) { dbg.rec = null; console.warn("[debugaudio] recorder failed", e); }
+  }
+
+  function dbgWav(chunks, rate) {
+    var n = 0, i;
+    for (i = 0; i < chunks.length; i++) n += chunks[i].byteLength;
+    var out = new DataView(new ArrayBuffer(44 + n));
+    function str(o, s) { for (var k = 0; k < s.length; k++) out.setUint8(o + k, s.charCodeAt(k)); }
+    str(0, "RIFF"); out.setUint32(4, 36 + n, true); str(8, "WAVE"); str(12, "fmt ");
+    out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 1, true);
+    out.setUint32(24, rate, true); out.setUint32(28, rate * 2, true);
+    out.setUint16(32, 2, true); out.setUint16(34, 16, true); str(36, "data"); out.setUint32(40, n, true);
+    var off = 44;
+    for (i = 0; i < chunks.length; i++) { new Uint8Array(out.buffer, off).set(new Uint8Array(chunks[i])); off += chunks[i].byteLength; }
+    return new Blob([out.buffer], { type: "audio/wav" });
+  }
+
+  function dbgSave(blob, name) {
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 10000);
+  }
+
+  function dbgEndTurn() {
+    if (!DEBUG_AUDIO || dbg.turn === null) return;
+    var turn = dbg.turn, sent = dbg.sent, recv = dbg.recv, rec = dbg.rec;
+    dbg.turn = null;
+    dbgSave(dbgWav(sent, 16000), "turn" + turn + "-sent-16k.wav");
+    dbgSave(dbgWav(recv, 24000), "turn" + turn + "-received-24k.wav");
+    if (rec && rec.state !== "inactive") {
+      rec.onstop = function () { dbgSave(new Blob(dbg.webm, { type: "audio/webm" }), "turn" + turn + "-played.webm"); };
+      rec.stop();
+    }
+  }
+
+  function b64Bytes(b64) {
+    var bin = atob(b64), u = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+    return u.buffer;
+  }
+
   // Plays whatever translation audio has arrived so far and keeps appending as
   // more streams in, gaplessly. Called repeatedly while a turn drains.
+  //
+  // The model delivers 250 ms chunks at exactly real-time pace, so the queue only
+  // ever holds about one chunk of headroom. Two rules keep that headroom intact:
+  //  - Silent chunks (padding, pauses between phrases) are not played, but they
+  //    still advance the timeline by their duration. Skipping them outright used to
+  //    cost 250 ms of headroom per pause, leaving the rest of the turn playing at
+  //    the live edge (measured: 2-9 ms), where any stall is an audible gap.
+  //  - When the queue does run dry, re-buffer PLAYOUT_LEAD_S before resuming.
   function scheduleAudio() {
     if (!audioBuf.length) return;
     ensurePlayCtx();
-    nextTime = Math.max(nextTime, playCtx.currentTime);
     for (var i = 0; i < audioBuf.length; i++) {
-      var bin = atob(audioBuf[i]);
+      var item = audioBuf[i];
+      // Padding before the turn's first speech has no place on the timeline.
+      if (!item.loud && !turnHasSpeech) continue;
+      var bin = atob(item.b64);
       var bytes = new Uint8Array(bin.length);
       for (var j = 0; j < bin.length; j++) bytes[j] = bin.charCodeAt(j);
       var i16 = new Int16Array(bytes.buffer);
       if (!i16.length) continue;
+      if (nextTime <= playCtx.currentTime) nextTime = playCtx.currentTime + PLAYOUT_LEAD_S;
+      if (!item.loud) {
+        // The model runs slightly faster than real time (~4%), so cap the queue
+        // during silence rather than letting latency creep up over a long turn.
+        if (nextTime - playCtx.currentTime < PLAYOUT_LEAD_S + 0.5) nextTime += i16.length / 24000;
+        continue;
+      }
+      turnHasSpeech = true;
       var buf = playCtx.createBuffer(1, i16.length, 24000);
       var ch = buf.getChannelData(0);
       for (var k = 0; k < i16.length; k++) ch[k] = i16[k] / 0x8000;
       var node = playCtx.createBufferSource();
       node.buffer = buf;
-      node.connect(playCtx.destination);
+      node.connect(playOut);
       var t = Math.max(playCtx.currentTime, nextTime);
       node.start(t);
       nextTime = t + buf.duration;
+      speechEnd = nextTime;
     }
     audioBuf = [];
   }
@@ -848,7 +1007,9 @@
     clearTurnTimers();
     drainTimer = setInterval(function () {
       var quiet = performance.now() - lastOutputAt > QUIESCE_MS;
-      var drained = playCtx.currentTime >= nextTime - 0.05;
+      // speechEnd, not nextTime: the model streams padding forever, which keeps
+      // advancing nextTime, so "nextTime reached" would never happen.
+      var drained = playCtx.currentTime >= speechEnd - 0.05;
       // A cold session can take seconds to produce its first token, so never close
       // on a timer alone — but do not hang forever on a turn that says nothing.
       var graceExpired = performance.now() - endedAt > COLD_GRACE_MS;
@@ -860,11 +1021,14 @@
   function closeTurn() {
     clearTurnTimers();
     draining = false;
-    var ln = lineByTurn[currentTurn];
-    if (ln) ln.closed = true;
+    for (var i = lines.length - 1; i >= 0; i--) {
+      if (lines[i].turn === currentTurn) { lines[i].closed = true; break; }
+    }
     hasTurned = true;
     active = null;
     phase = "idle";
+    if (route !== null) setRoute(null);   // never leave the mic routed after a turn
+    dbgEndTurn();
     render();
   }
 
@@ -876,13 +1040,18 @@
     phase = "error";
     active = null;
     audioBuf = [];
-    stopStreaming();
+    // Release on the server too: a direction can fail while the socket stays open,
+    // and the mic must not keep feeding a session the UI shows as failed.
+    if (route !== null) setRoute(null);
     render();
   }
 
   // Real end: close the socket so the server tears down both upstream sessions,
-  // release the microphone, and stop the playout. Leaves the transcript on screen.
+  // release the microphone, and stop the playout. Callers then return to setup.
   function endSession() {
+    sessionToken++;   // late getUserMedia / worklet callbacks see this and stand down
+    micPending = false;
+    connected = false;
     clearTurnTimers();
     draining = false;
     if (ws) {
@@ -892,8 +1061,10 @@
     if (micStream) { try { micStream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {} }
     if (audioCtx) { try { audioCtx.close(); } catch (e) {} }
     if (playCtx) { try { playCtx.close(); } catch (e) {} }
-    audioCtx = sourceNode = processor = micStream = null;
-    playCtx = null; nextTime = 0;
+    if (processor && processor.port) { try { processor.port.onmessage = null; } catch (e) {} }
+    audioCtx = sourceNode = processor = micStream = micMute = null;
+    route = null;
+    playCtx = null; playOut = null; dbg.tap = null; nextTime = 0; speechEnd = 0;
     phase = "ended";
     active = null;
     render();
@@ -908,7 +1079,8 @@
     }
     clearTurnTimers();
     draining = false;
-    lines = []; lineByTurn = {}; audioBuf = []; phase = "idle"; active = null;
+    lines = []; lineBySide = { doctor: null, patient: null }; audioBuf = []; phase = "idle"; active = null;
+    route = null; connected = false;
     hasTurned = false;
     connect();
     render();
@@ -916,41 +1088,95 @@
 
   function send(obj) { if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj)); }
 
+  // Capture. An AudioWorklet hands over exactly one 100 ms chunk per 100 ms (the
+  // spec's recommended size, evenly paced). Worklets need a secure context, so a
+  // plain-http LAN tablet falls back to a ScriptProcessor feeding the same chunker.
+  var WORKLET_SRC =
+    "class Chunker extends AudioWorkletProcessor {" +
+    "  constructor(){super();this.buf=new Float32Array(" + CHUNK + ");this.n=0;}" +
+    "  process(inputs){var ch=inputs[0]&&inputs[0][0];if(!ch)return true;" +
+    "    for(var i=0;i<ch.length;i++){this.buf[this.n++]=ch[i];" +
+    "      if(this.n===this.buf.length){this.port.postMessage(this.buf);this.buf=new Float32Array(" + CHUNK + ");this.n=0;}}" +
+    "    return true;}" +
+    "}" +
+    "registerProcessor('chunker', Chunker);";
+
   function ensureMic() {
     if (audioCtx) { resumeStreaming(); return; }
+    // One mic per session: a second open (TALK tapped while the permission prompt
+    // is up) would interleave two capture graphs and double every chunk.
+    if (micPending) return;
+    micPending = true;
+    var token = sessionToken;
     navigator.mediaDevices.getUserMedia({
       audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true }
     }).then(function (stream) {
+      if (token !== sessionToken) {   // ended while the prompt was open
+        stream.getTracks().forEach(function (t) { t.stop(); });
+        return;
+      }
+      micPending = false;
       micStream = stream;
       audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
       // Created inside a promise callback, i.e. outside the user gesture that
-      // started the turn, so browsers hand it back SUSPENDED and it captures
-      // nothing. Resuming only on the next ensureMic() is why the first turn of
-      // every session produced no audio at all.
+      // started the session, so browsers hand it back SUSPENDED and it captures
+      // nothing until resumed.
       if (audioCtx.state === "suspended") audioCtx.resume();
       sourceNode = audioCtx.createMediaStreamSource(stream);
-      processor = audioCtx.createScriptProcessor(2048, 1, 1);
-      processor.onaudioprocess = onAudio;
-      var mute = audioCtx.createGain(); mute.gain.value = 0;
-      sourceNode.connect(processor);
-      processor.connect(mute);
-      mute.connect(audioCtx.destination);
+      micMute = audioCtx.createGain(); micMute.gain.value = 0;
+      micMute.connect(audioCtx.destination);
       lastSound = performance.now();
-    }).catch(function () { onError("Microphone unavailable"); });
+      var useWorklet = audioCtx.audioWorklet && typeof AudioWorkletNode === "function";
+      if (useWorklet) {
+        var url = URL.createObjectURL(new Blob([WORKLET_SRC], { type: "application/javascript" }));
+        var ctx = audioCtx;
+        audioCtx.audioWorklet.addModule(url).then(function () {
+          if (token !== sessionToken || ctx !== audioCtx) return;
+          processor = new AudioWorkletNode(audioCtx, "chunker");
+          processor.port.onmessage = function (e) { onChunk(e.data); };
+          sourceNode.connect(processor);
+          processor.connect(micMute);
+        }).catch(function () {
+          if (token === sessionToken && ctx === audioCtx) startScriptProcessor();
+        });
+      } else {
+        startScriptProcessor();
+      }
+    }).catch(function () {
+      micPending = false;
+      if (token === sessionToken) onError("Microphone unavailable");
+    });
+  }
+
+  function startScriptProcessor() {
+    processor = audioCtx.createScriptProcessor(2048, 1, 1);
+    processor.onaudioprocess = function (e) {
+      var input = e.inputBuffer.getChannelData(0);
+      var merged = new Float32Array(pcmAccum.length + input.length);
+      merged.set(pcmAccum);
+      merged.set(input, pcmAccum.length);
+      var off = 0;
+      for (; off + CHUNK <= merged.length; off += CHUNK) onChunk(merged.subarray(off, off + CHUNK));
+      pcmAccum = merged.slice(off);
+    };
+    pcmAccum = new Float32Array(0);
+    sourceNode.connect(processor);
+    processor.connect(micMute);
   }
 
   function resumeStreaming() {
     if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
   }
 
-  function stopStreaming() {
-    // keep the stream warm; just stop treating chunks as a live turn
-    pcmAccum = new Int16Array(0);
+  // While translated speech plays from the tablet speaker and nobody holds the
+  // mic, do not upload: the server keeps the last 300 ms of unrouted mic audio as
+  // the next speaker's pre-roll, and that must not be the translation itself.
+  function playbackActive() {
+    return !!playCtx && playCtx.currentTime < speechEnd + 0.2;
   }
 
-  function onAudio(e) {
-    if (phase !== "listening") return;
-    var input = e.inputBuffer.getChannelData(0);
+  // One 100 ms chunk of float samples from the capture graph.
+  function onChunk(input) {
     var i16 = new Int16Array(input.length);
     var sum = 0;
     for (var i = 0; i < input.length; i++) {
@@ -958,25 +1184,16 @@
       i16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
       sum += s * s;
     }
-    var rms = Math.sqrt(sum / input.length);
     var now = performance.now();
-    if (rms > SILENCE_THRESHOLD) { lastSound = now; heardSound = true; }
-
-    var merged = new Int16Array(pcmAccum.length + i16.length);
-    merged.set(pcmAccum);
-    merged.set(i16, pcmAccum.length);
-    pcmAccum = merged;
-    var withinTail = (now - lastSound) < TRAIL_SILENCE_MS;
-    while (pcmAccum.length >= CHUNK) {
-      // Forward speech and its short tail. Streaming the full silence gap makes the
-      // model finalise the utterance early and drop the last clause.
-      if (withinTail) sendAudio(pcmAccum.subarray(0, CHUNK));
-      pcmAccum = pcmAccum.subarray(CHUNK);
+    if (phase === "listening") {
+      if (Math.sqrt(sum / input.length) > SILENCE_THRESHOLD) { lastSound = now; heardSound = true; }
+      // UI convenience only: release the route after the speaker has said
+      // something and then gone quiet. Every chunk is still streamed regardless.
+      if (heardSound && now - lastSound > SILENCE_MS) stopTalk();
     }
-    // Only auto-end a turn that has actually carried speech. Ending on elapsed
-    // silence alone silently discarded the whole turn for anyone who taps and then
-    // pauses to think before speaking.
-    if (heardSound && now - lastSound > SILENCE_MS) stopTalk();
+    if (phase === "error" || phase === "ended") return;
+    if (route === null && playbackActive()) return;
+    sendAudio(i16);
   }
 
   function int16ToB64(i16) {
@@ -988,11 +1205,13 @@
 
   function sendAudio(i16) {
     if (!ws || ws.readyState !== WebSocket.OPEN) {
-      // Dropping captured speech silently is the failure mode this tool must never
-      // have; surface it instead of losing the words.
-      onError("Connection lost");
+      // The mic streams from Start, before the socket is up and between turns;
+      // only speech routed to a session is worth an error. Dropping routed speech
+      // silently is the failure mode this tool must never have.
+      if (route !== null && phase === "listening") onError("Connection lost");
       return;
     }
+    if (DEBUG_AUDIO && dbg.turn !== null && route !== null) dbg.sent.push(i16.slice().buffer);
     send({ type: "audio", b64: int16ToB64(i16) });
   }
 
@@ -1012,8 +1231,8 @@
   if (saved) {
     try {
       var prev = JSON.parse(saved);
-      if (prev.doctor) document.getElementById("doctor-lang").value = prev.doctor;
-      if (prev.patient) document.getElementById("patient-lang").value = prev.patient;
+      if (LANGS[prev.doctor]) document.getElementById("doctor-lang").value = prev.doctor;
+      if (LANGS[prev.patient]) document.getElementById("patient-lang").value = prev.patient;
     } catch (e) {}
   }
   var consent = document.getElementById("consent");
@@ -1028,7 +1247,7 @@
     // Open the microphone now rather than on the first tap. Creating the audio
     // context on demand races the speaker's first words and intermittently loses
     // the whole opening turn; priming it here means capture is live before anyone
-    // speaks. Nothing is transmitted until a TALK button is pressed.
+    // speaks. The stream reaches a translation session only while TALK routes it.
     ensureMic();
     connect();
   });
@@ -1052,14 +1271,21 @@
   document.getElementById("end-cancel").addEventListener("click", function () {
     endbox.classList.add("hidden");
   });
+  // Ending returns to the setup page. Reloading (as "Change languages" does) is the
+  // only reset that is guaranteed complete: it clears the transcript and re-gates
+  // Start behind consent, so the next patient never inherits this consultation.
+  function endAndReturnToSetup(delayMs) {
+    endbox.classList.add("hidden");
+    endSession();
+    setTimeout(function () { location.reload(); }, delayMs || 0);
+  }
   document.getElementById("end-save").addEventListener("click", function () {
     downloadTranscript();
-    endbox.classList.add("hidden");
-    endSession();
+    // Let the browser start the download before the page navigates away.
+    endAndReturnToSetup(500);
   });
   document.getElementById("end-nosave").addEventListener("click", function () {
-    endbox.classList.add("hidden");
-    endSession();
+    endAndReturnToSetup(0);
   });
 
   render();

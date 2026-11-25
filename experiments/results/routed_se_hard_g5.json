@@ -1,0 +1,10055 @@
+[
+ {
+  "events": [
+   {
+    "t": 2.96,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 2.96,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.14,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.39,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.7,
+    "session": "doctor",
+    "kind": "in",
+    "text": "I want to ask you,",
+    "loud": false
+   },
+   {
+    "t": 3.89,
+    "session": "doctor",
+    "kind": "out",
+    "text": "我想问你，",
+    "loud": false
+   },
+   {
+    "t": 3.9,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.91,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.04,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.29,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.39,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.54,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.06,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.31,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.35,
+    "session": "doctor",
+    "kind": "in",
+    "text": " about your",
+    "loud": false
+   },
+   {
+    "t": 5.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.59,
+    "session": "doctor",
+    "kind": "out",
+    "text": "关于你的",
+    "loud": false
+   },
+   {
+    "t": 5.59,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.64,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.04,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.14,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.34,
+    "session": "doctor",
+    "kind": "in",
+    "text": " sleep.",
+    "loud": false
+   },
+   {
+    "t": 6.34,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 6.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.6,
+    "session": "doctor",
+    "kind": "out",
+    "text": "睡眠。",
+    "loud": false
+   },
+   {
+    "t": 6.6,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 6.64,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 6.89,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.29,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.39,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.54,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.64,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.79,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.04,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.14,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.79,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.89,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.14,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.39,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.54,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.64,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.89,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.14,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.54,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.64,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.79,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.89,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.04,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.29,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.39,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.64,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.89,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.29,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.39,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.64,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.85,
+    "session": "patient",
+    "kind": "in",
+    "text": "我沒有過敏。",
+    "loud": false
+   },
+   {
+    "t": 12.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.19,
+    "session": "patient",
+    "kind": "out",
+    "text": "I don't have allergies.",
+    "loud": false
+   },
+   {
+    "t": 13.23,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.29,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 13.54,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.64,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 13.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.89,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 14.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 14.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.04,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.29,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.39,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.64,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.14,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.29,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.39,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.57,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.64,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.96,
+    "session": "doctor",
+    "kind": "in",
+    "text": " Take",
+    "loud": false
+   },
+   {
+    "t": 17.08,
+    "session": "doctor",
+    "kind": "out",
+    "text": "请",
+    "loud": false
+   },
+   {
+    "t": 17.09,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 17.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.29,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 17.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.01,
+    "session": "doctor",
+    "kind": "in",
+    "text": " 500",
+    "loud": false
+   },
+   {
+    "t": 18.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.35,
+    "session": "doctor",
+    "kind": "out",
+    "text": "服用500",
+    "loud": false
+   },
+   {
+    "t": 18.36,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.02,
+    "session": "doctor",
+    "kind": "in",
+    "text": " milligrams three times",
+    "loud": false
+   },
+   {
+    "t": 19.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.34,
+    "session": "doctor",
+    "kind": "out",
+    "text": "毫克，一天",
+    "loud": false
+   },
+   {
+    "t": 19.35,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.0,
+    "session": "doctor",
+    "kind": "in",
+    "text": " a day for seven",
+    "loud": false
+   },
+   {
+    "t": 20.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.34,
+    "session": "doctor",
+    "kind": "out",
+    "text": "三次，连",
+    "loud": false
+   },
+   {
+    "t": 20.35,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.99,
+    "session": "doctor",
+    "kind": "in",
+    "text": " days.",
+    "loud": false
+   },
+   {
+    "t": 21.04,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.34,
+    "session": "doctor",
+    "kind": "out",
+    "text": "续七天。",
+    "loud": false
+   },
+   {
+    "t": 21.35,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 22.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 22.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.56,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.31,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.56,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.06,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.74,
+    "session": "patient",
+    "kind": "in",
+    "text": "我的",
+    "loud": false
+   },
+   {
+    "t": 25.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.94,
+    "session": "patient",
+    "kind": "out",
+    "text": " My",
+    "loud": false
+   },
+   {
+    "t": 25.95,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.78,
+    "session": "patient",
+    "kind": "in",
+    "text": "體溫是3",
+    "loud": false
+   },
+   {
+    "t": 26.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.93,
+    "session": "patient",
+    "kind": "out",
+    "text": " body temperature",
+    "loud": false
+   },
+   {
+    "t": 26.95,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.81,
+    "session": "patient",
+    "kind": "in",
+    "text": " 8度5。",
+    "loud": false
+   },
+   {
+    "t": 27.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.95,
+    "session": "patient",
+    "kind": "out",
+    "text": " is 38.5.",
+    "loud": false
+   },
+   {
+    "t": 27.96,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.31,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 30.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.73,
+    "session": "doctor",
+    "kind": "in",
+    "text": " Tell",
+    "loud": false
+   },
+   {
+    "t": 32.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 32.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.09,
+    "session": "doctor",
+    "kind": "out",
+    "text": "告诉",
+    "loud": false
+   },
+   {
+    "t": 33.1,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 33.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 33.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.77,
+    "session": "doctor",
+    "kind": "in",
+    "text": " me about the",
+    "loud": false
+   },
+   {
+    "t": 33.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 33.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.1,
+    "session": "doctor",
+    "kind": "out",
+    "text": "我关于疼痛",
+    "loud": false
+   },
+   {
+    "t": 34.11,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.72,
+    "session": "doctor",
+    "kind": "in",
+    "text": " pain, when it",
+    "loud": false
+   },
+   {
+    "t": 34.84,
+    "session": "doctor",
+    "kind": "out",
+    "text": "的情况，",
+    "loud": false
+   },
+   {
+    "t": 34.86,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.76,
+    "session": "doctor",
+    "kind": "in",
+    "text": " started, what makes it",
+    "loud": false
+   },
+   {
+    "t": 35.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.12,
+    "session": "doctor",
+    "kind": "out",
+    "text": "什么时候开始的，",
+    "loud": false
+   },
+   {
+    "t": 36.12,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.73,
+    "session": "doctor",
+    "kind": "in",
+    "text": " worse, whether",
+    "loud": false
+   },
+   {
+    "t": 36.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.09,
+    "session": "doctor",
+    "kind": "out",
+    "text": "什么让它加重，",
+    "loud": false
+   },
+   {
+    "t": 37.1,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.71,
+    "session": "doctor",
+    "kind": "in",
+    "text": " it spreads anywhere",
+    "loud": false
+   },
+   {
+    "t": 37.85,
+    "session": "doctor",
+    "kind": "out",
+    "text": "是否",
+    "loud": false
+   },
+   {
+    "t": 37.85,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.29,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.77,
+    "session": "doctor",
+    "kind": "in",
+    "text": " else, and how it",
+    "loud": false
+   },
+   {
+    "t": 38.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.1,
+    "session": "doctor",
+    "kind": "out",
+    "text": "扩散到其他地方，",
+    "loud": false
+   },
+   {
+    "t": 39.11,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.46,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.8,
+    "session": "doctor",
+    "kind": "in",
+    "text": " affects your sleep at",
+    "loud": false
+   },
+   {
+    "t": 39.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.1,
+    "session": "doctor",
+    "kind": "out",
+    "text": "以及它",
+    "loud": false
+   },
+   {
+    "t": 40.12,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.73,
+    "session": "doctor",
+    "kind": "in",
+    "text": " night.",
+    "loud": false
+   },
+   {
+    "t": 40.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.1,
+    "session": "doctor",
+    "kind": "out",
+    "text": "如何影响你晚上的",
+    "loud": false
+   },
+   {
+    "t": 41.11,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 42.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.56,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.06,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.31,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.31,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.79,
+    "session": "patient",
+    "kind": "in",
+    "text": "我怕這",
+    "loud": false
+   },
+   {
+    "t": 45.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.94,
+    "session": "patient",
+    "kind": "out",
+    "text": " I'm afraid",
+    "loud": false
+   },
+   {
+    "t": 45.95,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.56,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 46.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.81,
+    "session": "patient",
+    "kind": "in",
+    "text": "樣吃了會",
+    "loud": false
+   },
+   {
+    "t": 46.94,
+    "session": "patient",
+    "kind": "out",
+    "text": " that if I eat this,",
+    "loud": false
+   },
+   {
+    "t": 46.95,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.06,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.31,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.56,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.77,
+    "session": "patient",
+    "kind": "in",
+    "text": "犯困。",
+    "loud": false
+   },
+   {
+    "t": 47.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.95,
+    "session": "patient",
+    "kind": "out",
+    "text": " I'll get sleepy.",
+    "loud": false
+   },
+   {
+    "t": 47.96,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.06,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.31,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.56,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 49.06,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 49.31,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.06,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.31,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.56,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.81,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.08,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.31,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.06,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.56,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.56,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.8,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.15,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.4,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.55,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.65,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   }
+  ],
+  "rows": [
+   {
+    "clip": "s11-d1",
+    "speaker": "doctor",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 12,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 2.91,
+    "last_out_after_end_s": 1.4,
+    "late_out_chars": 0,
+    "heard": "I want to ask you, about your sleep.",
+    "said": "我想问你，关于你的睡眠。"
+   },
+   {
+    "clip": "c-p1",
+    "speaker": "patient",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 23,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 3.2,
+    "last_out_after_end_s": 1.89,
+    "late_out_chars": 0,
+    "heard": "我沒有過敏。",
+    "said": "I don't have allergies."
+   },
+   {
+    "clip": "s07-d1",
+    "speaker": "doctor",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 19,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 0.79,
+    "last_out_after_end_s": 1.54,
+    "late_out_chars": 0,
+    "heard": " Take 500 milligrams three times a day for seven days.",
+    "said": "请服用500毫克，一天三次，连续七天。"
+   },
+   {
+    "clip": "s08-p1",
+    "speaker": "patient",
+    "input_recall": 0.857,
+    "tail_heard": false,
+    "out_chars": 29,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 1.15,
+    "last_out_after_end_s": 0.95,
+    "late_out_chars": 0,
+    "heard": "我的體溫是3 8度5。",
+    "said": " My body temperature is 38.5."
+   },
+   {
+    "clip": "b13-d1",
+    "speaker": "doctor",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 47,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 0.8,
+    "last_out_after_end_s": 1.6,
+    "late_out_chars": 0,
+    "heard": " Tell me about the pain, when it started, what makes it worse, whether it spreads anywhere else, and how it affects your sleep at night.",
+    "said": "告诉我关于疼痛的情况，什么时候开始的，什么让它加重，是否扩散到其他地方，以及它如何影响你晚上的"
+   },
+   {
+    "clip": "turn-p4",
+    "speaker": "patient",
+    "input_recall": 0.889,
+    "tail_heard": true,
+    "out_chars": 48,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 2.15,
+    "last_out_after_end_s": 1.25,
+    "late_out_chars": 0,
+    "heard": "我怕這樣吃了會犯困。",
+    "said": " I'm afraid that if I eat this, I'll get sleepy."
+   }
+  ],
+  "agg": {
+   "clips": 6,
+   "mean_input_recall": 0.958,
+   "tails_dropped": 1,
+   "empty_outputs": 0,
+   "out_tails_dropped": 0,
+   "late_out_chars": 0,
+   "spurious_out_chars": 0,
+   "spurious_text": "",
+   "median_first_audio_s": 1.65,
+   "median_last_out_after_end_s": 1.47,
+   "closes": 0,
+   "turn_completes": 0
+  },
+  "label": "routed_se_hard_g5",
+  "run": 0,
+  "schedule": {
+   "clips": [
+    "s11-d1",
+    "c-p1",
+    "s07-d1",
+    "s08-p1",
+    "b13-d1",
+    "turn-p4"
+   ],
+   "gap": 5.0
+  }
+ },
+ {
+  "events": [
+   {
+    "t": 3.03,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.07,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.9,
+    "session": "doctor",
+    "kind": "in",
+    "text": "I want to ask you,",
+    "loud": false
+   },
+   {
+    "t": 3.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.07,
+    "session": "doctor",
+    "kind": "out",
+    "text": "我想问你，",
+    "loud": false
+   },
+   {
+    "t": 4.08,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.09,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 5.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.38,
+    "session": "doctor",
+    "kind": "in",
+    "text": " about your",
+    "loud": false
+   },
+   {
+    "t": 5.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.53,
+    "session": "doctor",
+    "kind": "out",
+    "text": "关于你的",
+    "loud": false
+   },
+   {
+    "t": 5.53,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 6.36,
+    "session": "doctor",
+    "kind": "in",
+    "text": " sleep.",
+    "loud": false
+   },
+   {
+    "t": 6.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.52,
+    "session": "doctor",
+    "kind": "out",
+    "text": "睡眠。",
+    "loud": false
+   },
+   {
+    "t": 6.54,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 6.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 6.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.94,
+    "session": "patient",
+    "kind": "in",
+    "text": "我沒有過敏。",
+    "loud": false
+   },
+   {
+    "t": 12.94,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.2,
+    "session": "patient",
+    "kind": "out",
+    "text": "I don't have allergies.",
+    "loud": false
+   },
+   {
+    "t": 13.21,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.7,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 13.78,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 13.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 14.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.98,
+    "session": "doctor",
+    "kind": "in",
+    "text": " Take",
+    "loud": false
+   },
+   {
+    "t": 17.02,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 17.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.27,
+    "session": "doctor",
+    "kind": "out",
+    "text": "请",
+    "loud": false
+   },
+   {
+    "t": 17.28,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 17.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.02,
+    "session": "doctor",
+    "kind": "in",
+    "text": " 500",
+    "loud": false
+   },
+   {
+    "t": 18.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.28,
+    "session": "doctor",
+    "kind": "out",
+    "text": "服用500",
+    "loud": false
+   },
+   {
+    "t": 18.29,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.08,
+    "session": "doctor",
+    "kind": "in",
+    "text": " milligrams three times",
+    "loud": false
+   },
+   {
+    "t": 19.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.27,
+    "session": "doctor",
+    "kind": "out",
+    "text": "毫克，一天",
+    "loud": false
+   },
+   {
+    "t": 19.28,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.01,
+    "session": "doctor",
+    "kind": "in",
+    "text": " a day for seven",
+    "loud": false
+   },
+   {
+    "t": 20.02,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.27,
+    "session": "doctor",
+    "kind": "out",
+    "text": "三次，连",
+    "loud": false
+   },
+   {
+    "t": 20.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.51,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.76,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.0,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.05,
+    "session": "doctor",
+    "kind": "in",
+    "text": " days.",
+    "loud": false
+   },
+   {
+    "t": 21.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.27,
+    "session": "doctor",
+    "kind": "out",
+    "text": "续七天。",
+    "loud": false
+   },
+   {
+    "t": 21.3,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.51,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.74,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.99,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 22.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.24,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 22.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.49,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 22.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.74,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.18,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.24,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.49,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.83,
+    "session": "patient",
+    "kind": "in",
+    "text": "我的",
+    "loud": false
+   },
+   {
+    "t": 25.95,
+    "session": "patient",
+    "kind": "out",
+    "text": " My",
+    "loud": false
+   },
+   {
+    "t": 25.96,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.26,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.89,
+    "session": "patient",
+    "kind": "in",
+    "text": "體溫是3",
+    "loud": false
+   },
+   {
+    "t": 26.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.21,
+    "session": "patient",
+    "kind": "out",
+    "text": " body temperature",
+    "loud": false
+   },
+   {
+    "t": 27.22,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.87,
+    "session": "patient",
+    "kind": "in",
+    "text": " 8度5。",
+    "loud": false
+   },
+   {
+    "t": 27.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.2,
+    "session": "patient",
+    "kind": "out",
+    "text": " is 38.5",
+    "loud": false
+   },
+   {
+    "t": 28.21,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.96,
+    "session": "patient",
+    "kind": "out",
+    "text": " degrees.",
+    "loud": false
+   },
+   {
+    "t": 28.97,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 30.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 30.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.67,
+    "session": "doctor",
+    "kind": "in",
+    "text": " Tell",
+    "loud": false
+   },
+   {
+    "t": 32.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 32.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.01,
+    "session": "doctor",
+    "kind": "out",
+    "text": "告诉",
+    "loud": false
+   },
+   {
+    "t": 33.02,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 33.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 33.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.68,
+    "session": "doctor",
+    "kind": "in",
+    "text": " me about the",
+    "loud": false
+   },
+   {
+    "t": 33.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 33.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.02,
+    "session": "doctor",
+    "kind": "out",
+    "text": "我关于疼痛",
+    "loud": false
+   },
+   {
+    "t": 34.03,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.68,
+    "session": "doctor",
+    "kind": "in",
+    "text": " pain, when it",
+    "loud": false
+   },
+   {
+    "t": 34.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.02,
+    "session": "doctor",
+    "kind": "out",
+    "text": "的情况，",
+    "loud": false
+   },
+   {
+    "t": 35.03,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.74,
+    "session": "doctor",
+    "kind": "in",
+    "text": " started, what makes it",
+    "loud": false
+   },
+   {
+    "t": 35.75,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.04,
+    "session": "doctor",
+    "kind": "out",
+    "text": "什么时候开始的，",
+    "loud": false
+   },
+   {
+    "t": 36.06,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.72,
+    "session": "doctor",
+    "kind": "in",
+    "text": " worse, whether",
+    "loud": false
+   },
+   {
+    "t": 36.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.02,
+    "session": "doctor",
+    "kind": "out",
+    "text": "什么让它",
+    "loud": false
+   },
+   {
+    "t": 37.03,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.72,
+    "session": "doctor",
+    "kind": "in",
+    "text": " it spreads anywhere",
+    "loud": false
+   },
+   {
+    "t": 37.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.04,
+    "session": "doctor",
+    "kind": "out",
+    "text": "更严重，",
+    "loud": false
+   },
+   {
+    "t": 38.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.74,
+    "session": "doctor",
+    "kind": "in",
+    "text": " else, and how it",
+    "loud": false
+   },
+   {
+    "t": 38.75,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.02,
+    "session": "doctor",
+    "kind": "out",
+    "text": "是否扩散到",
+    "loud": false
+   },
+   {
+    "t": 39.04,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.71,
+    "session": "doctor",
+    "kind": "in",
+    "text": " affects your sleep at",
+    "loud": false
+   },
+   {
+    "t": 39.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.93,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.02,
+    "session": "doctor",
+    "kind": "out",
+    "text": "其他地方，",
+    "loud": false
+   },
+   {
+    "t": 40.05,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.74,
+    "session": "doctor",
+    "kind": "in",
+    "text": " night.",
+    "loud": false
+   },
+   {
+    "t": 40.78,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.03,
+    "session": "doctor",
+    "kind": "out",
+    "text": "以及它如何影响",
+    "loud": false
+   },
+   {
+    "t": 41.04,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.0,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 42.18,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.92,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.79,
+    "session": "patient",
+    "kind": "in",
+    "text": "我怕這",
+    "loud": false
+   },
+   {
+    "t": 45.96,
+    "session": "patient",
+    "kind": "out",
+    "text": " I'm afraid",
+    "loud": false
+   },
+   {
+    "t": 45.97,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 45.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 46.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 46.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 46.72,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.86,
+    "session": "patient",
+    "kind": "in",
+    "text": "樣吃了會",
+    "loud": false
+   },
+   {
+    "t": 46.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.22,
+    "session": "patient",
+    "kind": "out",
+    "text": " that if I eat this,",
+    "loud": false
+   },
+   {
+    "t": 47.22,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.84,
+    "session": "patient",
+    "kind": "in",
+    "text": "犯困。",
+    "loud": false
+   },
+   {
+    "t": 47.97,
+    "session": "patient",
+    "kind": "out",
+    "text": " I'll get sleepy.",
+    "loud": false
+   },
+   {
+    "t": 47.98,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.68,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.42,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.17,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.99,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.67,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.73,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.16,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.41,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.66,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   }
+  ],
+  "rows": [
+   {
+    "clip": "s11-d1",
+    "speaker": "doctor",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 12,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 3.09,
+    "last_out_after_end_s": 1.32,
+    "late_out_chars": 0,
+    "heard": "I want to ask you, about your sleep.",
+    "said": "我想问你，关于你的睡眠。"
+   },
+   {
+    "clip": "c-p1",
+    "speaker": "patient",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 23,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 3.5,
+    "last_out_after_end_s": 1.9,
+    "late_out_chars": 0,
+    "heard": "我沒有過敏。",
+    "said": "I don't have allergies."
+   },
+   {
+    "clip": "s07-d1",
+    "speaker": "doctor",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 19,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 0.72,
+    "last_out_after_end_s": 1.47,
+    "late_out_chars": 0,
+    "heard": " Take 500 milligrams three times a day for seven days.",
+    "said": "请服用500毫克，一天三次，连续七天。"
+   },
+   {
+    "clip": "s08-p1",
+    "speaker": "patient",
+    "input_recall": 0.857,
+    "tail_heard": false,
+    "out_chars": 37,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 1.36,
+    "last_out_after_end_s": 1.96,
+    "late_out_chars": 0,
+    "heard": "我的體溫是3 8度5。",
+    "said": " My body temperature is 38.5 degrees."
+   },
+   {
+    "clip": "b13-d1",
+    "speaker": "doctor",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 44,
+    "empty": false,
+    "out_tail_ok": false,
+    "first_audio_s": 0.72,
+    "last_out_after_end_s": 1.53,
+    "late_out_chars": 0,
+    "heard": " Tell me about the pain, when it started, what makes it worse, whether it spreads anywhere else, and how it affects your sleep at night.",
+    "said": "告诉我关于疼痛的情况，什么时候开始的，什么让它更严重，是否扩散到其他地方，以及它如何影响"
+   },
+   {
+    "clip": "turn-p4",
+    "speaker": "patient",
+    "input_recall": 0.889,
+    "tail_heard": true,
+    "out_chars": 48,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 1.47,
+    "last_out_after_end_s": 1.27,
+    "late_out_chars": 0,
+    "heard": "我怕這樣吃了會犯困。",
+    "said": " I'm afraid that if I eat this, I'll get sleepy."
+   }
+  ],
+  "agg": {
+   "clips": 6,
+   "mean_input_recall": 0.958,
+   "tails_dropped": 1,
+   "empty_outputs": 0,
+   "out_tails_dropped": 1,
+   "late_out_chars": 0,
+   "spurious_out_chars": 0,
+   "spurious_text": "",
+   "median_first_audio_s": 1.42,
+   "median_last_out_after_end_s": 1.5,
+   "closes": 0,
+   "turn_completes": 0
+  },
+  "label": "routed_se_hard_g5",
+  "run": 1,
+  "schedule": {
+   "clips": [
+    "s11-d1",
+    "c-p1",
+    "s07-d1",
+    "s08-p1",
+    "b13-d1",
+    "turn-p4"
+   ],
+   "gap": 5.0
+  }
+ },
+ {
+  "events": [
+   {
+    "t": 2.88,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 2.88,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.57,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 3.86,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.07,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.07,
+    "session": "doctor",
+    "kind": "in",
+    "text": "I want to ask you,",
+    "loud": false
+   },
+   {
+    "t": 4.27,
+    "session": "doctor",
+    "kind": "out",
+    "text": "我想问你，",
+    "loud": false
+   },
+   {
+    "t": 4.27,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.28,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.32,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.42,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.67,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 4.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 4.92,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 5.07,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.17,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 5.32,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.35,
+    "session": "doctor",
+    "kind": "in",
+    "text": " about your",
+    "loud": false
+   },
+   {
+    "t": 5.46,
+    "session": "doctor",
+    "kind": "out",
+    "text": "关于你的",
+    "loud": false
+   },
+   {
+    "t": 5.48,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.66,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.82,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 5.92,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.17,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.37,
+    "session": "doctor",
+    "kind": "in",
+    "text": " sleep.",
+    "loud": false
+   },
+   {
+    "t": 6.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.73,
+    "session": "doctor",
+    "kind": "out",
+    "text": "睡眠。",
+    "loud": false
+   },
+   {
+    "t": 6.75,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 6.85,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 6.92,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.17,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.67,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 7.85,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 7.92,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 8.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.42,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.84,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 8.92,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.67,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.84,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 9.92,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.17,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.42,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.67,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 10.92,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.17,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.42,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 11.92,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.17,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.68,
+    "session": "patient",
+    "kind": "in",
+    "text": "我没有过敏。",
+    "loud": false
+   },
+   {
+    "t": 12.88,
+    "session": "patient",
+    "kind": "out",
+    "text": "I don't have allergies.",
+    "loud": false
+   },
+   {
+    "t": 12.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 12.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 13.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 13.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 13.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 13.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.44,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 14.96,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 15.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.69,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 16.92,
+    "session": "doctor",
+    "kind": "in",
+    "text": " Take",
+    "loud": false
+   },
+   {
+    "t": 16.94,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.23,
+    "session": "doctor",
+    "kind": "out",
+    "text": "请",
+    "loud": false
+   },
+   {
+    "t": 17.25,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 17.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.69,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 17.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.0,
+    "session": "doctor",
+    "kind": "in",
+    "text": " 500",
+    "loud": false
+   },
+   {
+    "t": 18.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.21,
+    "session": "doctor",
+    "kind": "out",
+    "text": "服用500",
+    "loud": false
+   },
+   {
+    "t": 18.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 18.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 18.98,
+    "session": "doctor",
+    "kind": "in",
+    "text": " milligrams three times",
+    "loud": false
+   },
+   {
+    "t": 19.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.21,
+    "session": "doctor",
+    "kind": "out",
+    "text": "毫克，一天",
+    "loud": false
+   },
+   {
+    "t": 19.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 19.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 19.99,
+    "session": "doctor",
+    "kind": "in",
+    "text": " a day for seven",
+    "loud": false
+   },
+   {
+    "t": 20.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.22,
+    "session": "doctor",
+    "kind": "out",
+    "text": "三次，连",
+    "loud": false
+   },
+   {
+    "t": 20.24,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 20.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 20.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.0,
+    "session": "doctor",
+    "kind": "in",
+    "text": " days.",
+    "loud": false
+   },
+   {
+    "t": 21.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.21,
+    "session": "doctor",
+    "kind": "out",
+    "text": "续七天。",
+    "loud": false
+   },
+   {
+    "t": 21.23,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.69,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 21.84,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 21.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 22.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.19,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 22.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.69,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 22.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 23.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.7,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 24.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.54,
+    "session": "patient",
+    "kind": "in",
+    "text": "我的",
+    "loud": false
+   },
+   {
+    "t": 25.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 25.9,
+    "session": "patient",
+    "kind": "out",
+    "text": " My",
+    "loud": false
+   },
+   {
+    "t": 25.91,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 25.94,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.47,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.6,
+    "session": "patient",
+    "kind": "in",
+    "text": "体温是",
+    "loud": false
+   },
+   {
+    "t": 26.61,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 26.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.87,
+    "session": "patient",
+    "kind": "out",
+    "text": " body temperature",
+    "loud": false
+   },
+   {
+    "t": 26.89,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 26.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.63,
+    "session": "patient",
+    "kind": "in",
+    "text": "38度5。",
+    "loud": false
+   },
+   {
+    "t": 27.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 27.86,
+    "session": "patient",
+    "kind": "out",
+    "text": " is 38.5",
+    "loud": false
+   },
+   {
+    "t": 27.88,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 27.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.61,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 28.87,
+    "session": "patient",
+    "kind": "out",
+    "text": " degrees.",
+    "loud": false
+   },
+   {
+    "t": 28.9,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 28.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.7,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 29.84,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 29.94,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.84,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 30.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.6,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 31.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.67,
+    "session": "doctor",
+    "kind": "in",
+    "text": " Tell",
+    "loud": false
+   },
+   {
+    "t": 32.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.84,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 32.97,
+    "session": "doctor",
+    "kind": "out",
+    "text": "告诉",
+    "loud": false
+   },
+   {
+    "t": 32.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 33.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 33.74,
+    "session": "doctor",
+    "kind": "in",
+    "text": " me about the",
+    "loud": false
+   },
+   {
+    "t": 33.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 33.96,
+    "session": "doctor",
+    "kind": "out",
+    "text": "我关于疼痛",
+    "loud": false
+   },
+   {
+    "t": 33.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.36,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 34.73,
+    "session": "doctor",
+    "kind": "in",
+    "text": " pain, when it",
+    "loud": false
+   },
+   {
+    "t": 34.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 34.96,
+    "session": "doctor",
+    "kind": "out",
+    "text": "的情况，",
+    "loud": false
+   },
+   {
+    "t": 34.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.42,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 35.75,
+    "session": "doctor",
+    "kind": "in",
+    "text": " started, what makes it",
+    "loud": false
+   },
+   {
+    "t": 35.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 35.97,
+    "session": "doctor",
+    "kind": "out",
+    "text": "什么时候开始的，",
+    "loud": false
+   },
+   {
+    "t": 35.98,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 36.74,
+    "session": "doctor",
+    "kind": "in",
+    "text": " worse, whether",
+    "loud": false
+   },
+   {
+    "t": 36.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 36.96,
+    "session": "doctor",
+    "kind": "out",
+    "text": "什么让它",
+    "loud": false
+   },
+   {
+    "t": 36.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.52,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.74,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 37.76,
+    "session": "doctor",
+    "kind": "in",
+    "text": " it spreads anywhere",
+    "loud": false
+   },
+   {
+    "t": 37.84,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 37.97,
+    "session": "doctor",
+    "kind": "out",
+    "text": "更严重，",
+    "loud": false
+   },
+   {
+    "t": 38.02,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.2,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.36,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.45,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.7,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 38.82,
+    "session": "doctor",
+    "kind": "in",
+    "text": " else, and how it",
+    "loud": false
+   },
+   {
+    "t": 38.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 38.97,
+    "session": "doctor",
+    "kind": "out",
+    "text": "是否扩散到其他",
+    "loud": false
+   },
+   {
+    "t": 39.0,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.19,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.44,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.69,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 39.74,
+    "session": "doctor",
+    "kind": "in",
+    "text": " affects your sleep at",
+    "loud": false
+   },
+   {
+    "t": 39.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 39.97,
+    "session": "doctor",
+    "kind": "out",
+    "text": "地方，以及",
+    "loud": false
+   },
+   {
+    "t": 40.0,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.19,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 40.78,
+    "session": "doctor",
+    "kind": "in",
+    "text": " night.",
+    "loud": false
+   },
+   {
+    "t": 40.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 40.97,
+    "session": "doctor",
+    "kind": "out",
+    "text": "它如何影响你晚",
+    "loud": false
+   },
+   {
+    "t": 41.0,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.19,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 41.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 41.94,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 42.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 42.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 42.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.84,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 43.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 44.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.56,
+    "session": "patient",
+    "kind": "in",
+    "text": "我怕",
+    "loud": false
+   },
+   {
+    "t": 45.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.69,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 45.87,
+    "session": "patient",
+    "kind": "out",
+    "text": " I'm afraid",
+    "loud": false
+   },
+   {
+    "t": 45.89,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 45.97,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 46.22,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 46.46,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 46.69,
+    "session": "patient",
+    "kind": "in",
+    "text": "这药吃了会",
+    "loud": false
+   },
+   {
+    "t": 46.71,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 46.96,
+    "session": "patient",
+    "kind": "out",
+    "text": " this medicine will",
+    "loud": false
+   },
+   {
+    "t": 46.97,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.0,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.2,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.45,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.59,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.64,
+    "session": "patient",
+    "kind": "in",
+    "text": "犯困。",
+    "loud": false
+   },
+   {
+    "t": 47.7,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 47.86,
+    "session": "patient",
+    "kind": "out",
+    "text": " make me drowsy.",
+    "loud": false
+   },
+   {
+    "t": 47.88,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 47.95,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.1,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.19,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.44,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.7,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 48.84,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 48.94,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 49.19,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": true
+   },
+   {
+    "t": 49.44,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.69,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.85,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 49.94,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.19,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.44,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.69,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.84,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 50.94,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.19,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.44,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 51.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.09,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.19,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.69,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 52.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.34,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.44,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.83,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 53.93,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.08,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.18,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.33,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.43,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.58,
+    "session": "patient",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   },
+   {
+    "t": 54.68,
+    "session": "doctor",
+    "kind": "audio",
+    "text": "",
+    "loud": false
+   }
+  ],
+  "rows": [
+   {
+    "clip": "s11-d1",
+    "speaker": "doctor",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 12,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 3.27,
+    "last_out_after_end_s": 1.53,
+    "late_out_chars": 0,
+    "heard": "I want to ask you, about your sleep.",
+    "said": "我想问你，关于你的睡眠。"
+   },
+   {
+    "clip": "c-p1",
+    "speaker": "patient",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 23,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 3.13,
+    "last_out_after_end_s": 1.58,
+    "late_out_chars": 0,
+    "heard": "我没有过敏。",
+    "said": "I don't have allergies."
+   },
+   {
+    "clip": "s07-d1",
+    "speaker": "doctor",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 19,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 0.95,
+    "last_out_after_end_s": 1.41,
+    "late_out_chars": 0,
+    "heard": " Take 500 milligrams three times a day for seven days.",
+    "said": "请服用500毫克，一天三次，连续七天。"
+   },
+   {
+    "clip": "s08-p1",
+    "speaker": "patient",
+    "input_recall": 0.857,
+    "tail_heard": false,
+    "out_chars": 37,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 1.11,
+    "last_out_after_end_s": 1.87,
+    "late_out_chars": 0,
+    "heard": "我的体温是38度5。",
+    "said": " My body temperature is 38.5 degrees."
+   },
+   {
+    "clip": "b13-d1",
+    "speaker": "doctor",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 46,
+    "empty": false,
+    "out_tail_ok": false,
+    "first_audio_s": 0.98,
+    "last_out_after_end_s": 1.47,
+    "late_out_chars": 0,
+    "heard": " Tell me about the pain, when it started, what makes it worse, whether it spreads anywhere else, and how it affects your sleep at night.",
+    "said": "告诉我关于疼痛的情况，什么时候开始的，什么让它更严重，是否扩散到其他地方，以及它如何影响你晚"
+   },
+   {
+    "clip": "turn-p4",
+    "speaker": "patient",
+    "input_recall": 1.0,
+    "tail_heard": true,
+    "out_chars": 46,
+    "empty": false,
+    "out_tail_ok": true,
+    "first_audio_s": 1.39,
+    "last_out_after_end_s": 1.16,
+    "late_out_chars": 0,
+    "heard": "我怕这药吃了会犯困。",
+    "said": " I'm afraid this medicine will make me drowsy."
+   }
+  ],
+  "agg": {
+   "clips": 6,
+   "mean_input_recall": 0.976,
+   "tails_dropped": 1,
+   "empty_outputs": 0,
+   "out_tails_dropped": 1,
+   "late_out_chars": 0,
+   "spurious_out_chars": 0,
+   "spurious_text": "",
+   "median_first_audio_s": 1.25,
+   "median_last_out_after_end_s": 1.5,
+   "closes": 0,
+   "turn_completes": 0
+  },
+  "label": "routed_se_hard_g5",
+  "run": 2,
+  "schedule": {
+   "clips": [
+    "s11-d1",
+    "c-p1",
+    "s07-d1",
+    "s08-p1",
+    "b13-d1",
+    "turn-p4"
+   ],
+   "gap": 5.0
+  }
+ }
+]

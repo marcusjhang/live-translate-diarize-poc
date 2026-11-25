@@ -10,15 +10,24 @@ Selfcheck: uv run server.py --self-check  (no key needed — pure logic only)
 The browser owns mic capture, the turn state, and the buffered playback; this
 backend owns the Gemini 3.5 Live Translate sessions and the API key. It is a
 thin relay plus the pure logic that the self-check asserts: language mapping,
-the transcript normaliser, and the turn state machine.
+the transcript normaliser, mic routing and the bounded input queue.
+
+Input model (docs/starter-alignment-plan.md): exactly Google's starter, once per
+direction. The browser streams the mic as one continuous 16 kHz PCM16 stream in
+100 ms chunks; automatic activity detection decides where speech starts and ends.
+The TALK buttons only ROUTE that stream to one direction's session. Releasing
+the route sends `audio_stream_end`, which makes the model flush the clause it is
+still holding (it reorders, so it often waits for more audio).
 """
 import asyncio
 import argparse
 import base64
+import collections
 from contextlib import asynccontextmanager
 import json
 import os
 import sys
+import time
 from pathlib import Path
 
 import uvicorn
@@ -26,6 +35,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from streaming_mode import STREAMING_MODES, default_streaming_mode, parse_streaming_mode
+from prompt import LANG_NAMES, system_instruction
 
 STATIC_DIR = Path(__file__).parent / "static"
 
@@ -52,7 +62,8 @@ DEFAULT_STREAMING_MODE = default_streaming_mode()
 # Pure logic — no SDK, no network, no key. The self-check asserts this.
 # ---------------------------------------------------------------------------
 
-_BCP47 = {"zh": "zh-Hans"}  # Mandarin needs a script tag; en/es/fil pass through.
+_BCP47 = {"zh": "zh-Hans"}  # Mandarin needs a script tag; every other UI code
+# (ta, id, vi, zh-Hant, pt-BR, ...) is already a BCP-47 tag and passes through.
 
 
 def lang_bcp47(code: str) -> str:
@@ -80,10 +91,94 @@ def normalize_transcript(sc: dict) -> list[dict]:
     return out
 
 
+SIDES = ("doctor", "patient")
+
+
+def reroute(current: str | None, new: str | None, flush: bool = True):
+    """Move the mic route from `current` to `new` (a side or None = released).
+    Returns (route, actions): actions are (side, item) pairs to enqueue. The side
+    losing the mic gets `stream_end` so the model flushes its pending clause."""
+    if new not in SIDES:
+        new = None
+    actions = []
+    if flush and current is not None and current != new:
+        actions.append((current, {"type": "stream_end"}))
+    return new, actions
+
+
+INPUT_BACKLOG = 20  # chunks (2 s) a direction may buffer while it reconnects
+PREROLL_CHUNKS = 3  # 300 ms of mic audio sent ahead of a newly routed stream
+PREROLL_MAX_AGE = 0.45  # s; older chunks are not "just before the tap" any more
+
+# The browser streams the mic continuously, routed or not. Keeping the last few
+# chunks lets a newly routed session hear the onset of the first word: people
+# start talking as (or just before) they tap, and a session fed nothing until
+# that instant clipped the first syllable ("咳嗽…" for "我咳嗽…").
+
+
+def fresh_preroll(buf, now: float, max_age: float = PREROLL_MAX_AGE) -> list[bytes]:
+    """The pre-roll chunks still recent enough to be the onset of the speech that
+    the tap is about. The browser pauses uploading while translated speech plays,
+    so without an age limit the buffer could hold the PREVIOUS speaker's tail
+    from seconds ago."""
+    return [pcm for t, pcm in buf if now - t <= max_age]
+
+
+def offer(q: "asyncio.Queue", item: dict, limit: int = INPUT_BACKLOG) -> int:
+    """Enqueue without letting a reconnecting direction build a backlog: beyond
+    `limit` queued audio chunks the OLDEST audio is dropped (live speech replayed
+    late in a burst is worse than a gap). Control items are never dropped.
+    Returns the number of chunks dropped."""
+    dropped = 0
+    if item.get("type") == "audio":
+        while sum(1 for x in q._queue if x.get("type") == "audio") >= limit:  # noqa: SLF001
+            for x in list(q._queue):  # noqa: SLF001
+                if x.get("type") == "audio":
+                    q._queue.remove(x)  # noqa: SLF001
+                    dropped += 1
+                    break
+    q.put_nowait(item)
+    return dropped
+
+
 # ---------------------------------------------------------------------------
-# Gemini 3.5 Live Translate — Developer API-key auth (NOT Vertex / ADC).
+# Gemini client. Two backends, chosen with GEMINI_BACKEND:
+#   apikey     (default) Developer API, GEMINI_API_KEY, api_version v1beta
+#   enterprise Google Cloud / Agent Platform, exactly as the starter:
+#              genai.Client(enterprise=True, project=..., location=...) with ADC
+#              (`gcloud auth application-default login`, GOOGLE_CLOUD_PROJECT,
+#              optional GOOGLE_CLOUD_LOCATION, default us-central1).
 # Imported lazily so --self-check needs no google-genai and no key.
 # ---------------------------------------------------------------------------
+
+BACKENDS = ("apikey", "enterprise")
+
+
+def backend() -> str:
+    b = (os.environ.get("GEMINI_BACKEND") or "apikey").strip().lower()
+    if b not in BACKENDS:
+        raise ValueError(f"GEMINI_BACKEND must be one of {BACKENDS}, got {b!r}")
+    return b
+
+
+def client_kwargs(b: str, env=os.environ) -> dict:
+    """Constructor arguments for genai.Client per backend (pure; self-checked)."""
+    if b == "enterprise":
+        return {"enterprise": True, "project": env["GOOGLE_CLOUD_PROJECT"],
+                "location": env.get("GOOGLE_CLOUD_LOCATION", "us-central1")}
+    # Pin the API version: newer google-genai releases default the Developer API to
+    # "v1", which does not serve the Live WebSocket (BidiGenerateContent) and
+    # rejects every connect with HTTP 404. Live lives on v1beta.
+    return {"api_key": env["GEMINI_API_KEY"],
+            "http_options": {"api_version": env.get("GEMINI_API_VERSION", "v1beta")}}
+
+
+def backend_ready(b: str, env=os.environ) -> str | None:
+    """None if the backend has what it needs, else the reason (shown to the user)."""
+    if b == "enterprise":
+        return None if env.get("GOOGLE_CLOUD_PROJECT") else "GOOGLE_CLOUD_PROJECT not set on server"
+    return None if env.get("GEMINI_API_KEY") else "GEMINI_API_KEY not set on server"
+
 
 _gemini_client = None
 
@@ -93,41 +188,37 @@ def gemini_client():
     if _gemini_client is None:
         from google import genai
 
-        # Pin the API version: newer google-genai releases default the Developer
-        # API to "v1", which does not serve the Live WebSocket (BidiGenerateContent)
-        # and rejects every connect with HTTP 404. Live lives on v1beta.
-        _gemini_client = genai.Client(
-            api_key=os.environ["GEMINI_API_KEY"],
-            http_options={"api_version": os.environ.get("GEMINI_API_VERSION", "v1beta")},
-        )
+        _gemini_client = genai.Client(**client_kwargs(backend()))
     return _gemini_client
 
 
-def gemini_config(target_bcp47: str, handle: str | None = None):
+def gemini_config(target_bcp47: str, handle: str | None = None, instruction: str | None = None):
+    """The starter's config, plus session resumption (a consult outlasts one live
+    session) and the per-direction system instruction (prompt.py). Automatic
+    activity detection stays ON: no realtime_input_config."""
     from google.genai import types
 
-    # NOTE: transparent=True is Vertex-only. With Developer-API key auth it raises
-    # ValueError at connect, so use handle-based resumption only.
+    # transparent=True (server-managed resumption) is Vertex-only; with Developer
+    # API key auth it raises ValueError at connect, so that path keeps handles only.
+    transparent = {"transparent": True} if backend() == "enterprise" else {}
     resumption = (
-        types.SessionResumptionConfig(handle=handle)
+        types.SessionResumptionConfig(handle=handle, **transparent)
         if handle
-        else types.SessionResumptionConfig()
+        else types.SessionResumptionConfig(**transparent)
     )
     return types.LiveConnectConfig(
         response_modalities=[types.Modality.AUDIO],
+        system_instruction=instruction,
         translation_config=types.TranslationConfig(
             target_language_code=target_bcp47,
-            echo_target_language=False,  # True makes the model parrot same-language input
+            # False: do not re-speak input that is already in the target language.
+            # (It does not fully stop that — see docs/starter-alignment-results.md —
+            # which is why the mic is routed to one direction at a time.)
+            echo_target_language=False,
         ),
         input_audio_transcription=types.AudioTranscriptionConfig(),
         output_audio_transcription=types.AudioTranscriptionConfig(),
-        realtime_input_config=types.RealtimeInputConfig(
-            automatic_activity_detection=types.AutomaticActivityDetection(disabled=True)
-        ),
         session_resumption=resumption,
-        context_window_compression=types.ContextWindowCompressionConfig(
-            sliding_window=types.SlidingWindow(target_tokens=16384)
-        ),
     )
 
 
@@ -163,11 +254,12 @@ def _flatten(sc) -> dict:
     return d
 
 
-async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio.Queue):
-    """One translation direction = one Gemini live session. Consumes control
-    items from in_q (activity_start / audio / silence / activity_end / close),
-    streams them to the model, and pushes normalized messages (tagged with side)
-    into out_q. Reconnects on go_away using the resumption handle, so a consult
+async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio.Queue,
+                     instruction: str | None = None):
+    """One translation direction = one Gemini live session fed like the starter:
+    audio chunks as they arrive, plus `audio_stream_end` when the mic is routed
+    away. Pushes normalized messages (tagged with side by the caller) into out_q.
+    Reconnects on go_away / clean close using the resumption handle, so a consult
     survives the ~10-15 min live-session caps."""
     from google.genai import types
 
@@ -177,68 +269,33 @@ async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio
     MAX_HARD_FAILURES = 5
     clean_reconnects = 0
     MAX_CLEAN_RECONNECTS = 10
-    # Which turn the model's output currently belongs to. The model keeps emitting
-    # after a turn is closed; without this tag that late output has no turn to
-    # belong to and gets attributed to whatever turn comes next — which is how the
-    # tool ended up "saying" sentences nobody spoke.
-    cur_turn = None
 
     while True:
-        config = gemini_config(target, handle)
+        config = gemini_config(target, handle, instruction)
         stopped = {"v": False}
         produced = {"v": False}
         try:
             async with client.aio.live.connect(model=MODEL, config=config) as session:
 
-                # Warm the session. The first turn on a cold Live session frequently
-                # produces nothing at all. A throwaway silent turn primes it; its
-                # output is tagged with turn=None and dropped by the client.
-                try:
-                    await session.send_realtime_input(activity_start=types.ActivityStart())
-                    warm = b"\x00\x00" * 1600
-                    for _ in range(4):
-                        await session.send_realtime_input(
-                            audio=types.Blob(data=warm, mime_type="audio/pcm;rate=16000"))
-                        await asyncio.sleep(0.1)
-                    await session.send_realtime_input(activity_end=types.ActivityEnd())
-                    print(f"[{side}] warmed")
-                except Exception as e:  # noqa: BLE001 - warming is best-effort
-                    print(f"[{side}] warm-up skipped: {e}")
-
                 async def send_loop():
-                    nonlocal cur_turn
-                    turn_bytes = 0
                     while True:
                         item = await in_q.get()
                         t = item["type"]
                         if t == "close":
                             stopped["v"] = True
                             return
-                        if t == "activity_start":
-                            turn_bytes = 0
-                            cur_turn = item.get("turn")
-                            await session.send_realtime_input(activity_start=types.ActivityStart())
-                        elif t == "activity_end":
-                            await session.send_realtime_input(activity_end=types.ActivityEnd())
-                            print(f"[{side}] turn input audio = {turn_bytes / 32000:.2f}s "
-                                  f"({turn_bytes} bytes @16k mono pcm16)")
-                        elif t == "audio":
-                            pcm = base64.b64decode(item["b64"])
-                            turn_bytes += len(pcm)
-                            await session.send_realtime_input(
-                                audio=types.Blob(data=pcm, mime_type="audio/pcm;rate=16000")
-                            )
-                        elif t == "silence":
-                            # Trailing silence must be PACED, not bursted: it is what
-                            # lets the model finish the final clause. Sending it as one
-                            # instant burst does not reliably commit the tail, which is
-                            # why the last phrase kept dropping. 100 ms per chunk.
-                            chunk = b"\x00\x00" * 1600  # 100 ms of 16 kHz mono PCM16
-                            for _ in range(item["ms"] // 100):
+                        try:
+                            if t == "audio":
                                 await session.send_realtime_input(
-                                    audio=types.Blob(data=chunk, mime_type="audio/pcm;rate=16000")
+                                    audio=types.Blob(data=item["pcm"], mime_type="audio/pcm;rate=16000")
                                 )
-                                await asyncio.sleep(0.1)
+                            elif t == "stream_end":
+                                await session.send_realtime_input(audio_stream_end=True)
+                        except asyncio.CancelledError:
+                            # go_away mid-send: give the item to the next session
+                            # instead of losing a chunk of speech or the flush.
+                            in_q._queue.appendleft(item)  # noqa: SLF001
+                            raise
 
                 async def recv_loop():
                     nonlocal handle
@@ -253,9 +310,7 @@ async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio
                         if sc:
                             produced["v"] = True
                             for out in normalize_transcript(_flatten(sc)):
-                                tagged = dict(out)
-                                tagged["turn"] = cur_turn
-                                await out_q.put((side, tagged))
+                                await out_q.put((side, out))
 
                 send_t = asyncio.create_task(send_loop())
                 recv_t = asyncio.create_task(recv_loop())
@@ -265,8 +320,7 @@ async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio
                     t.cancel()
                 # Await each pump explicitly. gather(..., return_exceptions=True) can
                 # still leave a task's exception un-retrieved when it is cancelled
-                # while raising, which produced one "Task exception was never
-                # retrieved" traceback per session close — 36 in a 15-scenario run.
+                # while raising.
                 error = None
                 for t in (send_t, recv_t):
                     try:
@@ -283,15 +337,13 @@ async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio
         except asyncio.CancelledError:
             raise
         except Exception as e:  # noqa: BLE001
-            # A session ending is NORMAL, not a failure: the Live API closes the
-            # socket at the end of a turn and rotates sessions at its caps, both
-            # surfacing as a clean close (code 1000) or ClosedOK. Treating those as
-            # fatal used to kill this direction permanently. Only genuine,
-            # repeated failures (auth, connect refused) are surfaced to the browser.
+            # A session ending is NORMAL, not a failure: the API rotates sessions at
+            # its caps, surfacing as a clean close (code 1000) or ClosedOK. Only
+            # genuine, repeated failures (auth, connect refused) reach the browser.
             if is_benign_session_end(e):
                 hard_failures = 0
                 print(f"[{side}] session closed cleanly -> reconnecting (handle={'yes' if handle else 'no'})")
-                await asyncio.sleep(0.2)  # reconnect with the handle, cheaply
+                await asyncio.sleep(0.2)
             else:
                 hard_failures += 1
                 if hard_failures > MAX_HARD_FAILURES:
@@ -302,10 +354,9 @@ async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio
                 await asyncio.sleep(min(2 ** hard_failures, 4))
             continue
 
-        # Reached only on a clean end with the browser still present: go_away or a
-        # rotated session. Reconnect transparently using the resumption handle, but
-        # bounded — a handle the server rejects immediately would otherwise spin
-        # here forever on a 50 ms pause, hammering the API.
+        # Clean end with the browser still present: go_away or a rotated session.
+        # Reconnect with the handle, but bounded — a handle the server rejects
+        # immediately would otherwise spin here, hammering the API.
         if produced["v"]:
             clean_reconnects = 0
         clean_reconnects += 1
@@ -314,7 +365,6 @@ async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio
             await out_q.put((side, {"type": "error", "raw": "session ended repeatedly"}))
             return
         await asyncio.sleep(min(0.2 * clean_reconnects, 2))
-
 
 
 def _quiet_benign(loop, context):
@@ -370,8 +420,12 @@ async def ws_bridge(browser: WebSocket):
         await browser.close()
         return
 
-    if not os.environ.get("GEMINI_API_KEY"):
-        await browser.send_json({"type": "error", "raw": "GEMINI_API_KEY not set on server"})
+    try:
+        why = backend_ready(backend())
+    except ValueError as e:
+        why = str(e)
+    if why:
+        await browser.send_json({"type": "error", "raw": why})
         await browser.close()
         return
 
@@ -380,8 +434,12 @@ async def ws_bridge(browser: WebSocket):
     in_q = {"doctor": asyncio.Queue(), "patient": asyncio.Queue()}
     out_q = asyncio.Queue()
     tasks = {
-        "doctor": asyncio.create_task(_direction("doctor", lang_bcp47(patient), in_q["doctor"], out_q)),
-        "patient": asyncio.create_task(_direction("patient", lang_bcp47(doctor), in_q["patient"], out_q)),
+        "doctor": asyncio.create_task(_direction(
+            "doctor", lang_bcp47(patient), in_q["doctor"], out_q,
+            system_instruction("doctor", doctor, patient))),
+        "patient": asyncio.create_task(_direction(
+            "patient", lang_bcp47(doctor), in_q["patient"], out_q,
+            system_instruction("patient", patient, doctor))),
     }
 
     await browser.send_json({"type": "ready", "streaming_mode": streaming_mode})
@@ -394,28 +452,43 @@ async def ws_bridge(browser: WebSocket):
             await browser.send_json(msg)
 
     out_task = asyncio.create_task(out_pump())
-    active = None  # the single direction that may stream right now
+    route = None  # the direction receiving the mic stream; None = released
+    preroll = collections.deque(maxlen=PREROLL_CHUNKS)  # recent unrouted mic audio
 
     try:
         while True:
             m = await browser.receive_json()
+            if not isinstance(m, dict):
+                continue
             t = m.get("type")
-            if t == "talk_start":
-                side = m.get("side")
-                if side in in_q and active is None:
-                    active = side
-                    await in_q[side].put({"type": "activity_start", "turn": m.get("turn")})
-            elif t == "audio":
+            if t == "audio":
                 b64 = m.get("b64")
-                if active is not None and isinstance(b64, str):
-                    await in_q[active].put({"type": "audio", "b64": b64})
-            elif t == "talk_end":
-                if active is not None:
-                    # ~800 ms trailing silence, then activity_end. 400 ms measured
-                    # truncates the final clause; 800 ms yields the whole sentence.
-                    await in_q[active].put({"type": "silence", "ms": 800})
-                    await in_q[active].put({"type": "activity_end"})
-                    active = None
+                if route is not None and isinstance(b64, str):
+                    try:
+                        pcm = base64.b64decode(b64, validate=True)
+                    except ValueError:
+                        continue
+                    if pcm and len(pcm) % 2 == 0:
+                        dropped = offer(in_q[route], {"type": "audio", "pcm": pcm})
+                        if dropped:
+                            print(f"[{route}] input backlog: dropped {dropped} stale chunk(s)")
+                elif isinstance(b64, str):
+                    try:
+                        pcm = base64.b64decode(b64, validate=True)
+                    except ValueError:
+                        continue
+                    if pcm and len(pcm) % 2 == 0:
+                        preroll.append((time.monotonic(), pcm))
+            elif t == "route":
+                prev = route
+                route, actions = reroute(route, m.get("side"))
+                for side, item in actions:
+                    offer(in_q[side], item)
+                if route is not None and route != prev:
+                    for pcm in fresh_preroll(preroll, time.monotonic()):
+                        offer(in_q[route], {"type": "audio", "pcm": pcm})
+                # Released or switched: whatever was buffered belongs to no one now.
+                preroll.clear()
             elif t == "set_streaming_mode":
                 try:
                     streaming_mode = parse_streaming_mode(m.get("streaming_mode"))
@@ -456,11 +529,99 @@ def _self_check():
     else:
         _check(False, "unknown streaming mode must fail")
 
+    # Mic routing: the side losing the mic is flushed, exactly once.
+    _check(reroute(None, "doctor") == ("doctor", []), "first route flushes nobody")
+    _check(reroute("doctor", "doctor") == ("doctor", []), "same route is a no-op")
+    _check(reroute("doctor", "patient") == ("patient", [("doctor", {"type": "stream_end"})]),
+           "switching flushes the previous side")
+    _check(reroute("patient", None) == (None, [("patient", {"type": "stream_end"})]),
+           "release flushes")
+    _check(reroute("patient", "nobody") == (None, [("patient", {"type": "stream_end"})]),
+           "an unknown side is a release")
+    _check(reroute("doctor", "patient", flush=False) == ("patient", []), "flush can be disabled")
+
+    # Pre-roll: only chunks from just before the tap.
+    _check(fresh_preroll([(9.0, b"old"), (9.7, b"a"), (9.9, b"b")], now=10.0) == [b"a", b"b"],
+           "stale pre-roll is not replayed")
+    _check(fresh_preroll([(1.0, b"x")], now=10.0) == [], "pre-roll from long ago is empty")
+
+    # Bounded input queue: stale audio is dropped oldest-first, control never.
+    q = asyncio.Queue()
+    for i in range(3):
+        offer(q, {"type": "audio", "pcm": bytes([i])}, limit=3)
+    offer(q, {"type": "stream_end"}, limit=3)
+    _check(offer(q, {"type": "audio", "pcm": b"\x03"}, limit=3) == 1, "one stale chunk dropped")
+    items = [q.get_nowait() for _ in range(q.qsize())]
+    _check([x.get("pcm") for x in items] == [b"\x01", b"\x02", None, b"\x03"],
+           "oldest audio dropped, order and control items kept")
+
+    # Starter config: automatic activity detection, no manual turns, no compression.
+    try:
+        cfg = gemini_config("zh-Hans")
+    except ImportError:
+        cfg = None  # google-genai not installed: config check needs the SDK
+    if cfg is not None:
+        _check(cfg.realtime_input_config is None, "automatic activity detection stays on")
+        _check(cfg.context_window_compression is None, "no context compression")
+        _check(cfg.translation_config.target_language_code == "zh-Hans", "target passes through")
+        _check(cfg.session_resumption is not None, "resumption configured")
+        _check(cfg.system_instruction is None, "no instruction unless passed")
+        _check(gemini_config("zh-Hans", instruction="x").system_instruction is not None,
+               "instruction passes through")
+
+    # System instruction: right roles and languages for every pair, nothing from
+    # any other language leaking in, unknown codes fall back to their tag.
+    codes = list(LANG_NAMES) + ["ta"]
+    for spk, lis in (("doctor", "patient"), ("patient", "doctor")):
+        for src in codes:
+            for tgt in codes:
+                if src == tgt:
+                    continue
+                si = system_instruction(spk, src, tgt)
+                names = {LANG_NAMES.get(src, src), LANG_NAMES.get(tgt, tgt)}
+                _check(f"hear only the {spk}, speaking {LANG_NAMES.get(src, src)}" in si,
+                       f"{spk} {src}->{tgt}: speaker and source named")
+                _check(f"to the {lis} in {LANG_NAMES.get(tgt, tgt)}" in si,
+                       f"{spk} {src}->{tgt}: listener and target named")
+                # English is named on purpose: code-switching and drug names.
+                for other in set(LANG_NAMES.values()) - names - {"English"}:
+                    _check(other not in si, f"{spk} {src}->{tgt}: {other} leaks in")
+    try:
+        system_instruction("nurse", "en", "zh")
+    except ValueError:
+        pass
+    else:
+        _check(False, "unknown speaker must fail")
+
+    # Backend selection (no network: constructor arguments only).
+    _check(client_kwargs("apikey", {"GEMINI_API_KEY": "k"}) ==
+           {"api_key": "k", "http_options": {"api_version": "v1beta"}}, "apikey pins v1beta")
+    _check(client_kwargs("enterprise", {"GOOGLE_CLOUD_PROJECT": "p"}) ==
+           {"enterprise": True, "project": "p", "location": "us-central1"}, "enterprise = starter client")
+    _check(backend_ready("apikey", {}) is not None, "apikey needs a key")
+    _check(backend_ready("enterprise", {"GOOGLE_CLOUD_PROJECT": "p"}) is None, "enterprise needs a project")
+    _old = os.environ.get("GEMINI_BACKEND")
+    try:
+        os.environ["GEMINI_BACKEND"] = "nope"
+        try:
+            backend()
+        except ValueError:
+            pass
+        else:
+            _check(False, "unknown backend must fail")
+    finally:
+        if _old is None:
+            os.environ.pop("GEMINI_BACKEND", None)
+        else:
+            os.environ["GEMINI_BACKEND"] = _old
+
     # Language mapping.
     _check(lang_bcp47("zh") == "zh-Hans", "zh must map to zh-Hans")
     _check(lang_bcp47("en") == "en", "en passes through")
     _check(lang_bcp47("es") == "es", "es passes through")
     _check(lang_bcp47("fil") == "fil", "fil passes through")
+    _check(lang_bcp47("zh-Hant") == "zh-Hant", "zh-Hant passes through")
+    _check(lang_bcp47("pt-BR") == "pt-BR", "pt-BR passes through")
 
     # Transcript normaliser.
     _check(normalize_transcript({"input_text": "penicillin"}) ==
