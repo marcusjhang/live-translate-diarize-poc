@@ -46,6 +46,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import harness_lib as H  # noqa: E402
+sys.path.insert(0, str(H.ROOT))
+from prompt import system_instruction  # noqa: E402
 
 from google import genai  # noqa: E402
 from google.genai import types  # noqa: E402
@@ -61,6 +63,8 @@ PRESETS = {
     "hard": ["s11-d1", "c-p1", "s07-d1", "s08-p1", "b13-d1", "turn-p4"],
 }
 TARGET = {"doctor": "zh-Hans", "patient": "en"}  # doctor speaks en, patient zh
+SOURCE = {"doctor": "en", "patient": "zh"}
+INSTRUCTION = False  # --instruction on: the app's per-direction system instruction
 
 
 def load_dotenv():
@@ -87,8 +91,9 @@ def make_client(backend: str):
                         http_options={"api_version": os.environ.get("GEMINI_API_VERSION", "v1beta")})
 
 
-def make_config(target: str, gated: bool, handle: str | None):
+def make_config(target: str, gated: bool, handle: str | None, instruction: str | None = None):
     cfg = dict(
+        system_instruction=instruction,
         response_modalities=[types.Modality.AUDIO],
         input_audio_transcription=types.AudioTranscriptionConfig(),
         output_audio_transcription=types.AudioTranscriptionConfig(),
@@ -124,7 +129,9 @@ class Side:
         first = True
         while not self.stop:
             try:
-                cfg = make_config(TARGET[self.name], self.gated, self.handle)
+                inst = (system_instruction(self.name, SOURCE[self.name], SOURCE["patient" if self.name == "doctor" else "doctor"])
+                        if INSTRUCTION else None)
+                cfg = make_config(TARGET[self.name], self.gated, self.handle, inst)
                 async with self.client.aio.live.connect(model=MODEL, config=cfg) as s:
                     if self.gated and first:  # app's warm-up turn
                         await s.send_realtime_input(activity_start=types.ActivityStart())
@@ -298,7 +305,11 @@ def main():
     p.add_argument("--backend", choices=["apikey", "enterprise"], default="apikey")
     p.add_argument("--out", help="write JSON results here")
     p.add_argument("--label", default="")
+    p.add_argument("--instruction", choices=["off", "on"], default="off",
+                   help="send the app's per-direction system instruction (prompt.py)")
     args = p.parse_args()
+    global INSTRUCTION
+    INSTRUCTION = args.instruction == "on"
     if args.input == "gated" and args.sessions != "routed":
         p.error("gated input is the app's routed mode only")
 
@@ -310,7 +321,8 @@ def main():
     segs = H.build_schedule(clips, gap)
     label = args.label or (f"{args.input}/{args.sessions}/idle={args.idle}/floor={args.floor:g}"
                            f"{'/fb' if args.feedback else ''}{'/sup' if args.suppress else ''}"
-                           f"{f'/se={args.stream_end:g}' if args.stream_end is not None else ''}/gap={gap:g}")
+                           f"{f'/se={args.stream_end:g}' if args.stream_end is not None else ''}/gap={gap:g}"
+                           f"{'/si' if args.instruction == 'on' else ''}")
     results = []
     for r in range(args.runs):
         rng = random.Random(args.seed + r)

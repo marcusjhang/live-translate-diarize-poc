@@ -303,21 +303,11 @@
       <h1>Interpretation setup</h1>
       <div class="field">
         <label for="doctor-lang">Doctor language</label>
-        <select id="doctor-lang">
-          <option value="en" selected>English</option>
-          <option value="zh">中文 (Mandarin)</option>
-          <option value="es">Español (Spanish)</option>
-          <option value="fil">Filipino</option>
-        </select>
+        <select id="doctor-lang"></select>
       </div>
       <div class="field">
         <label for="patient-lang">Patient language</label>
-        <select id="patient-lang">
-          <option value="zh" selected>中文 (Mandarin)</option>
-          <option value="en">English</option>
-          <option value="es">Español (Spanish)</option>
-          <option value="fil">Filipino</option>
-        </select>
+        <select id="patient-lang"></select>
       </div>
       <label class="consent" for="consent">
         <input type="checkbox" id="consent">
@@ -368,7 +358,69 @@
 (function () {
   "use strict";
 
-  var LANGS = { en: "English", zh: "中文", es: "Español", fil: "Filipino" };
+  // [code, English name, native name]. Codes are BCP-47 tags the translation model
+  // accepts as-is, except "zh", which the server maps to zh-Hans (kept as "zh" so
+  // saved setups and the e2e suites still work). Priority languages first, then
+  // everything else alphabetically by English name.
+  var PRIORITY_LANGS = [
+    ["ta", "Tamil", "தமிழ்"],
+    ["id", "Indonesian", "Bahasa Indonesia"],
+    ["vi", "Vietnamese", "Tiếng Việt"],
+    ["hi", "Hindi", "हिन्दी"],
+    ["zh", "Chinese, Simplified", "简体中文"],
+    ["zh-Hant", "Chinese, Traditional", "繁體中文"],
+    ["my", "Burmese", "မြန်မာ"],
+    ["fil", "Filipino", "Filipino"],
+    ["bn", "Bengali", "বাংলা"],
+    ["ko", "Korean", "한국어"],
+    ["ms", "Malay", "Bahasa Melayu"]
+  ];
+  var OTHER_LANGS = [
+    ["af", "Afrikaans", "Afrikaans"], ["ak", "Akan", "Akan"], ["sq", "Albanian", "Shqip"],
+    ["am", "Amharic", "አማርኛ"], ["ar", "Arabic", "العربية"], ["hy", "Armenian", "Հայերեն"],
+    ["az", "Azerbaijani", "Azərbaycanca"], ["eu", "Basque", "Euskara"],
+    ["be", "Belarusian", "Беларуская"], ["bg", "Bulgarian", "Български"],
+    ["ca", "Catalan", "Català"], ["hr", "Croatian", "Hrvatski"], ["cs", "Czech", "Čeština"],
+    ["da", "Danish", "Dansk"], ["nl", "Dutch", "Nederlands"], ["en", "English", "English"],
+    ["et", "Estonian", "Eesti"], ["fi", "Finnish", "Suomi"], ["fr", "French", "Français"],
+    ["gl", "Galician", "Galego"], ["ka", "Georgian", "ქართული"], ["de", "German", "Deutsch"],
+    ["el", "Greek", "Ελληνικά"], ["gu", "Gujarati", "ગુજરાતી"], ["ha", "Hausa", "Hausa"],
+    ["he", "Hebrew", "עברית"], ["hu", "Hungarian", "Magyar"], ["is", "Icelandic", "Íslenska"],
+    ["it", "Italian", "Italiano"], ["ja", "Japanese", "日本語"], ["jv", "Javanese", "Basa Jawa"],
+    ["kn", "Kannada", "ಕನ್ನಡ"], ["kk", "Kazakh", "Қазақ"], ["km", "Khmer", "ខ្មែរ"],
+    ["rw", "Kinyarwanda", "Ikinyarwanda"], ["lo", "Lao", "ລາວ"], ["lv", "Latvian", "Latviešu"],
+    ["lt", "Lithuanian", "Lietuvių"], ["mk", "Macedonian", "Македонски"],
+    ["ml", "Malayalam", "മലയാളം"], ["mr", "Marathi", "मराठी"], ["mn", "Mongolian", "Монгол"],
+    ["ne", "Nepali", "नेपाली"], ["no", "Norwegian", "Norsk"], ["fa", "Persian", "فارسی"],
+    ["pl", "Polish", "Polski"], ["pt-BR", "Portuguese, Brazil", "Português (Brasil)"],
+    ["pt-PT", "Portuguese, Portugal", "Português (Portugal)"], ["pa", "Punjabi", "ਪੰਜਾਬੀ"],
+    ["ro", "Romanian", "Română"], ["ru", "Russian", "Русский"], ["sr", "Serbian", "Српски"],
+    ["sd", "Sindhi", "سنڌي"], ["si", "Sinhala", "සිංහල"], ["sk", "Slovak", "Slovenčina"],
+    ["sl", "Slovenian", "Slovenščina"], ["es", "Spanish", "Español"],
+    ["su", "Sundanese", "Basa Sunda"], ["sw", "Swahili", "Kiswahili"],
+    ["sv", "Swedish", "Svenska"], ["te", "Telugu", "తెలుగు"], ["th", "Thai", "ไทย"],
+    ["tr", "Turkish", "Türkçe"], ["uk", "Ukrainian", "Українська"], ["ur", "Urdu", "اردو"],
+    ["uz", "Uzbek", "Oʻzbek"], ["zu", "Zulu", "isiZulu"]
+  ];
+  var LANGS = {};  // code -> native name, for the panel labels
+  PRIORITY_LANGS.concat(OTHER_LANGS).forEach(function (l) { LANGS[l[0]] = l[2]; });
+  function fillLangSelect(id, selected) {
+    var sel = document.getElementById(id);
+    [["Priority languages", PRIORITY_LANGS], ["All other languages", OTHER_LANGS]].forEach(function (g) {
+      var group = document.createElement("optgroup");
+      group.label = g[0];
+      g[1].forEach(function (l) {
+        var o = document.createElement("option");
+        o.value = l[0];
+        o.textContent = l[1] === l[2] ? l[1] : l[2] + " (" + l[1] + ")";
+        if (l[0] === selected) o.selected = true;
+        group.appendChild(o);
+      });
+      sel.appendChild(group);
+    });
+  }
+  fillLangSelect("doctor-lang", "en");
+  fillLangSelect("patient-lang", "zh");
   var ROLES = { doctor: "Doctor", patient: "Patient" };
   // Input model (docs/starter-alignment-plan.md): like Google's starter, the mic is
   // ONE continuous 16 kHz stream of 100 ms PCM16 chunks for the whole session, and
@@ -1179,8 +1231,8 @@
   if (saved) {
     try {
       var prev = JSON.parse(saved);
-      if (prev.doctor) document.getElementById("doctor-lang").value = prev.doctor;
-      if (prev.patient) document.getElementById("patient-lang").value = prev.patient;
+      if (LANGS[prev.doctor]) document.getElementById("doctor-lang").value = prev.doctor;
+      if (LANGS[prev.patient]) document.getElementById("patient-lang").value = prev.patient;
     } catch (e) {}
   }
   var consent = document.getElementById("consent");

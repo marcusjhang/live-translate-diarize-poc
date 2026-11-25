@@ -60,6 +60,14 @@ per direction (`docs/starter-alignment-plan.md`, evidence in
 - `response_modalities=[AUDIO]`, `input_audio_transcription`,
   `output_audio_transcription`, `translation_config(target_language_code=<other
   BCP-47>, echo_target_language=False)`.
+- `system_instruction` per direction (`prompt.py`): GP-consult interpreter role,
+  who is speaking to whom, keep every number/dose/frequency/negation, keep drug
+  names untranslated, polite register. One English template for every language
+  pair; languages enter only by name (unknown codes by their BCP-47 tag), so adding
+  a language needs no prompt change. Measured en↔zh, 3 runs each
+  (`experiments/results/*_si{off,on}.*`): fixes `38.5` → "38 degrees" (0/3 → 3/3) and
+  the dropped "come back" clause in turn-d5 (0/3 → 3/3); does **not** fix "twice a
+  day" (wrong 3/3 either way); first-audio latency unchanged (~2.6 s).
 - **Automatic activity detection stays on.** No `realtime_input_config`, no
   `activity_start`/`activity_end`, no warm-up turn, no fake trailing silence.
 - `session_resumption` — on `go_away` the server reconnects with the latest
@@ -116,7 +124,7 @@ observed test run, not a guarantee — the model is stochastic and results vary.
 
 | Failure | Frequency | Detected? |
 |---|---|---|
-| A spoken **frequency** is dropped in translation (e.g. "twice a day" -> "daily") | 6 / 6 attempts — **deterministic** | yes, `Check the number (2)` |
+| A spoken **frequency** is dropped in translation (e.g. "twice a day" -> "daily") | 6 / 6 attempts — **deterministic**; still 3 / 3 with the system instruction ("一天吃两片/一片") | yes, `Check the number (2)` |
 | A **number** is mangled (`38.5` -> `3 8度5`) | intermittent | yes, `Check the number` |
 | A turn produces **no translation** at all | intermittent | yes, `No translation — please check` |
 | A clause is rendered as **one bare word** / transliterated gibberish (`Me duele la cabeza.` -> `Midway`) | intermittent | partly — see below |

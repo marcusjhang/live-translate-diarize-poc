@@ -35,6 +35,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from streaming_mode import STREAMING_MODES, default_streaming_mode, parse_streaming_mode
+from prompt import LANG_NAMES, system_instruction
 
 STATIC_DIR = Path(__file__).parent / "static"
 
@@ -61,7 +62,8 @@ DEFAULT_STREAMING_MODE = default_streaming_mode()
 # Pure logic — no SDK, no network, no key. The self-check asserts this.
 # ---------------------------------------------------------------------------
 
-_BCP47 = {"zh": "zh-Hans"}  # Mandarin needs a script tag; en/es/fil pass through.
+_BCP47 = {"zh": "zh-Hans"}  # Mandarin needs a script tag; every other UI code
+# (ta, id, vi, zh-Hant, pt-BR, ...) is already a BCP-47 tag and passes through.
 
 
 def lang_bcp47(code: str) -> str:
@@ -190,9 +192,10 @@ def gemini_client():
     return _gemini_client
 
 
-def gemini_config(target_bcp47: str, handle: str | None = None):
+def gemini_config(target_bcp47: str, handle: str | None = None, instruction: str | None = None):
     """The starter's config, plus session resumption (a consult outlasts one live
-    session). Automatic activity detection stays ON: no realtime_input_config."""
+    session) and the per-direction system instruction (prompt.py). Automatic
+    activity detection stays ON: no realtime_input_config."""
     from google.genai import types
 
     # transparent=True (server-managed resumption) is Vertex-only; with Developer
@@ -205,6 +208,7 @@ def gemini_config(target_bcp47: str, handle: str | None = None):
     )
     return types.LiveConnectConfig(
         response_modalities=[types.Modality.AUDIO],
+        system_instruction=instruction,
         translation_config=types.TranslationConfig(
             target_language_code=target_bcp47,
             # False: do not re-speak input that is already in the target language.
@@ -250,7 +254,8 @@ def _flatten(sc) -> dict:
     return d
 
 
-async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio.Queue):
+async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio.Queue,
+                     instruction: str | None = None):
     """One translation direction = one Gemini live session fed like the starter:
     audio chunks as they arrive, plus `audio_stream_end` when the mic is routed
     away. Pushes normalized messages (tagged with side by the caller) into out_q.
@@ -266,7 +271,7 @@ async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio
     MAX_CLEAN_RECONNECTS = 10
 
     while True:
-        config = gemini_config(target, handle)
+        config = gemini_config(target, handle, instruction)
         stopped = {"v": False}
         produced = {"v": False}
         try:
@@ -429,8 +434,12 @@ async def ws_bridge(browser: WebSocket):
     in_q = {"doctor": asyncio.Queue(), "patient": asyncio.Queue()}
     out_q = asyncio.Queue()
     tasks = {
-        "doctor": asyncio.create_task(_direction("doctor", lang_bcp47(patient), in_q["doctor"], out_q)),
-        "patient": asyncio.create_task(_direction("patient", lang_bcp47(doctor), in_q["patient"], out_q)),
+        "doctor": asyncio.create_task(_direction(
+            "doctor", lang_bcp47(patient), in_q["doctor"], out_q,
+            system_instruction("doctor", doctor, patient))),
+        "patient": asyncio.create_task(_direction(
+            "patient", lang_bcp47(doctor), in_q["patient"], out_q,
+            system_instruction("patient", patient, doctor))),
     }
 
     await browser.send_json({"type": "ready", "streaming_mode": streaming_mode})
@@ -556,6 +565,33 @@ def _self_check():
         _check(cfg.context_window_compression is None, "no context compression")
         _check(cfg.translation_config.target_language_code == "zh-Hans", "target passes through")
         _check(cfg.session_resumption is not None, "resumption configured")
+        _check(cfg.system_instruction is None, "no instruction unless passed")
+        _check(gemini_config("zh-Hans", instruction="x").system_instruction is not None,
+               "instruction passes through")
+
+    # System instruction: right roles and languages for every pair, nothing from
+    # any other language leaking in, unknown codes fall back to their tag.
+    codes = list(LANG_NAMES) + ["ta"]
+    for spk, lis in (("doctor", "patient"), ("patient", "doctor")):
+        for src in codes:
+            for tgt in codes:
+                if src == tgt:
+                    continue
+                si = system_instruction(spk, src, tgt)
+                names = {LANG_NAMES.get(src, src), LANG_NAMES.get(tgt, tgt)}
+                _check(f"hear only the {spk}, speaking {LANG_NAMES.get(src, src)}" in si,
+                       f"{spk} {src}->{tgt}: speaker and source named")
+                _check(f"to the {lis} in {LANG_NAMES.get(tgt, tgt)}" in si,
+                       f"{spk} {src}->{tgt}: listener and target named")
+                # English is named on purpose: code-switching and drug names.
+                for other in set(LANG_NAMES.values()) - names - {"English"}:
+                    _check(other not in si, f"{spk} {src}->{tgt}: {other} leaks in")
+    try:
+        system_instruction("nurse", "en", "zh")
+    except ValueError:
+        pass
+    else:
+        _check(False, "unknown speaker must fail")
 
     # Backend selection (no network: constructor arguments only).
     _check(client_kwargs("apikey", {"GEMINI_API_KEY": "k"}) ==
@@ -584,6 +620,8 @@ def _self_check():
     _check(lang_bcp47("en") == "en", "en passes through")
     _check(lang_bcp47("es") == "es", "es passes through")
     _check(lang_bcp47("fil") == "fil", "fil passes through")
+    _check(lang_bcp47("zh-Hant") == "zh-Hant", "zh-Hant passes through")
+    _check(lang_bcp47("pt-BR") == "pt-BR", "pt-BR passes through")
 
     # Transcript normaliser.
     _check(normalize_transcript({"input_text": "penicillin"}) ==
