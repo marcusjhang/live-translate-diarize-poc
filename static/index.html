@@ -290,8 +290,8 @@
   <div class="setup hidden" id="endbox">
     <div class="setup-card">
       <h1>End this consultation?</h1>
-      <p class="note">The translation session stops and the microphone is released. You stay on this
-      page so you can still read or save what was said.</p>
+      <p class="note">The translation session stops, the microphone is released, and you return to
+      the setup page. The transcript is cleared unless you save it first.</p>
       <button class="start" id="end-save" type="button">Save transcript &amp; end</button>
       <button class="start start--quiet" id="end-nosave" type="button">End without saving</button>
       <button class="cancel" id="end-cancel" type="button">Cancel</button>
@@ -391,8 +391,9 @@
   // small peak threshold). Energy can: measured padding is RMS ~0-11, speech is in
   // the hundreds and up.
   var AUDIO_RMS_MIN = 220;
+  var PLAYOUT_LEAD_S = 0.25;  // jitter-buffer depth when playback (re)starts; see scheduleAudio()
   var quietTimer = null, capTimer = null;
-  var playCtx = null, nextTime = 0, draining = false, drainTimer = null, lastOutputAt = 0;
+  var playCtx = null, nextTime = 0, speechEnd = 0, turnHasSpeech = false, draining = false, drainTimer = null, lastOutputAt = 0;
   var turnSeq = 0, currentTurn = null, sawOutput = false, heardSound = false, turnCapTimer = null;
   var MAX_TURN_MS = 30000;   // hard ceiling so a turn can never stay open forever
   // Seconds of digital silence must not be streamed at the model: it finalises the
@@ -733,9 +734,11 @@
       // Only the active person's session contributes audio, and only while a
       // turn is open: an idle session keeps streaming silence-padded frames.
       if (m.side === active && (phase === "listening" || phase === "translating")) {
-        if (b64Rms(m.b64) > AUDIO_RMS_MIN) {
-          audioBuf.push(m.b64);
-          if (draining || streamingMode === "realtime") scheduleAudio();
+        var loud = b64Rms(m.b64) > AUDIO_RMS_MIN;
+        audioBuf.push({ b64: m.b64, loud: loud });
+        if (DEBUG_AUDIO && dbg.turn !== null) dbg.recv.push(b64Bytes(m.b64));
+        if (draining || streamingMode === "realtime") scheduleAudio();
+        if (loud) {
           sawOutput = true;
           markOutput();
         }
@@ -759,9 +762,11 @@
     lines.push(ln);
     lineByTurn[currentTurn] = ln;
     audioBuf = [];
+    turnHasSpeech = false;
     pcmAccum = new Int16Array(0);
     lastSound = performance.now();
     send({ type: "talk_start", side: side, turn: currentTurn });
+    dbgStartTurn(currentTurn);
     // Safety ceiling. A turn where no audio is ever captured does not auto-end
     // (that is deliberate, so a pause-before-speaking is not discarded), so it
     // must not be able to hang the session indefinitely either.
@@ -806,31 +811,117 @@
   function ensurePlayCtx() {
     if (!playCtx) {
       playCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+      playOut = playCtx.createGain();
+      playOut.connect(playCtx.destination);
+      if (DEBUG_AUDIO) {
+        dbg.tap = playCtx.createMediaStreamDestination();
+        playOut.connect(dbg.tap);
+      }
     }
     if (playCtx.state === "suspended") playCtx.resume();
   }
 
+  // ---- Audio debug recorder (open the page with ?debugaudio) ----------------
+  // Per turn, downloads three files when the turn closes:
+  //   turnN-sent-16k.wav      the mic audio actually sent to the server
+  //   turnN-received-24k.wav  every chunk the model sent, back to back, untouched
+  //   turnN-played.webm       what the page actually sent to the speakers
+  // Compare them: if "received" is choppy, the model is; if only "played" is,
+  // playback is; if "sent" is choppy, capture is.
+  var DEBUG_AUDIO = /[?&]debugaudio\b/.test(location.search);
+  var playOut = null;
+  var dbg = { tap: null, rec: null, webm: [], sent: [], recv: [], turn: null };
+
+  function dbgStartTurn(turn) {
+    if (!DEBUG_AUDIO) return;
+    ensurePlayCtx();
+    dbg.turn = turn; dbg.sent = []; dbg.recv = []; dbg.webm = [];
+    try {
+      dbg.rec = new MediaRecorder(dbg.tap.stream);
+      dbg.rec.ondataavailable = function (e) { if (e.data.size) dbg.webm.push(e.data); };
+      dbg.rec.start(1000);
+    } catch (e) { dbg.rec = null; console.warn("[debugaudio] recorder failed", e); }
+  }
+
+  function dbgWav(chunks, rate) {
+    var n = 0, i;
+    for (i = 0; i < chunks.length; i++) n += chunks[i].byteLength;
+    var out = new DataView(new ArrayBuffer(44 + n));
+    function str(o, s) { for (var k = 0; k < s.length; k++) out.setUint8(o + k, s.charCodeAt(k)); }
+    str(0, "RIFF"); out.setUint32(4, 36 + n, true); str(8, "WAVE"); str(12, "fmt ");
+    out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, 1, true);
+    out.setUint32(24, rate, true); out.setUint32(28, rate * 2, true);
+    out.setUint16(32, 2, true); out.setUint16(34, 16, true); str(36, "data"); out.setUint32(40, n, true);
+    var off = 44;
+    for (i = 0; i < chunks.length; i++) { new Uint8Array(out.buffer, off).set(new Uint8Array(chunks[i])); off += chunks[i].byteLength; }
+    return new Blob([out.buffer], { type: "audio/wav" });
+  }
+
+  function dbgSave(blob, name) {
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 10000);
+  }
+
+  function dbgEndTurn() {
+    if (!DEBUG_AUDIO || dbg.turn === null) return;
+    var turn = dbg.turn, sent = dbg.sent, recv = dbg.recv, rec = dbg.rec;
+    dbg.turn = null;
+    dbgSave(dbgWav(sent, 16000), "turn" + turn + "-sent-16k.wav");
+    dbgSave(dbgWav(recv, 24000), "turn" + turn + "-received-24k.wav");
+    if (rec && rec.state !== "inactive") {
+      rec.onstop = function () { dbgSave(new Blob(dbg.webm, { type: "audio/webm" }), "turn" + turn + "-played.webm"); };
+      rec.stop();
+    }
+  }
+
+  function b64Bytes(b64) {
+    var bin = atob(b64), u = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+    return u.buffer;
+  }
+
   // Plays whatever translation audio has arrived so far and keeps appending as
   // more streams in, gaplessly. Called repeatedly while a turn drains.
+  //
+  // The model delivers 250 ms chunks at exactly real-time pace, so the queue only
+  // ever holds about one chunk of headroom. Two rules keep that headroom intact:
+  //  - Silent chunks (padding, pauses between phrases) are not played, but they
+  //    still advance the timeline by their duration. Skipping them outright used to
+  //    cost 250 ms of headroom per pause, leaving the rest of the turn playing at
+  //    the live edge (measured: 2-9 ms), where any stall is an audible gap.
+  //  - When the queue does run dry, re-buffer PLAYOUT_LEAD_S before resuming.
   function scheduleAudio() {
     if (!audioBuf.length) return;
     ensurePlayCtx();
-    nextTime = Math.max(nextTime, playCtx.currentTime);
     for (var i = 0; i < audioBuf.length; i++) {
-      var bin = atob(audioBuf[i]);
+      var item = audioBuf[i];
+      // Padding before the turn's first speech has no place on the timeline.
+      if (!item.loud && !turnHasSpeech) continue;
+      var bin = atob(item.b64);
       var bytes = new Uint8Array(bin.length);
       for (var j = 0; j < bin.length; j++) bytes[j] = bin.charCodeAt(j);
       var i16 = new Int16Array(bytes.buffer);
       if (!i16.length) continue;
+      if (nextTime <= playCtx.currentTime) nextTime = playCtx.currentTime + PLAYOUT_LEAD_S;
+      if (!item.loud) {
+        // The model runs slightly faster than real time (~4%), so cap the queue
+        // during silence rather than letting latency creep up over a long turn.
+        if (nextTime - playCtx.currentTime < PLAYOUT_LEAD_S + 0.5) nextTime += i16.length / 24000;
+        continue;
+      }
+      turnHasSpeech = true;
       var buf = playCtx.createBuffer(1, i16.length, 24000);
       var ch = buf.getChannelData(0);
       for (var k = 0; k < i16.length; k++) ch[k] = i16[k] / 0x8000;
       var node = playCtx.createBufferSource();
       node.buffer = buf;
-      node.connect(playCtx.destination);
+      node.connect(playOut);
       var t = Math.max(playCtx.currentTime, nextTime);
       node.start(t);
       nextTime = t + buf.duration;
+      speechEnd = nextTime;
     }
     audioBuf = [];
   }
@@ -848,7 +939,9 @@
     clearTurnTimers();
     drainTimer = setInterval(function () {
       var quiet = performance.now() - lastOutputAt > QUIESCE_MS;
-      var drained = playCtx.currentTime >= nextTime - 0.05;
+      // speechEnd, not nextTime: the model streams padding forever, which keeps
+      // advancing nextTime, so "nextTime reached" would never happen.
+      var drained = playCtx.currentTime >= speechEnd - 0.05;
       // A cold session can take seconds to produce its first token, so never close
       // on a timer alone — but do not hang forever on a turn that says nothing.
       var graceExpired = performance.now() - endedAt > COLD_GRACE_MS;
@@ -865,6 +958,7 @@
     hasTurned = true;
     active = null;
     phase = "idle";
+    dbgEndTurn();
     render();
   }
 
@@ -881,7 +975,7 @@
   }
 
   // Real end: close the socket so the server tears down both upstream sessions,
-  // release the microphone, and stop the playout. Leaves the transcript on screen.
+  // release the microphone, and stop the playout. Callers then return to setup.
   function endSession() {
     clearTurnTimers();
     draining = false;
@@ -893,7 +987,7 @@
     if (audioCtx) { try { audioCtx.close(); } catch (e) {} }
     if (playCtx) { try { playCtx.close(); } catch (e) {} }
     audioCtx = sourceNode = processor = micStream = null;
-    playCtx = null; nextTime = 0;
+    playCtx = null; playOut = null; dbg.tap = null; nextTime = 0; speechEnd = 0;
     phase = "ended";
     active = null;
     render();
@@ -993,6 +1087,7 @@
       onError("Connection lost");
       return;
     }
+    if (DEBUG_AUDIO && dbg.turn !== null) dbg.sent.push(i16.slice().buffer);
     send({ type: "audio", b64: int16ToB64(i16) });
   }
 
@@ -1052,14 +1147,21 @@
   document.getElementById("end-cancel").addEventListener("click", function () {
     endbox.classList.add("hidden");
   });
+  // Ending returns to the setup page. Reloading (as "Change languages" does) is the
+  // only reset that is guaranteed complete: it clears the transcript and re-gates
+  // Start behind consent, so the next patient never inherits this consultation.
+  function endAndReturnToSetup(delayMs) {
+    endbox.classList.add("hidden");
+    endSession();
+    setTimeout(function () { location.reload(); }, delayMs || 0);
+  }
   document.getElementById("end-save").addEventListener("click", function () {
     downloadTranscript();
-    endbox.classList.add("hidden");
-    endSession();
+    // Let the browser start the download before the page navigates away.
+    endAndReturnToSetup(500);
   });
   document.getElementById("end-nosave").addEventListener("click", function () {
-    endbox.classList.add("hidden");
-    endSession();
+    endAndReturnToSetup(0);
   });
 
   render();

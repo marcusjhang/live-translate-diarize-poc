@@ -106,16 +106,23 @@ check('cancel keeps the session', await status(), 'Your turn');
 
 // --- ending ------------------------------------------------------------------
 await ev(`document.querySelector('.end').click()`); await sleep(300);
-await ev(`document.getElementById('end-nosave').click()`); await sleep(1200);
-check('status becomes "Session ended"', await status(), 'Session ended');
-check('TALK is disabled after ending', await ev(`document.querySelector('.panel[data-role="doctor"] button.talk').disabled`), true);
-check('transcript survives ending', (await convo()).trim(), before.trim());
+await ev(`document.getElementById('end-nosave').click()`); await sleep(2400);
+check('ending returns to the setup page', await ev(`!document.getElementById('setup').classList.contains('hidden')`), true);
 check('prompt closed', await ev(`document.getElementById('endbox').classList.contains('hidden')`), true);
+check('Start is gated again', await ev(`document.getElementById('start').disabled`), true);
+check('previous transcript is cleared', (await convo()).trim(), '');
+
+// --- save & end also returns to setup ---------------------------------------
+await ev(`(function(){var c=document.getElementById('consent'); if(c&&!c.checked) c.click(); document.getElementById('start').click();})()`);
+await sleep(1600);
+await ev(`document.querySelector('.end').click()`); await sleep(300);
+await ev(`document.getElementById('end-save').click()`); await sleep(2400);
+check('save & end returns to the setup page', await ev(`!document.getElementById('setup').classList.contains('hidden')`), true);
 
 // --- recovery ----------------------------------------------------------------
+await ev(`document.getElementById('setup').classList.add('hidden')`);
 await ev(`document.querySelector('.langs').click()`); await sleep(2400);
 check('Change languages returns to setup', await ev(`!document.getElementById('setup').classList.contains('hidden')`), true);
-check('Start is gated again', await ev(`document.getElementById('start').disabled`), true);
 
 console.log(`\n${pass}/${pass + fail} checks pass`);
 ws.close();
