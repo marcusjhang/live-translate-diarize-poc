@@ -79,6 +79,16 @@ contains; `OUT_tail_drop` = clips whose translation lost the final clause;
   context. Homophone on a TTS clip; the translation stays close in meaning.
 - Spoken Chinese decimals come back as `38度5`, `38.5`, `3 8度5` or occasionally a
   dropped `.5`; the app's number check exists for exactly this.
+- **`turn-d5` main-clause omission.** "Come back in one week if the fever continues"
+  is sometimes rendered as just "如果一周后发烧还在持续，" — the conditional first,
+  then nothing. Every d5 output, complete or not, finishes 1.1–1.3 s after speech
+  ends, i.e. *before* any release or `audio_stream_end`, so it is the model choosing
+  a truncated rendering, not a held clause waiting for a flush. It occurs under
+  gated input too (2/5 runs, and once in the pre-change e2e run). Within one
+  session it repeats identically (6/6 in the 60-turn longevity run, whose context
+  makes it deterministic). A "flush on pause" (`audio_stream_end` 1 s into the
+  pause, route kept) was tried and did not change it (5/6 vs 5/6 drops in the full
+  conversation), so it was not kept.
 - Numbers can be omitted by the model (`suite-a` 06 once dropped 三次); the app flags it.
 
 ## Longevity (Phase 4)
