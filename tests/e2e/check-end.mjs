@@ -10,6 +10,7 @@
 import fs from 'node:fs';
 
 const CDP_FILE = process.env.CDP_FILE || '/tmp/cdp.txt';
+const APP_URL = process.env.APP_URL || 'http://localhost:8000';
 const CLIPS = process.env.CLIPS || new URL('./clips/', import.meta.url).pathname;
 const cdpUrl = fs.readFileSync(CDP_FILE, 'utf8').trim();
 const ws = new WebSocket(cdpUrl);
@@ -54,7 +55,7 @@ const check = (name, got, want) => {
 const b64 = fs.readFileSync(`${CLIPS}s01-d1.wav`).subarray(44).toString('base64');
 
 // --- fresh page, mic stubbed so a real turn can run without a human -----------
-await ev(`location.href='http://localhost:8000'`); await sleep(2000);
+await ev(`location.href='${APP_URL}'`); await sleep(2000);
 await ev(`try{localStorage.removeItem('interpret.cfg')}catch(e){}; location.reload()`); await sleep(2400);
 await ev(`(async function(){
   navigator.mediaDevices=navigator.mediaDevices||{};

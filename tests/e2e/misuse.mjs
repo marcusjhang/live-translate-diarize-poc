@@ -6,6 +6,7 @@ import fs from 'node:fs';
 //   superset browser cdp --workspace <id> --pane <paneId> --json | jq -r .url > /tmp/cdp.txt
 // Fixtures come from `python3 tests/e2e/gen-clips.py`.
 const CDP_FILE = process.env.CDP_FILE || "/tmp/cdp.txt";
+const APP_URL = process.env.APP_URL || 'http://localhost:8000';
 const CLIPS = process.env.CLIPS || new URL("./clips/", import.meta.url).pathname;
 // ------------------------------------------------------------------------
 
@@ -37,7 +38,7 @@ const state = () => ev(`(function(){var d=document.querySelector('.panel[data-ro
    dcls:d.querySelector('button.talk').className, pcls:p.querySelector('button.talk').className});})()`);
 
 async function reset() {
-  await ev(`location.href='http://localhost:8000'`); await sleep(2200);
+  await ev(`location.href='${APP_URL}'`); await sleep(2200);
   await ev(`(async function(){
     navigator.mediaDevices=navigator.mediaDevices||{};
     navigator.mediaDevices.getUserMedia=async function(){

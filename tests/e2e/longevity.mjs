@@ -6,6 +6,7 @@ import fs from 'node:fs';
 //   superset browser cdp --workspace <id> --pane <paneId> --json | jq -r .url > /tmp/cdp.txt
 // Fixtures come from `python3 tests/e2e/gen-clips.py`.
 const CDP_FILE = process.env.CDP_FILE || "/tmp/cdp.txt";
+const APP_URL = process.env.APP_URL || 'http://localhost:8000';
 const CLIPS = process.env.CLIPS || new URL("./clips/", import.meta.url).pathname;
 // ------------------------------------------------------------------------
 
@@ -55,7 +56,7 @@ for (let k = 0; k < 6; k++) TURNS.push(...BASE);
 console.log('longevity run:', TURNS.length, 'turns');
 
 console.log('navigating...');
-await ev(`location.href='http://localhost:8000'`); await sleep(2500);
+await ev(`location.href='${APP_URL}'`); await sleep(2500);
 await ev(`try{localStorage.removeItem('interpret.cfg')}catch(e){}; location.reload(); 'cleared'`);
 await sleep(2400);
 

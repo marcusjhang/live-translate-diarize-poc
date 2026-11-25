@@ -6,6 +6,7 @@ import fs from 'node:fs';
 //   superset browser cdp --workspace <id> --pane <paneId> --json | jq -r .url > /tmp/cdp.txt
 // Fixtures come from `python3 tests/e2e/gen-clips.py`.
 const CDP_FILE = process.env.CDP_FILE || "/tmp/cdp.txt";
+const APP_URL = process.env.APP_URL || 'http://localhost:8000';
 const CLIPS = process.env.CLIPS || new URL("./clips/", import.meta.url).pathname;
 // ------------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ await send('Runtime.enable');
 }
 const ev=async(e,a=false)=>{const r=await send('Runtime.evaluate',{expression:e,returnByValue:true,awaitPromise:a});return r.exceptionDetails?'ERR':(r && r.result ? r.result.value : 'TIMEOUT');};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-await ev(`location.href='http://localhost:8000'`); await sleep(2000);
+await ev(`location.href='${APP_URL}'`); await sleep(2000);
 await ev(`try{localStorage.removeItem('interpret.cfg')}catch(e){}; location.reload()`); await sleep(2400);
 console.log('Start disabled before consent :', await ev(`document.getElementById('start').disabled`));
 console.log('consent text present          :', await ev(`/not a medical interpreter/i.test(document.getElementById('setup').innerText) && /医疗翻译员/.test(document.getElementById('setup').innerText)`));
