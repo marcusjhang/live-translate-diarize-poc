@@ -31,7 +31,7 @@ def schedule_for(name, res):
 
 def main():
     md = "--md" in sys.argv
-    cols = ["runs", "in_recall", "in_tail_drop", "OUT_tail_drop", "empty", "late",
+    cols = ["runs", "zh_recall", "zh<0.9", "en_recall", "in_recall", "in_tail_drop", "OUT_tail_drop", "empty", "late",
             "spurious", "first_audio", "last_out", "closes"]
     rows = []
     groups = {}
@@ -40,14 +40,19 @@ def main():
     for stem, files in groups.items():
         runs = [r for f in files for r in json.loads(f.read_text())]
         segs = schedule_for(stem, runs[0])
-        aggs = []
+        aggs, zh, en = [], [], []
         for r in runs:
             evs = [H.Event(**e) for e in r["events"]]
-            aggs.append(H.score(evs, segs)["agg"])
+            sc = H.score(evs, segs)
+            aggs.append(sc["agg"])
+            for row, seg in zip(sc["rows"], segs):
+                (zh if seg.lang == "zh" else en).append(row["input_recall"])
         n = len(aggs)
         tot = lambda k: sum(a[k] for a in aggs)
         med = lambda k: H._median([a[k] for a in aggs if a[k] is not None])
-        rows.append([stem, n, round(tot("mean_input_recall") / n, 3),
+        avg = lambda xs: round(sum(xs) / len(xs), 3) if xs else None
+        rows.append([stem, n, avg(zh), f"{sum(x < 0.9 for x in zh)}/{len(zh)}", avg(en),
+                     round(tot("mean_input_recall") / n, 3),
                      f"{tot('tails_dropped')}/{n * aggs[0]['clips']}",
                      f"{tot('out_tails_dropped')}/{n * aggs[0]['clips']}",
                      tot("empty_outputs"), tot("late_out_chars"), tot("spurious_out_chars"),

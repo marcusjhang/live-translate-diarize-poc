@@ -94,6 +94,10 @@ async def run(args):
             silence = b"\x00\x00" * (CHUNK_BYTES // 2)
             if args.manual_vad:
                 await session.send_realtime_input(activity_start=types.ActivityStart())
+            for _ in range(int(args.lead * 10)):  # audio before the speech starts
+                await session.send_realtime_input(
+                    audio=types.Blob(data=silence, mime_type="audio/pcm;rate=16000"))
+                await asyncio.sleep(0.1)
             for i in range(0, len(pcm), CHUNK_BYTES):
                 await session.send_realtime_input(
                     audio=types.Blob(data=pcm[i:i + CHUNK_BYTES], mime_type="audio/pcm;rate=16000"))
@@ -157,6 +161,7 @@ def main():
     p.add_argument("--backend", choices=["apikey", "enterprise"], default="apikey")
     p.add_argument("--manual-vad", action="store_true", help="disable auto VAD (our app's mode)")
     p.add_argument("--no-echo", action="store_true", help="echo_target_language=False (our app's setting)")
+    p.add_argument("--lead", type=float, default=0.0, help="seconds of silence before the clip")
     p.add_argument("--tail", type=float, default=3.0, help="seconds of silence streamed after the clip")
     p.add_argument("--drain", type=float, default=5.0, help="seconds to keep receiving after sending")
     p.add_argument("--out", help="output WAV path (24 kHz)")

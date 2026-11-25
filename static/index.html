@@ -370,8 +370,15 @@
 
   var LANGS = { en: "English", zh: "中文", es: "Español", fil: "Filipino" };
   var ROLES = { doctor: "Doctor", patient: "Patient" };
-  var SILENCE_THRESHOLD = 0.01;
-  var SILENCE_MS = 3000;
+  // Input model (docs/starter-alignment-plan.md): like Google's starter, the mic is
+  // ONE continuous 16 kHz stream of 100 ms PCM16 chunks for the whole session, and
+  // the model's own activity detection decides where speech starts and ends. TALK
+  // only ROUTES that stream to one person's translation session; releasing the
+  // route makes the model flush the clause it is holding. Nothing here edits the
+  // audio the model hears (no silence trimming, no fake padding, no turn markers).
+  var SILENCE_THRESHOLD = 0.01;  // UI only: drives auto-release, never filters audio
+                                 // (the model's input transcript also counts as speech)
+  var SILENCE_MS = 3000;         // auto-release after this much quiet following speech
   var CHUNK = 1600; // 100 ms of 16 kHz mono PCM16
 
   var cfg = { doctor: "en", patient: "zh" };
@@ -379,10 +386,10 @@
   var phase = "idle"; // idle | listening | translating | error | ended
   var active = null;  // doctor | patient | null
   var lines = [];
-  // Every transcript line is keyed by the turn it belongs to. The model keeps
-  // emitting after a turn closes; without this, that late output lands in whatever
-  // line comes next, which is how the tool "said" things nobody spoke.
-  var lineByTurn = {};
+  // Output is attributed by SESSION: each person has their own translation session,
+  // so whatever it emits belongs to that person's latest line, even if it arrives
+  // after someone else has started talking.
+  var lineBySide = { doctor: null, patient: null };
   var audioBuf = [];
   var QUIESCE_MS = 3000;      // this long with no *speech* from the model -> turn done
   var TURN_HARD_CAP_MS = 15000;
@@ -396,15 +403,13 @@
   var playCtx = null, nextTime = 0, speechEnd = 0, turnHasSpeech = false, draining = false, drainTimer = null, lastOutputAt = 0;
   var turnSeq = 0, currentTurn = null, sawOutput = false, heardSound = false, turnCapTimer = null;
   var MAX_TURN_MS = 30000;   // hard ceiling so a turn can never stay open forever
-  // Seconds of digital silence must not be streamed at the model: it finalises the
-  // utterance early and drops the tail. Forward speech plus a short tail, and let
-  // it resume the moment sound returns.
-  var TRAIL_SILENCE_MS = 1200;
-  var COLD_GRACE_MS = 9000;   // longest we wait for a first token before closing anyway
+  var COLD_GRACE_MS = 6000;   // longest we wait for a first token before handing over anyway
+  var route = null;           // side the mic is routed to, mirrored to the server
 
   var ws = null;
   var audioCtx = null, sourceNode = null, processor = null, micStream = null;
   var pcmAccum = new Int16Array(0);
+  var micMute = null;
   var lastSound = 0;
   var hasTurned = false;
 
@@ -717,21 +722,23 @@
       if (streamingMode === "realtime" && audioBuf.length) scheduleAudio();
       render();
     } else if (m.type === "source") {
-      var ls = lineByTurn[m.turn];
-      if (!ls || ls.side !== m.side) return;   // attribute strictly by turn
+      var ls = lineBySide[m.side];
+      if (!ls) return;                         // nobody on that side has spoken yet
       ls.source += m.text;
+      // The model hearing words is the best speech detector we have: a quiet or
+      // distant speaker may never cross SILENCE_THRESHOLD, but is still transcribed.
+      if (phase === "listening" && m.side === active) { lastSound = performance.now(); heardSound = true; }
       sawOutput = true;
       render();
     } else if (m.type === "translation") {
-      var lt = lineByTurn[m.turn];
-      if (!lt || lt.side !== m.side) return;
+      var lt = lineBySide[m.side];
+      if (!lt) return;
       lt.translation += m.text;
       sawOutput = true;
       markOutput();
       if (streamingMode === "realtime") render();
     } else if (m.type === "audio") {
-      if (m.turn !== currentTurn) return;
-      // Only the active person's session contributes audio, and only while a
+      // Only the active person's session contributes audio, and only while their
       // turn is open: an idle session keeps streaming silence-padded frames.
       if (m.side === active && (phase === "listening" || phase === "translating")) {
         var loud = b64Rms(m.b64) > AUDIO_RMS_MIN;
@@ -760,12 +767,11 @@
     heardSound = false;
     var ln = { side: side, source: "", translation: "", turn: currentTurn, closed: false };
     lines.push(ln);
-    lineByTurn[currentTurn] = ln;
+    lineBySide[side] = ln;
     audioBuf = [];
     turnHasSpeech = false;
-    pcmAccum = new Int16Array(0);
     lastSound = performance.now();
-    send({ type: "talk_start", side: side, turn: currentTurn });
+    setRoute(side);
     dbgStartTurn(currentTurn);
     // Safety ceiling. A turn where no audio is ever captured does not auto-end
     // (that is deliberate, so a pause-before-speaking is not discarded), so it
@@ -780,12 +786,16 @@
   function stopTalk() {
     if (phase !== "listening") return;
     phase = "translating";
-    send({ type: "talk_end" });
-    stopStreaming();
+    setRoute(null);   // the server sends audio_stream_end: the model flushes its tail
     // The Live API never sends a "turn finished" signal, so the turn ends on a
     // drained playback queue plus model silence. See startDrain().
     startDrain();
     render();
+  }
+
+  function setRoute(side) {
+    route = side;
+    send({ type: "route", side: side });
   }
 
   function b64Rms(b64) {
@@ -953,8 +963,9 @@
   function closeTurn() {
     clearTurnTimers();
     draining = false;
-    var ln = lineByTurn[currentTurn];
-    if (ln) ln.closed = true;
+    for (var i = lines.length - 1; i >= 0; i--) {
+      if (lines[i].turn === currentTurn) { lines[i].closed = true; break; }
+    }
     hasTurned = true;
     active = null;
     phase = "idle";
@@ -970,7 +981,7 @@
     phase = "error";
     active = null;
     audioBuf = [];
-    stopStreaming();
+    route = null;
     render();
   }
 
@@ -986,7 +997,9 @@
     if (micStream) { try { micStream.getTracks().forEach(function (t) { t.stop(); }); } catch (e) {} }
     if (audioCtx) { try { audioCtx.close(); } catch (e) {} }
     if (playCtx) { try { playCtx.close(); } catch (e) {} }
-    audioCtx = sourceNode = processor = micStream = null;
+    if (processor && processor.port) { try { processor.port.onmessage = null; } catch (e) {} }
+    audioCtx = sourceNode = processor = micStream = micMute = null;
+    route = null;
     playCtx = null; playOut = null; dbg.tap = null; nextTime = 0; speechEnd = 0;
     phase = "ended";
     active = null;
@@ -1002,13 +1015,27 @@
     }
     clearTurnTimers();
     draining = false;
-    lines = []; lineByTurn = {}; audioBuf = []; phase = "idle"; active = null;
+    lines = []; lineBySide = { doctor: null, patient: null }; audioBuf = []; phase = "idle"; active = null;
+    route = null;
     hasTurned = false;
     connect();
     render();
   }
 
   function send(obj) { if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj)); }
+
+  // Capture. An AudioWorklet hands over exactly one 100 ms chunk per 100 ms (the
+  // spec's recommended size, evenly paced). Worklets need a secure context, so a
+  // plain-http LAN tablet falls back to a ScriptProcessor feeding the same chunker.
+  var WORKLET_SRC =
+    "class Chunker extends AudioWorkletProcessor {" +
+    "  constructor(){super();this.buf=new Float32Array(" + CHUNK + ");this.n=0;}" +
+    "  process(inputs){var ch=inputs[0]&&inputs[0][0];if(!ch)return true;" +
+    "    for(var i=0;i<ch.length;i++){this.buf[this.n++]=ch[i];" +
+    "      if(this.n===this.buf.length){this.port.postMessage(this.buf);this.buf=new Float32Array(" + CHUNK + ");this.n=0;}}" +
+    "    return true;}" +
+    "}" +
+    "registerProcessor('chunker', Chunker);";
 
   function ensureMic() {
     if (audioCtx) { resumeStreaming(); return; }
@@ -1018,33 +1045,57 @@
       micStream = stream;
       audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
       // Created inside a promise callback, i.e. outside the user gesture that
-      // started the turn, so browsers hand it back SUSPENDED and it captures
-      // nothing. Resuming only on the next ensureMic() is why the first turn of
-      // every session produced no audio at all.
+      // started the session, so browsers hand it back SUSPENDED and it captures
+      // nothing until resumed.
       if (audioCtx.state === "suspended") audioCtx.resume();
       sourceNode = audioCtx.createMediaStreamSource(stream);
-      processor = audioCtx.createScriptProcessor(2048, 1, 1);
-      processor.onaudioprocess = onAudio;
-      var mute = audioCtx.createGain(); mute.gain.value = 0;
-      sourceNode.connect(processor);
-      processor.connect(mute);
-      mute.connect(audioCtx.destination);
+      micMute = audioCtx.createGain(); micMute.gain.value = 0;
+      micMute.connect(audioCtx.destination);
       lastSound = performance.now();
+      var useWorklet = audioCtx.audioWorklet && typeof AudioWorkletNode === "function";
+      if (useWorklet) {
+        var url = URL.createObjectURL(new Blob([WORKLET_SRC], { type: "application/javascript" }));
+        audioCtx.audioWorklet.addModule(url).then(function () {
+          processor = new AudioWorkletNode(audioCtx, "chunker");
+          processor.port.onmessage = function (e) { onChunk(e.data); };
+          sourceNode.connect(processor);
+          processor.connect(micMute);
+        }).catch(function () { startScriptProcessor(); });
+      } else {
+        startScriptProcessor();
+      }
     }).catch(function () { onError("Microphone unavailable"); });
+  }
+
+  function startScriptProcessor() {
+    processor = audioCtx.createScriptProcessor(2048, 1, 1);
+    processor.onaudioprocess = function (e) {
+      var input = e.inputBuffer.getChannelData(0);
+      var merged = new Float32Array(pcmAccum.length + input.length);
+      merged.set(pcmAccum);
+      merged.set(input, pcmAccum.length);
+      var off = 0;
+      for (; off + CHUNK <= merged.length; off += CHUNK) onChunk(merged.subarray(off, off + CHUNK));
+      pcmAccum = merged.slice(off);
+    };
+    pcmAccum = new Float32Array(0);
+    sourceNode.connect(processor);
+    processor.connect(micMute);
   }
 
   function resumeStreaming() {
     if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
   }
 
-  function stopStreaming() {
-    // keep the stream warm; just stop treating chunks as a live turn
-    pcmAccum = new Int16Array(0);
+  // While translated speech plays from the tablet speaker and nobody holds the
+  // mic, do not upload: the server keeps the last 300 ms of unrouted mic audio as
+  // the next speaker's pre-roll, and that must not be the translation itself.
+  function playbackActive() {
+    return !!playCtx && playCtx.currentTime < speechEnd + 0.2;
   }
 
-  function onAudio(e) {
-    if (phase !== "listening") return;
-    var input = e.inputBuffer.getChannelData(0);
+  // One 100 ms chunk of float samples from the capture graph.
+  function onChunk(input) {
     var i16 = new Int16Array(input.length);
     var sum = 0;
     for (var i = 0; i < input.length; i++) {
@@ -1052,25 +1103,15 @@
       i16[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
       sum += s * s;
     }
-    var rms = Math.sqrt(sum / input.length);
     var now = performance.now();
-    if (rms > SILENCE_THRESHOLD) { lastSound = now; heardSound = true; }
-
-    var merged = new Int16Array(pcmAccum.length + i16.length);
-    merged.set(pcmAccum);
-    merged.set(i16, pcmAccum.length);
-    pcmAccum = merged;
-    var withinTail = (now - lastSound) < TRAIL_SILENCE_MS;
-    while (pcmAccum.length >= CHUNK) {
-      // Forward speech and its short tail. Streaming the full silence gap makes the
-      // model finalise the utterance early and drop the last clause.
-      if (withinTail) sendAudio(pcmAccum.subarray(0, CHUNK));
-      pcmAccum = pcmAccum.subarray(CHUNK);
+    if (phase === "listening") {
+      if (Math.sqrt(sum / input.length) > SILENCE_THRESHOLD) { lastSound = now; heardSound = true; }
+      // UI convenience only: release the route after the speaker has said
+      // something and then gone quiet. Every chunk is still streamed regardless.
+      if (heardSound && now - lastSound > SILENCE_MS) stopTalk();
     }
-    // Only auto-end a turn that has actually carried speech. Ending on elapsed
-    // silence alone silently discarded the whole turn for anyone who taps and then
-    // pauses to think before speaking.
-    if (heardSound && now - lastSound > SILENCE_MS) stopTalk();
+    if (route === null && playbackActive()) return;
+    sendAudio(i16);
   }
 
   function int16ToB64(i16) {
@@ -1082,12 +1123,13 @@
 
   function sendAudio(i16) {
     if (!ws || ws.readyState !== WebSocket.OPEN) {
-      // Dropping captured speech silently is the failure mode this tool must never
-      // have; surface it instead of losing the words.
-      onError("Connection lost");
+      // The mic streams from Start, before the socket is up and between turns;
+      // only speech routed to a session is worth an error. Dropping routed speech
+      // silently is the failure mode this tool must never have.
+      if (route !== null && phase === "listening") onError("Connection lost");
       return;
     }
-    if (DEBUG_AUDIO && dbg.turn !== null) dbg.sent.push(i16.slice().buffer);
+    if (DEBUG_AUDIO && dbg.turn !== null && route !== null) dbg.sent.push(i16.slice().buffer);
     send({ type: "audio", b64: int16ToB64(i16) });
   }
 
@@ -1123,7 +1165,7 @@
     // Open the microphone now rather than on the first tap. Creating the audio
     // context on demand races the speaker's first words and intermittently loses
     // the whole opening turn; priming it here means capture is live before anyone
-    // speaks. Nothing is transmitted until a TALK button is pressed.
+    // speaks. The stream reaches a translation session only while TALK routes it.
     ensureMic();
     connect();
   });
