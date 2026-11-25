@@ -75,6 +75,7 @@ class FakeWorld:
         self.sessions = []
         self.configs = []
         self.go_away_after = None
+        self.reconnect_delay = 0.0
         world = self
 
         class _Connect:
@@ -85,6 +86,8 @@ class FakeWorld:
                 self.s = FakeSession(world, tgt, h)
 
             async def __aenter__(self):
+                if world.reconnect_delay and len(world.by_target(self.s.target)) > 1:
+                    await asyncio.sleep(world.reconnect_delay)
                 return self.s
 
             async def __aexit__(self, *a):
@@ -146,8 +149,13 @@ class BridgeTests(unittest.TestCase):
             for v in range(1, 6):
                 ws.send_json({"type": "audio", "b64": chunk(v)})
             ws.send_json({"type": "route", "side": None})
-            ws.send_json({"type": "audio", "b64": chunk(9)})  # released: dropped
+            ws.send_json({"type": "audio", "b64": chunk(9)})  # released: pre-roll only
             got = self.drain(ws, lambda g: any(m.get("text") == "flush-zh-Hans" for m in g))
+            # Prove where chunk 9 went: route the patient, who must get it as pre-roll.
+            ws.send_json({"type": "route", "side": "patient"})
+            ws.send_json({"type": "audio", "b64": chunk(8)})
+            self.assertTrue(self.wait_for(lambda: self.world.by_target("en") and
+                                          len([k for k in self.world.by_target("en")[0].sent if "audio" in k]) == 2))
             doc = self.world.by_target("zh-Hans")[0]
             pat = self.world.by_target("en")[0]
             audio = [kw["audio"] for kw in doc.sent if "audio" in kw]
@@ -155,7 +163,9 @@ class BridgeTests(unittest.TestCase):
             self.assertTrue(all(a.mime_type == "audio/pcm;rate=16000" and len(a.data) == 3200
                                 for a in audio), "100 ms 16 kHz PCM16 blobs")
             self.assertEqual(doc.sent[-1], {"audio_stream_end": True}, "release flushes")
-            self.assertEqual(pat.sent, [], "unrouted side receives nothing")
+            self.assertEqual([kw["audio"].data[0] for kw in pat.sent if "audio" in kw], [9, 8],
+                             "released audio only ever reaches the next route, as pre-roll")
+            self.assertNotIn(9, [a.data[0] for a in audio], "doctor never got post-release audio")
             for kw in doc.sent:
                 self.assertNotIn("activity_start", kw)
                 self.assertNotIn("activity_end", kw)
@@ -179,6 +189,50 @@ class BridgeTests(unittest.TestCase):
             self.assertEqual([kw["audio"].data[0] for kw in pat.sent if "audio" in kw], [11, 12, 13, 14])
             self.assertEqual([kw["audio"].data[0] for kw in doc.sent if "audio" in kw], [15],
                              "routed audio is not reused as pre-roll")
+
+    def test_stale_preroll_is_not_replayed(self):
+        with TestClient(server.app).websocket_connect("/ws") as ws:
+            self.open(ws)
+            ws.send_json({"type": "audio", "b64": chunk(20)})   # e.g. previous speaker's tail
+            time.sleep(server.PREROLL_MAX_AGE + 0.3)
+            ws.send_json({"type": "audio", "b64": chunk(21)})   # just before the tap
+            ws.send_json({"type": "route", "side": "patient"})
+            ws.send_json({"type": "audio", "b64": chunk(22)})
+            self.assertTrue(self.wait_for(lambda: self.world.by_target("en") and
+                                          len([k for k in self.world.by_target("en")[0].sent if "audio" in k]) >= 2))
+            time.sleep(0.1)
+            pat = self.world.by_target("en")[0]
+            self.assertEqual([kw["audio"].data[0] for kw in pat.sent if "audio" in kw], [21, 22])
+
+    def test_preroll_is_cleared_on_release(self):
+        with TestClient(server.app).websocket_connect("/ws") as ws:
+            self.open(ws)
+            ws.send_json({"type": "audio", "b64": chunk(30)})
+            ws.send_json({"type": "route", "side": "doctor"})   # consumes 30
+            ws.send_json({"type": "route", "side": None})
+            ws.send_json({"type": "route", "side": "patient"})  # nothing new since release
+            ws.send_json({"type": "audio", "b64": chunk(31)})
+            self.assertTrue(self.wait_for(lambda: self.world.by_target("en") and
+                                          any("audio" in k for k in self.world.by_target("en")[0].sent)))
+            time.sleep(0.1)
+            pat = self.world.by_target("en")[0]
+            self.assertEqual([kw["audio"].data[0] for kw in pat.sent if "audio" in kw], [31])
+
+    def test_reconnect_backlog_is_bounded_to_newest_audio(self):
+        self.world.go_away_after = 1
+        self.world.reconnect_delay = 0.8
+        with TestClient(server.app).websocket_connect("/ws") as ws:
+            self.open(ws)
+            ws.send_json({"type": "route", "side": "doctor"})
+            ws.send_json({"type": "audio", "b64": chunk(1)})    # triggers go_away
+            self.assertTrue(self.wait_for(lambda: len(self.world.by_target("zh-Hans")) == 2, 3))
+            for v in range(40, 75):                             # 3.5 s of speech while down
+                ws.send_json({"type": "audio", "b64": chunk(v)})
+            self.assertTrue(self.wait_for(lambda: len([k for k in self.world.by_target("zh-Hans")[1].sent
+                                                        if "audio" in k]) >= server.INPUT_BACKLOG, 4))
+            time.sleep(0.2)
+            got = [k["audio"].data[0] for k in self.world.by_target("zh-Hans")[1].sent if "audio" in k]
+            self.assertEqual(got, list(range(75 - server.INPUT_BACKLOG, 75)), "only the newest 2 s survive")
 
     def test_switch_flushes_previous_and_tags_each_side(self):
         with TestClient(server.app).websocket_connect("/ws") as ws:
@@ -208,6 +262,29 @@ class BridgeTests(unittest.TestCase):
             ws.send_json({"type": "audio", "b64": chunk(7)})
             self.assertTrue(self.wait_for(lambda: any("audio" in kw for kw in second.sent)),
                             "audio flows to the resumed session")
+
+    def test_enterprise_backend_uses_transparent_resumption(self):
+        old = {k: os.environ.get(k) for k in ("GEMINI_BACKEND", "GOOGLE_CLOUD_PROJECT")}
+        os.environ.update(GEMINI_BACKEND="enterprise", GOOGLE_CLOUD_PROJECT="demo")
+        try:
+            with TestClient(server.app).websocket_connect("/ws") as ws:
+                self.open(ws)
+                self.assertTrue(self.wait_for(lambda: len(self.world.configs) == 2))
+                self.assertTrue(all(c.session_resumption.transparent for c in self.world.configs))
+            os.environ.pop("GOOGLE_CLOUD_PROJECT")
+            with TestClient(server.app).websocket_connect("/ws") as ws:
+                ws.send_json({"type": "config", "doctor": "en", "patient": "zh"})
+                m = ws.receive_json()
+                self.assertEqual((m["type"], m["raw"]), ("error", "GOOGLE_CLOUD_PROJECT not set on server"))
+        finally:
+            for k, v in old.items():
+                os.environ.pop(k, None) if v is None else os.environ.__setitem__(k, v)
+
+    def test_apikey_backend_keeps_handle_resumption(self):
+        with TestClient(server.app).websocket_connect("/ws") as ws:
+            self.open(ws)
+            self.assertTrue(self.wait_for(lambda: len(self.world.configs) == 2))
+            self.assertTrue(all(not c.session_resumption.transparent for c in self.world.configs))
 
     def test_malformed_audio_is_ignored(self):
         with TestClient(server.app).websocket_connect("/ws") as ws:

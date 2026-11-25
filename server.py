@@ -27,6 +27,7 @@ from contextlib import asynccontextmanager
 import json
 import os
 import sys
+import time
 from pathlib import Path
 
 import uvicorn
@@ -105,11 +106,20 @@ def reroute(current: str | None, new: str | None, flush: bool = True):
 
 INPUT_BACKLOG = 20  # chunks (2 s) a direction may buffer while it reconnects
 PREROLL_CHUNKS = 3  # 300 ms of mic audio sent ahead of a newly routed stream
+PREROLL_MAX_AGE = 0.45  # s; older chunks are not "just before the tap" any more
 
 # The browser streams the mic continuously, routed or not. Keeping the last few
 # chunks lets a newly routed session hear the onset of the first word: people
 # start talking as (or just before) they tap, and a session fed nothing until
 # that instant clipped the first syllable ("咳嗽…" for "我咳嗽…").
+
+
+def fresh_preroll(buf, now: float, max_age: float = PREROLL_MAX_AGE) -> list[bytes]:
+    """The pre-roll chunks still recent enough to be the onset of the speech that
+    the tap is about. The browser pauses uploading while translated speech plays,
+    so without an age limit the buffer could hold the PREVIOUS speaker's tail
+    from seconds ago."""
+    return [pcm for t, pcm in buf if now - t <= max_age]
 
 
 def offer(q: "asyncio.Queue", item: dict, limit: int = INPUT_BACKLOG) -> int:
@@ -130,9 +140,43 @@ def offer(q: "asyncio.Queue", item: dict, limit: int = INPUT_BACKLOG) -> int:
 
 
 # ---------------------------------------------------------------------------
-# Gemini 3.5 Live Translate — Developer API-key auth (NOT Vertex / ADC).
+# Gemini client. Two backends, chosen with GEMINI_BACKEND:
+#   apikey     (default) Developer API, GEMINI_API_KEY, api_version v1beta
+#   enterprise Google Cloud / Agent Platform, exactly as the starter:
+#              genai.Client(enterprise=True, project=..., location=...) with ADC
+#              (`gcloud auth application-default login`, GOOGLE_CLOUD_PROJECT,
+#              optional GOOGLE_CLOUD_LOCATION, default us-central1).
 # Imported lazily so --self-check needs no google-genai and no key.
 # ---------------------------------------------------------------------------
+
+BACKENDS = ("apikey", "enterprise")
+
+
+def backend() -> str:
+    b = (os.environ.get("GEMINI_BACKEND") or "apikey").strip().lower()
+    if b not in BACKENDS:
+        raise ValueError(f"GEMINI_BACKEND must be one of {BACKENDS}, got {b!r}")
+    return b
+
+
+def client_kwargs(b: str, env=os.environ) -> dict:
+    """Constructor arguments for genai.Client per backend (pure; self-checked)."""
+    if b == "enterprise":
+        return {"enterprise": True, "project": env["GOOGLE_CLOUD_PROJECT"],
+                "location": env.get("GOOGLE_CLOUD_LOCATION", "us-central1")}
+    # Pin the API version: newer google-genai releases default the Developer API to
+    # "v1", which does not serve the Live WebSocket (BidiGenerateContent) and
+    # rejects every connect with HTTP 404. Live lives on v1beta.
+    return {"api_key": env["GEMINI_API_KEY"],
+            "http_options": {"api_version": env.get("GEMINI_API_VERSION", "v1beta")}}
+
+
+def backend_ready(b: str, env=os.environ) -> str | None:
+    """None if the backend has what it needs, else the reason (shown to the user)."""
+    if b == "enterprise":
+        return None if env.get("GOOGLE_CLOUD_PROJECT") else "GOOGLE_CLOUD_PROJECT not set on server"
+    return None if env.get("GEMINI_API_KEY") else "GEMINI_API_KEY not set on server"
+
 
 _gemini_client = None
 
@@ -142,13 +186,7 @@ def gemini_client():
     if _gemini_client is None:
         from google import genai
 
-        # Pin the API version: newer google-genai releases default the Developer
-        # API to "v1", which does not serve the Live WebSocket (BidiGenerateContent)
-        # and rejects every connect with HTTP 404. Live lives on v1beta.
-        _gemini_client = genai.Client(
-            api_key=os.environ["GEMINI_API_KEY"],
-            http_options={"api_version": os.environ.get("GEMINI_API_VERSION", "v1beta")},
-        )
+        _gemini_client = genai.Client(**client_kwargs(backend()))
     return _gemini_client
 
 
@@ -157,12 +195,13 @@ def gemini_config(target_bcp47: str, handle: str | None = None):
     session). Automatic activity detection stays ON: no realtime_input_config."""
     from google.genai import types
 
-    # NOTE: transparent=True is Vertex-only. With Developer-API key auth it raises
-    # ValueError at connect, so use handle-based resumption only.
+    # transparent=True (server-managed resumption) is Vertex-only; with Developer
+    # API key auth it raises ValueError at connect, so that path keeps handles only.
+    transparent = {"transparent": True} if backend() == "enterprise" else {}
     resumption = (
-        types.SessionResumptionConfig(handle=handle)
+        types.SessionResumptionConfig(handle=handle, **transparent)
         if handle
-        else types.SessionResumptionConfig()
+        else types.SessionResumptionConfig(**transparent)
     )
     return types.LiveConnectConfig(
         response_modalities=[types.Modality.AUDIO],
@@ -240,12 +279,18 @@ async def _direction(side: str, target: str, in_q: asyncio.Queue, out_q: asyncio
                         if t == "close":
                             stopped["v"] = True
                             return
-                        if t == "audio":
-                            await session.send_realtime_input(
-                                audio=types.Blob(data=item["pcm"], mime_type="audio/pcm;rate=16000")
-                            )
-                        elif t == "stream_end":
-                            await session.send_realtime_input(audio_stream_end=True)
+                        try:
+                            if t == "audio":
+                                await session.send_realtime_input(
+                                    audio=types.Blob(data=item["pcm"], mime_type="audio/pcm;rate=16000")
+                                )
+                            elif t == "stream_end":
+                                await session.send_realtime_input(audio_stream_end=True)
+                        except asyncio.CancelledError:
+                            # go_away mid-send: give the item to the next session
+                            # instead of losing a chunk of speech or the flush.
+                            in_q._queue.appendleft(item)  # noqa: SLF001
+                            raise
 
                 async def recv_loop():
                     nonlocal handle
@@ -370,8 +415,12 @@ async def ws_bridge(browser: WebSocket):
         await browser.close()
         return
 
-    if not os.environ.get("GEMINI_API_KEY"):
-        await browser.send_json({"type": "error", "raw": "GEMINI_API_KEY not set on server"})
+    try:
+        why = backend_ready(backend())
+    except ValueError as e:
+        why = str(e)
+    if why:
+        await browser.send_json({"type": "error", "raw": why})
         await browser.close()
         return
 
@@ -420,16 +469,17 @@ async def ws_bridge(browser: WebSocket):
                     except ValueError:
                         continue
                     if pcm and len(pcm) % 2 == 0:
-                        preroll.append(pcm)
+                        preroll.append((time.monotonic(), pcm))
             elif t == "route":
                 prev = route
                 route, actions = reroute(route, m.get("side"))
                 for side, item in actions:
                     offer(in_q[side], item)
                 if route is not None and route != prev:
-                    for pcm in preroll:
+                    for pcm in fresh_preroll(preroll, time.monotonic()):
                         offer(in_q[route], {"type": "audio", "pcm": pcm})
-                    preroll.clear()
+                # Released or switched: whatever was buffered belongs to no one now.
+                preroll.clear()
             elif t == "set_streaming_mode":
                 try:
                     streaming_mode = parse_streaming_mode(m.get("streaming_mode"))
@@ -481,6 +531,11 @@ def _self_check():
            "an unknown side is a release")
     _check(reroute("doctor", "patient", flush=False) == ("patient", []), "flush can be disabled")
 
+    # Pre-roll: only chunks from just before the tap.
+    _check(fresh_preroll([(9.0, b"old"), (9.7, b"a"), (9.9, b"b")], now=10.0) == [b"a", b"b"],
+           "stale pre-roll is not replayed")
+    _check(fresh_preroll([(1.0, b"x")], now=10.0) == [], "pre-roll from long ago is empty")
+
     # Bounded input queue: stale audio is dropped oldest-first, control never.
     q = asyncio.Queue()
     for i in range(3):
@@ -501,6 +556,28 @@ def _self_check():
         _check(cfg.context_window_compression is None, "no context compression")
         _check(cfg.translation_config.target_language_code == "zh-Hans", "target passes through")
         _check(cfg.session_resumption is not None, "resumption configured")
+
+    # Backend selection (no network: constructor arguments only).
+    _check(client_kwargs("apikey", {"GEMINI_API_KEY": "k"}) ==
+           {"api_key": "k", "http_options": {"api_version": "v1beta"}}, "apikey pins v1beta")
+    _check(client_kwargs("enterprise", {"GOOGLE_CLOUD_PROJECT": "p"}) ==
+           {"enterprise": True, "project": "p", "location": "us-central1"}, "enterprise = starter client")
+    _check(backend_ready("apikey", {}) is not None, "apikey needs a key")
+    _check(backend_ready("enterprise", {"GOOGLE_CLOUD_PROJECT": "p"}) is None, "enterprise needs a project")
+    _old = os.environ.get("GEMINI_BACKEND")
+    try:
+        os.environ["GEMINI_BACKEND"] = "nope"
+        try:
+            backend()
+        except ValueError:
+            pass
+        else:
+            _check(False, "unknown backend must fail")
+    finally:
+        if _old is None:
+            os.environ.pop("GEMINI_BACKEND", None)
+        else:
+            os.environ["GEMINI_BACKEND"] = _old
 
     # Language mapping.
     _check(lang_bcp47("zh") == "zh-Hans", "zh must map to zh-Hans")

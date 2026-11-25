@@ -17,10 +17,16 @@ See [Limitations](#limitations) for what that leaves untested.
 |---|---|
 | Node | ≥ 20 (uses the global `WebSocket` and top-level `await`) |
 | Server | `uv run server.py` running with `GEMINI_API_KEY` in `.env` |
-| Browser | a Superset browser pane, for its Chrome DevTools Protocol endpoint |
+| Browser | a Superset browser pane, **or** headless Chrome via `tests/e2e/launch-chrome.sh` (writes `/tmp/cdp.txt`) |
 | Optional | macOS, only to *regenerate* fixtures (`say` + `afconvert`) |
 
 ### Get the CDP endpoint
+
+Quickest: `tests/e2e/launch-chrome.sh` starts headless Chrome and writes the page
+endpoint to `$CDP_FILE`. Set `APP_URL` (default `http://localhost:8000`) to point the
+suites at another server, e.g. `APP_URL=http://localhost:8010`.
+
+With a Superset pane:
 
 The endpoint URL embeds an auth token, so it is never committed. Write it to a file and
 point `CDP_FILE` at it (default `/tmp/cdp.txt`):
@@ -116,3 +122,14 @@ attempts. `README.md` documents the measured frequencies.
 **Not covered at all** — the physical tablet layout and viewing angles; speaker volume and
 audibility; more than one session at a time; language pairs other than those listed;
 sessions longer than ~12 minutes.
+
+
+## Suite C — continuous input contract
+
+`suite-c.mjs` checks the starter-style input model directly: the mic streams ~10
+chunks/s for the whole session, TALK/release send `route` messages, nothing is
+uploaded while translated speech plays with the route released, a 2 s thinking
+pause stays one line, a quiet (−30 dB) speaker is translated, and the final clause
+of reordering sentences survives. Its fake mic carries a −60 dBFS noise floor.
+`ONLY=C1,C3` runs a subset. Against the pre-change app it fails 5+ checks
+(including dropping the quiet speaker entirely), so it is a real regression gate.

@@ -403,8 +403,11 @@
   var playCtx = null, nextTime = 0, speechEnd = 0, turnHasSpeech = false, draining = false, drainTimer = null, lastOutputAt = 0;
   var turnSeq = 0, currentTurn = null, sawOutput = false, heardSound = false, turnCapTimer = null;
   var MAX_TURN_MS = 30000;   // hard ceiling so a turn can never stay open forever
-  var COLD_GRACE_MS = 6000;   // longest we wait for a first token before handing over anyway
+  var COLD_GRACE_MS = 9000;   // longest we wait for a first token before handing over anyway
   var route = null;           // side the mic is routed to, mirrored to the server
+  var connected = false;      // server said "ready": a route message will not be lost
+  var micPending = false;     // getUserMedia / worklet setup in flight
+  var sessionToken = 0;       // bumped by endSession so late async setup is discarded
 
   var ws = null;
   var audioCtx = null, sourceNode = null, processor = null, micStream = null;
@@ -642,7 +645,7 @@
   }
 
   function statusText() {
-    if (phase === "idle") return hasTurned ? "Your turn" : "Ready";
+    if (phase === "idle") return !connected ? "Connecting…" : hasTurned ? "Your turn" : "Ready";
     if (phase === "listening") return "Listening…";
     if (phase === "translating") {
       var listener = active === "doctor" ? "patient" : "doctor";
@@ -672,7 +675,7 @@
       var btn = el(role, ".talk");
       btn.className = "talk";
       var isActive = phase === "listening" && active === role;
-      var isDisabled = phase === "error" || phase === "ended" || phase === "translating" ||
+      var isDisabled = !connected || phase === "error" || phase === "ended" || phase === "translating" ||
         (phase === "listening" && active !== role);
       btn.disabled = isDisabled;
       if (isActive) btn.classList.add("talk--listening");
@@ -716,7 +719,9 @@
   function onMessage(m) {
     if (m.type === "ready") {
       streamingMode = m.streaming_mode === "realtime" ? "realtime" : "turn";
-      phase = "idle"; render();
+      connected = true;
+      if (phase !== "listening" && phase !== "translating") phase = "idle";
+      render();
     } else if (m.type === "streaming_mode") {
       streamingMode = m.streaming_mode === "realtime" ? "realtime" : "turn";
       if (streamingMode === "realtime" && audioBuf.length) scheduleAudio();
@@ -728,15 +733,16 @@
       // The model hearing words is the best speech detector we have: a quiet or
       // distant speaker may never cross SILENCE_THRESHOLD, but is still transcribed.
       if (phase === "listening" && m.side === active) { lastSound = performance.now(); heardSound = true; }
-      sawOutput = true;
+      // Only the active person's output counts toward THEIR turn: late text from
+      // the previous speaker must neither end this turn early nor hold it open.
+      if (m.side === active) sawOutput = true;
       render();
     } else if (m.type === "translation") {
       var lt = lineBySide[m.side];
       if (!lt) return;
       lt.translation += m.text;
-      sawOutput = true;
-      markOutput();
-      if (streamingMode === "realtime") render();
+      if (m.side === active) { sawOutput = true; markOutput(); }
+      if (streamingMode === "realtime" || lt.closed) render();
     } else if (m.type === "audio") {
       // Only the active person's session contributes audio, and only while their
       // turn is open: an idle session keeps streaming silence-padded frames.
@@ -751,14 +757,14 @@
         }
       }
     } else if (m.type === "turn_end") {
-      closeTurn();
+      if (m.side === active && phase === "translating") closeTurn();
     } else if (m.type === "error") {
       onError(m.raw || "API error");
     }
   }
 
   function startTalk(side) {
-    if (phase !== "idle") return;
+    if (phase !== "idle" || !connected) return;
     phase = "listening";
     active = side;
     turnSeq++;
@@ -969,6 +975,7 @@
     hasTurned = true;
     active = null;
     phase = "idle";
+    if (route !== null) setRoute(null);   // never leave the mic routed after a turn
     dbgEndTurn();
     render();
   }
@@ -981,13 +988,18 @@
     phase = "error";
     active = null;
     audioBuf = [];
-    route = null;
+    // Release on the server too: a direction can fail while the socket stays open,
+    // and the mic must not keep feeding a session the UI shows as failed.
+    if (route !== null) setRoute(null);
     render();
   }
 
   // Real end: close the socket so the server tears down both upstream sessions,
   // release the microphone, and stop the playout. Callers then return to setup.
   function endSession() {
+    sessionToken++;   // late getUserMedia / worklet callbacks see this and stand down
+    micPending = false;
+    connected = false;
     clearTurnTimers();
     draining = false;
     if (ws) {
@@ -1016,7 +1028,7 @@
     clearTurnTimers();
     draining = false;
     lines = []; lineBySide = { doctor: null, patient: null }; audioBuf = []; phase = "idle"; active = null;
-    route = null;
+    route = null; connected = false;
     hasTurned = false;
     connect();
     render();
@@ -1039,9 +1051,19 @@
 
   function ensureMic() {
     if (audioCtx) { resumeStreaming(); return; }
+    // One mic per session: a second open (TALK tapped while the permission prompt
+    // is up) would interleave two capture graphs and double every chunk.
+    if (micPending) return;
+    micPending = true;
+    var token = sessionToken;
     navigator.mediaDevices.getUserMedia({
       audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true, noiseSuppression: true }
     }).then(function (stream) {
+      if (token !== sessionToken) {   // ended while the prompt was open
+        stream.getTracks().forEach(function (t) { t.stop(); });
+        return;
+      }
+      micPending = false;
       micStream = stream;
       audioCtx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
       // Created inside a promise callback, i.e. outside the user gesture that
@@ -1055,16 +1077,23 @@
       var useWorklet = audioCtx.audioWorklet && typeof AudioWorkletNode === "function";
       if (useWorklet) {
         var url = URL.createObjectURL(new Blob([WORKLET_SRC], { type: "application/javascript" }));
+        var ctx = audioCtx;
         audioCtx.audioWorklet.addModule(url).then(function () {
+          if (token !== sessionToken || ctx !== audioCtx) return;
           processor = new AudioWorkletNode(audioCtx, "chunker");
           processor.port.onmessage = function (e) { onChunk(e.data); };
           sourceNode.connect(processor);
           processor.connect(micMute);
-        }).catch(function () { startScriptProcessor(); });
+        }).catch(function () {
+          if (token === sessionToken && ctx === audioCtx) startScriptProcessor();
+        });
       } else {
         startScriptProcessor();
       }
-    }).catch(function () { onError("Microphone unavailable"); });
+    }).catch(function () {
+      micPending = false;
+      if (token === sessionToken) onError("Microphone unavailable");
+    });
   }
 
   function startScriptProcessor() {
@@ -1110,6 +1139,7 @@
       // something and then gone quiet. Every chunk is still streamed regardless.
       if (heardSound && now - lastSound > SILENCE_MS) stopTalk();
     }
+    if (phase === "error" || phase === "ended") return;
     if (route === null && playbackActive()) return;
     sendAudio(i16);
   }

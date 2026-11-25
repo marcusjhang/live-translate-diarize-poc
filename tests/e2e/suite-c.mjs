@@ -59,6 +59,15 @@ const STUB = `(async function(){
       return orig.apply(this,[c.__m].concat([].slice.call(arguments,1))); } }catch(e){}
     return orig.apply(this,arguments);
   };
+  // Record every translated-speech playback interval (24 kHz context) in page time.
+  window.__play=[];
+  var ostart=AudioBufferSourceNode.prototype.start;
+  AudioBufferSourceNode.prototype.start=function(when){
+    try{ var c=this.context; if(c.sampleRate===24000&&this.buffer){
+      var t0=performance.now()+Math.max(0,((when||0)-c.currentTime))*1000;
+      window.__play.push([t0,t0+this.buffer.duration*1000]); } }catch(e){}
+    return ostart.apply(this,arguments);
+  };
   window.__samples=[]; window.__audioN=0;
   setInterval(function(){ var st=document.querySelector('.panel[data-role="doctor"] .status');
     window.__samples.push({t:performance.now(),status:st?st.textContent:'',n:window.__audioN}); },100);
@@ -117,12 +126,18 @@ const during = sent.filter((m) => m.type === 'audio' && m.t > tRelease);
 const routedAudio = sent.filter((m) => m.type === 'audio' && m.t < tRelease);
 check('audio streamed continuously while routed', routedAudio.length >= Math.floor(r1.dur * 10),
   `${routedAudio.length} chunks for ${r1.dur}s`);
-const samples = JSON.parse(await ev(`JSON.stringify(window.__samples)`)).filter((x) => x.t > tRelease);
-const playing = samples.filter((x) => /Speaking to/.test(x.status));
-const uploadedWhilePlaying = playing.length ? playing[playing.length - 1].n - playing[0].n : -1;
-check('handover was observed (translation played for >= 0.5 s)', playing.length >= 5, `${playing.length} samples`);
+// Playback windows: merge back-to-back chunks (gaps < 60 ms), then shrink each
+// merged window by 150 ms per side for scheduling jitter.
+const play = JSON.parse(await ev(`JSON.stringify(window.__play)`)).filter(([a]) => a > tRelease)
+  .sort((x, y) => x[0] - y[0]);
+const merged = [];
+for (const iv of play) { const l = merged[merged.length - 1]; if (l && iv[0] <= l[1] + 60) l[1] = Math.max(l[1], iv[1]); else merged.push([...iv]); }
+for (const iv of merged) { iv[0] += 150; iv[1] -= 150; }
+const playedMs = merged.reduce((t, [a, b]) => t + Math.max(0, b - a), 0);
+const inPlayback = sent.filter((m) => m.type === 'audio' && merged.some(([a, b]) => m.t >= a && m.t <= b));
+check('translated speech actually played (>= 0.5 s)', playedMs >= 500, `${playedMs.toFixed(0)} ms`);
 check('no mic upload while translated speech plays (pre-roll cannot capture it)',
-  uploadedWhilePlaying >= 0 && uploadedWhilePlaying <= 3, `${uploadedWhilePlaying} chunks over ${playing.length / 10}s`);
+  inPlayback.length === 0, `${inPlayback.length} chunks during ${(playedMs / 1000).toFixed(1)} s of playback`);
 await sleep(1500);
 const idle2 = JSON.parse(await ev(`JSON.stringify(window.__sent.slice(-12))`)).filter((m) => m.type === 'audio').length;
 check('streaming resumes after playback', idle2 >= 8, `last 12 msgs had ${idle2} audio`);

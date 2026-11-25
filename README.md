@@ -21,55 +21,75 @@ switches between `After turn` and `Live` without opening a settings screen.
 
 The key is held server-side and never reaches the browser.
 
-Self-check the pure logic with no key set:
+### Backend
+
+`GEMINI_BACKEND=apikey` (default) uses the Developer API with `GEMINI_API_KEY`,
+pinned to `v1beta` (the only version that serves the Live WebSocket).
+`GEMINI_BACKEND=enterprise` uses Google Cloud exactly like Google's starter,
+`genai.Client(enterprise=True, project=..., location=...)`, with Application
+Default Credentials (`gcloud auth application-default login`),
+`GOOGLE_CLOUD_PROJECT` and optional `GOOGLE_CLOUD_LOCATION` (default
+`us-central1`); it also enables transparent session resumption.
+
+### Tests
 
 ```bash
-uv run server.py --self-check
+uv run server.py --self-check                     # pure logic, no key
+python3 -m unittest discover -s tests -p "test_[hs]*.py"
+uv run --with fastapi --with httpx --with websockets --with uvicorn --with google-genai \
+  python -m unittest tests.test_bridge            # /ws bridge vs a fake Gemini, no network
+PORT=8010 uv run server.py &                      # live tests below use the real API
+uv run tests/integration/ws_live.py --url ws://localhost:8010/ws --clips conv
+tests/e2e/launch-chrome.sh && APP_URL=http://localhost:8010 node tests/e2e/suite-c.mjs
 ```
+
+See `tests/e2e/README.md` for the browser suites and `experiments/` for the
+multi-turn harness behind `docs/starter-alignment-results.md`.
 
 ## Languages
 
 English, Mandarin Chinese (`zh` → `zh-Hans`), Spanish, Filipino. Map short
 codes to BCP-47 (`zh` → `zh-Hans`) in `lang_bcp47()`.
 
-## Turn protocol
+## Input protocol
 
-The API has no turn concept — it streams the translation progressively while the
-person is still speaking. Turn-based delivery is the app's job. The Gemini Live
-Translate session is configured to:
+The model is fed exactly the way Google's Live Translate starter feeds it, once
+per direction (`docs/starter-alignment-plan.md`, evidence in
+`docs/starter-alignment-results.md`):
 
-- `response_modalities=[AUDIO]` — text arrives via the transcription configs,
-  not as a text modality.
-- `translation_config(target_language_code=<other BCP-47>, echo_target_language=False)`
-  — `False` is required; `True` makes the model parrot same-language input.
-- `input_audio_transcription` / `output_audio_transcription` — source text and
-  translated text.
-- `realtime_input_config(automatic_activity_detection=disabled)` — server-side
-  VAD off; the app drives turns explicitly.
-- `session_resumption(transparent=True)` + `context_window_compression(...)` —
-  live sessions have a ~10 min connection cap and a ~15 min audio-only cap and
-  emit `go_away` before terminating. On `go_away` the app reconnects using
-  `session_resumption_update.new_handle`.
+- `response_modalities=[AUDIO]`, `input_audio_transcription`,
+  `output_audio_transcription`, `translation_config(target_language_code=<other
+  BCP-47>, echo_target_language=False)`.
+- **Automatic activity detection stays on.** No `realtime_input_config`, no
+  `activity_start`/`activity_end`, no warm-up turn, no fake trailing silence.
+- `session_resumption` — on `go_away` the server reconnects with the latest
+  handle (transparent resumption on the enterprise backend). No context
+  compression: a 60-turn, ~25-minute consult is covered by resumption alone.
 
-Audio in: 16 kHz mono PCM16 little-endian in 100 ms chunks
-(`audio/pcm;rate=16000`). Audio out: 24 kHz mono PCM16.
+Audio in: one continuous stream of 16 kHz mono PCM16 little-endian, 100 ms chunks
+(`audio/pcm;rate=16000`), captured by an AudioWorklet (ScriptProcessor fallback on
+insecure origins) and sent for the whole session. Audio out: 24 kHz mono PCM16.
 
-Per turn:
+TALK does not cut the audio up; it **routes** the stream:
 
-1. **TALK tap-down** — `session.send_realtime_input(activity_start=ActivityStart())`.
-2. Stream 100 ms audio chunks.
-3. **TALK tap-up** — send ~800 ms of silence as audio chunks, *then*
-   `activity_end=ActivityEnd()`. This is the single most important detail:
-   400 ms of trailing silence truncates the final clause; 800 ms yields the
-   complete sentence.
-4. On `go_away`, reconnect using the resumption handle.
+1. **TALK** — `{"type":"route","side":...}`. The server forwards the stream to
+   that person's session, starting with the last 300 ms of mic audio (pre-roll) so
+   the first syllable is not clipped.
+2. **Release** (tap again, or 3 s of quiet after speech) — `{"type":"route",
+   "side":null}`. The server sends `audio_stream_end` to that session, which makes
+   the model flush the clause it is still holding (translation reorders, so the
+   final clause is otherwise late or lost).
+3. While translated speech plays and nobody holds the mic, the browser stops
+   uploading, so the pre-roll never contains the translation itself.
 
-## Two sessions per direction
+## Two sessions, one route
 
-Two directions need two sessions: session A targets the patient's language and
-is fed the doctor's mic; session B targets the doctor's language and is fed the
-patient's mic. Both are opened at start and kept warm so the first turn is fast.
-Only one direction may stream at a time.
+Session A targets the patient's language and session B the doctor's. Only the
+routed session receives audio: `echo_target_language=False` does **not** stop a
+session re-speaking input already in its target language, so feeding the mic to
+both sessions makes each one parrot the other person. Output is attributed by
+session — whatever session A says belongs to the doctor's latest line, however
+late it arrives.
 
 ## Delivery modes
 
@@ -114,13 +134,13 @@ gibberish in both directions. Spanish should be considered **unproven**.
 
 ### Structural limits
 
-- **Turn ending is a heuristic.** The Live API never sends `turn_complete` or
-  `generation_complete`; a turn is closed when playback has drained and the model
-  has been quiet for a few seconds.
-- **Output is attributed by arrival time.** If the model pauses more than ~3s
-  mid-answer, a clause can land in the following turn's transcript line.
-- **A 10-minute session cap is real** and handled: the server reconnects with the
-  resumption handle. A 60-turn, 11.6-minute session completed without loss.
+- **Handover is a heuristic.** The Live API never sends `turn_complete`; the
+  buttons re-enable when playback has drained and the model has been quiet for a
+  few seconds. This affects the UI only, never what the model hears.
+- **Output is attributed by session**, so a late clause can only land on the same
+  person's latest line, never on the other person's.
+- **The session cap is real** and handled: the server reconnects with the
+  resumption handle.
 - **The microphone is opened when the session starts**, not on first tap, because
   creating the audio context on demand raced the speaker's first words and lost
   whole opening turns.

@@ -80,3 +80,28 @@ contains; `OUT_tail_drop` = clips whose translation lost the final clause;
 - Spoken Chinese decimals come back as `38度5`, `38.5`, `3 8度5` or occasionally a
   dropped `.5`; the app's number check exists for exactly this.
 - Numbers can be omitted by the model (`suite-a` 06 once dropped 三次); the app flags it.
+
+## Longevity (Phase 4)
+
+`tests/e2e/longevity.mjs`: 60 turns, ~25 min, one consult, **no context
+compression** — 60/60 turns completed, every turn handed over ("Your turn"), no
+errors; reconnects (if any) were absorbed by handle resumption. Compression stays
+removed.
+
+## Deviations from the plan (deliberate)
+
+- **Turns still exist in the UI.** Option A keeps explicit TALK taps, so a
+  transcript line is still one tap (not `LINE_GAP_MS` segmentation, plan 3.5), and
+  the playback-side handover heuristic (`startDrain`/`closeTurn`, `QUIESCE_MS`,
+  `COLD_GRACE_MS` = 9000 as before, caps) is kept: it decides when the buttons
+  re-enable. None of it touches what the model hears — the input side has no
+  turn markers, trimming, padding or warm-up.
+- **Feedback guard is narrower than plan 3.4.** Naive suppression destroyed the
+  next speaker's speech in the matrix; the app instead pauses upload only while
+  translation plays *and* nobody holds the mic, and the server ages out (0.45 s)
+  and clears (on release) its pre-roll.
+- **Phase 5 is implemented but not exercised live.** `GEMINI_BACKEND=enterprise`
+  builds the starter's `genai.Client(enterprise=True, ...)` (verified to construct
+  a Vertex client) and turns on transparent resumption; there are no Google Cloud
+  credentials on the test machine, so no live enterprise run exists yet. Run
+  `uv run experiments/multiturn.py --backend enterprise ...` once ADC is set up.

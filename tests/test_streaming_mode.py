@@ -41,7 +41,7 @@ class StreamingModeTests(unittest.TestCase):
     def test_browser_has_distinct_release_paths(self):
         html = (ROOT / "static" / "index.html").read_text()
         self.assertIn('finalized || streamingMode === "realtime"', html)
-        self.assertIn('streamingMode === "realtime") render()', html)
+        self.assertIn('streamingMode === "realtime" || lt.closed) render()', html)
         self.assertIn('draining || streamingMode === "realtime"', html)
         self.assertIn('streamingMode === "realtime" ? "turn" : "realtime"', html)
 
