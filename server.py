@@ -93,7 +93,13 @@ def gemini_client():
     if _gemini_client is None:
         from google import genai
 
-        _gemini_client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+        # Pin the API version: newer google-genai releases default the Developer
+        # API to "v1", which does not serve the Live WebSocket (BidiGenerateContent)
+        # and rejects every connect with HTTP 404. Live lives on v1beta.
+        _gemini_client = genai.Client(
+            api_key=os.environ["GEMINI_API_KEY"],
+            http_options={"api_version": os.environ.get("GEMINI_API_VERSION", "v1beta")},
+        )
     return _gemini_client
 
 
